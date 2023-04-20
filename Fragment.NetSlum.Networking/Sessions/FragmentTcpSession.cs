@@ -1,10 +1,10 @@
 using System.Runtime.CompilerServices;
 using Fragment.NetSlum.Core.DependencyInjection;
+using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Networking.Pipeline;
 using Fragment.NetSlum.TcpServer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Socom2Online.Core.Extensions;
 
 namespace Fragment.NetSlum.Networking.Sessions;
 

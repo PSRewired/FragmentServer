@@ -1,8 +1,6 @@
-using System;
-using System.Linq;
 using System.Text;
 
-namespace Socom2Online.Core.Extensions;
+namespace Fragment.NetSlum.Core.Extensions;
 
 public static class DataExtensions
 {
@@ -17,7 +15,7 @@ public static class DataExtensions
     {
         return ToHexString(ba.ToArray());
     }
-    
+
     public static string ToHexString(this byte[] ba)
     {
         return BitConverter.ToString(ba).Replace("-","");
@@ -38,17 +36,17 @@ public static class DataExtensions
 
         return tempBuff;
     }
-    
+
     public static string ToHexDump(this byte[] bytes, int bytesPerLine = 16)
     {
         return ToHexDump(bytes.AsSpan(), bytesPerLine);
     }
-        
+
     public static string ToHexDump(this Memory<byte> bytes, int bytesPerLine = 16)
     {
         return ToHexDump(bytes.Span, bytesPerLine);
     }
-        
+
     public static string ToHexDump(this ReadOnlySpan<byte> bytes, int bytesPerLine = 16)
     {
         if (bytes == null)
@@ -67,7 +65,7 @@ public static class DataExtensions
         var firstCharColumn = firstHexColumn
                               + bytesPerLine * 3       // - 2 digit for the hexadecimal value and 1 space
                               + (bytesPerLine - 1) / 8 // - 1 extra space every 8 characters from the 9th
-                              + 2;                  // 2 spaces 
+                              + 2;                  // 2 spaces
 
         var lineLength = firstCharColumn
                          + bytesPerLine + 2;           // - characters to show the ascii value
@@ -116,9 +114,9 @@ public static class DataExtensions
 
             result.AppendLine(new string(line));
         }
-        return result.ToString(); 
+        return result.ToString();
     }
-    
+
     static char asciiSymbol( byte val )
     {
         if( val < 32 )
