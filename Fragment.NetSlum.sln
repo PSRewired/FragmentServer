@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fragment.NetSlum.Server", "Fragment.NetSlum.Server\Fragment.NetSlum.Server.csproj", "{63D1AE8B-6213-45BF-8B93-E83B8AF99433}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fragment.NetSlum.TcpServer", "Fragment.NetSlum.TcpServer\Fragment.NetSlum.TcpServer.csproj", "{ED05DE0B-474F-4B3B-A29A-672604956157}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fragment.NetSlum.Core", "Fragment.NetSlum.Core\Fragment.NetSlum.Core.csproj", "{BF015F82-22A9-4A04-866B-5B774068B350}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fragment.NetSlum.Networking", "Fragment.NetSlum.Networking\Fragment.NetSlum.Networking.csproj", "{7D56F13A-B259-4977-99C2-C875E01E1851}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{63D1AE8B-6213-45BF-8B93-E83B8AF99433}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63D1AE8B-6213-45BF-8B93-E83B8AF99433}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63D1AE8B-6213-45BF-8B93-E83B8AF99433}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63D1AE8B-6213-45BF-8B93-E83B8AF99433}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED05DE0B-474F-4B3B-A29A-672604956157}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED05DE0B-474F-4B3B-A29A-672604956157}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED05DE0B-474F-4B3B-A29A-672604956157}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED05DE0B-474F-4B3B-A29A-672604956157}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF015F82-22A9-4A04-866B-5B774068B350}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF015F82-22A9-4A04-866B-5B774068B350}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF015F82-22A9-4A04-866B-5B774068B350}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF015F82-22A9-4A04-866B-5B774068B350}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D56F13A-B259-4977-99C2-C875E01E1851}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D56F13A-B259-4977-99C2-C875E01E1851}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D56F13A-B259-4977-99C2-C875E01E1851}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D56F13A-B259-4977-99C2-C875E01E1851}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
