@@ -5,7 +5,7 @@ namespace Fragment.NetSlum.Networking.Crypto;
 public class CryptoHandler
 {
     public BlowfishProvider ClientCipher { get; set; } = new BlowfishProvider();
-    public BlowfishProvider? ServerCipher { get; internal set; }
+    public BlowfishProvider ServerCipher { get; internal set; } = new BlowfishProvider();
 
     public bool TryEncrypt(byte[] data, out byte[] encrypted)
     {

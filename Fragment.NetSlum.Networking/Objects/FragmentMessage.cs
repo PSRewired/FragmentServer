@@ -19,11 +19,11 @@ public class FragmentMessage
     /// [DataLength][OpCode][Checksum][UnencryptedPayload]
     /// [DataLength][OpCode][EncryptedData(checksum included)]
     /// </summary>
-    public ushort Length => (ushort)(sizeof(ushort) + sizeof(OpCodes) + (Encrypted ? 0 : sizeof(ushort)) + Data.Length);
+    public ushort Length => (ushort)(sizeof(OpCodes) + (Encrypted ? 0 : sizeof(ushort)) + Data.Length);
 
     public byte[] ToArray()
     {
-        var buffer = new byte[Length];
+        var buffer = new byte[sizeof(ushort) + Length];
         var span = new Span<byte>(buffer);
         var dataOffset = 4;
 

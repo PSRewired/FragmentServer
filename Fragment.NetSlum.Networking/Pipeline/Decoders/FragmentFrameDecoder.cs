@@ -61,7 +61,7 @@ public class FragmentFrameDecoder : IPacketDecoder
         messages.Add(new FragmentMessage
         {
             OpCode = code,
-            Data = decrypted.AsMemory()[4..],
+            Data = decrypted,
         });
 
         return data.Length;

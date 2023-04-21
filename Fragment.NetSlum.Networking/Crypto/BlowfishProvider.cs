@@ -9,28 +9,42 @@ public class BlowfishProvider
 {
     private const string DefaultKey = "hackOnline";
 
-    public byte[] secretKey;
-    public uint secretKeyLength;
-    public uint[] pArray;
-    public List<uint[]> sBoxes;
+    private byte[] _secretKey;
+    private uint SecretKeyLength => (uint)(_secretKey?.Length ?? 0);
 
-    public BlowfishProvider()
-    {
-        PrepareStructure(Encoding.UTF8.GetBytes(DefaultKey));
-    }
+    private uint[]? _pArray;
+    private List<uint[]> _sBoxes = new();
 
-    public BlowfishProvider(byte[] key)
-    {
-        PrepareStructure(key);
-    }
+    public bool Initialized => _pArray != null && _sBoxes.Count > 0;
 
-    public BlowfishProvider(string key)
+    /// <summary>
+    /// Constructs an instance of this cipher suite that is pre-initialized with the default key
+    /// </summary>
+    public BlowfishProvider() : this(DefaultKey)
     {
-        PrepareStructure(Encoding.UTF8.GetBytes(key));
+        Initialize();
     }
 
     /// <summary>
-    /// Creates a new instance of this blowfish cipher suite with a randomly generated key
+    /// Constructs an un-initialized instance of this cipher suite with the given key
+    /// </summary>
+    /// <param name="key"></param>
+    public BlowfishProvider(byte[] key)
+    {
+        _secretKey = key;
+    }
+
+    /// <summary>
+    /// Constructs an un-initialized instance of this cipher suite with the given key
+    /// </summary>
+    /// <param name="key"></param>
+    public BlowfishProvider(string key)
+    {
+        _secretKey = Encoding.UTF8.GetBytes(key);
+    }
+
+    /// <summary>
+    /// Creates a new uninitialized instance of this blowfish cipher suite with a randomly generated key
     /// </summary>
     /// <param name="key">the key that was generated for this cipher suite</param>
     /// <returns></returns>
@@ -42,28 +56,38 @@ public class BlowfishProvider
         return new BlowfishProvider(key);
     }
 
-    public void PrepareStructure(byte[] key)
+    /// <summary>
+    /// Sets a new key without re-initializing the current state
+    /// </summary>
+    /// <param name="key"></param>
+    public void PrepareNewKey(byte[] key)
     {
-        secretKeyLength = (uint)key.Length;
-        secretKey = key;
+        _secretKey = key;
+    }
+
+    /// <summary>
+    /// Initializes the cipher suite for use using the key provided when the instance was instantiated
+    /// </summary>
+    public void Initialize()
+    {
         // Initialize Fields
-        pArray = new uint[18];
+        _pArray = new uint[18];
 
         for (int i = 0; i < 18; i++)
         {
-            pArray[i] = _defaultParray[i];
+            _pArray[i] = DefaultParray[i];
         }
 
-        sBoxes = new List<uint[]>();
+        _sBoxes = new List<uint[]>();
         for (int i = 0; i < 4; i++)
         {
             uint[] sBox = new uint[256];
             for (int j = 0; j < 256; j++)
             {
-                sBox[j] = _defaultSboxes[i * 256 + j];
+                sBox[j] = DefaultSboxes[i * 256 + j];
             }
 
-            sBoxes.Add(sBox);
+            _sBoxes.Add(sBox);
         }
 
         // Mix Key into P-Array
@@ -73,11 +97,11 @@ public class BlowfishProvider
             byte[] rolledKeyBytes = new byte[4];
             for (int j = 0; j < 4; j++)
             {
-                rolledKeyBytes[3 - j] = secretKey[(int)((i * 4 + j) % secretKeyLength)];
+                rolledKeyBytes[3 - j] = _secretKey[(int)((i * 4 + j) % SecretKeyLength)];
             }
 
             // XOR P-Array Entry with Rolled Key
-            pArray[i] ^= BitConverter.ToUInt32(rolledKeyBytes, 0);
+            _pArray[i] ^= BitConverter.ToUInt32(rolledKeyBytes, 0);
         }
 
         // Encrypt P-Array
@@ -85,15 +109,15 @@ public class BlowfishProvider
         for (int i = 0; i < 9; i++)
         {
             // Encrypt 1st Half
-            tempChunks[0] ^= pArray[0];
-            tempChunks[1] ^= pArray[1] ^ RotateDword(tempChunks[0]);
-            tempChunks[0] ^= pArray[2] ^ RotateDword(tempChunks[1]);
-            tempChunks[1] ^= pArray[3] ^ RotateDword(tempChunks[0]);
-            tempChunks[0] ^= pArray[4] ^ RotateDword(tempChunks[1]);
-            tempChunks[1] ^= pArray[5] ^ RotateDword(tempChunks[0]);
-            tempChunks[0] ^= pArray[6] ^ RotateDword(tempChunks[1]);
-            tempChunks[1] ^= pArray[7] ^ RotateDword(tempChunks[0]);
-            tempChunks[0] ^= pArray[8] ^ RotateDword(tempChunks[1]);
+            tempChunks[0] ^= _pArray[0];
+            tempChunks[1] ^= _pArray[1] ^ RotateDword(tempChunks[0]);
+            tempChunks[0] ^= _pArray[2] ^ RotateDword(tempChunks[1]);
+            tempChunks[1] ^= _pArray[3] ^ RotateDword(tempChunks[0]);
+            tempChunks[0] ^= _pArray[4] ^ RotateDword(tempChunks[1]);
+            tempChunks[1] ^= _pArray[5] ^ RotateDword(tempChunks[0]);
+            tempChunks[0] ^= _pArray[6] ^ RotateDword(tempChunks[1]);
+            tempChunks[1] ^= _pArray[7] ^ RotateDword(tempChunks[0]);
+            tempChunks[0] ^= _pArray[8] ^ RotateDword(tempChunks[1]);
 
             // Encrypt 2nd Half
             tempChunks[1] = Swap(tempChunks[1], tempChunks[0], 9);
@@ -106,12 +130,12 @@ public class BlowfishProvider
             tempChunks[0] = Swap(tempChunks[0], tempChunks[1], 16);
 
             // Write Data to P-Array
-            pArray[i * 2] = pArray[17] ^ tempChunks[1];
-            pArray[i * 2 + 1] = tempChunks[0];
+            _pArray[i * 2] = _pArray[17] ^ tempChunks[1];
+            _pArray[i * 2 + 1] = tempChunks[0];
 
             // Read Data for next Cycle
-            tempChunks[0] = pArray[i * 2];
-            tempChunks[1] = pArray[i * 2 + 1];
+            tempChunks[0] = _pArray[i * 2];
+            tempChunks[1] = _pArray[i * 2 + 1];
         }
 
         // Encrypt S-Boxes
@@ -121,8 +145,8 @@ public class BlowfishProvider
             for (int j = 0; j < 256; j += 2)
             {
                 // Encrypt Data
-                tempChunks[0] ^= pArray[0];
-                tempChunks[1] ^= pArray[1] ^ RotateDword(tempChunks[0]);
+                tempChunks[0] ^= _pArray[0];
+                tempChunks[1] ^= _pArray[1] ^ RotateDword(tempChunks[0]);
                 tempChunks[0] = Swap(tempChunks[0], tempChunks[1], 2);
                 tempChunks[1] = Swap(tempChunks[1], tempChunks[0], 3);
                 tempChunks[0] = Swap(tempChunks[0], tempChunks[1], 4);
@@ -140,18 +164,23 @@ public class BlowfishProvider
                 tempChunks[0] = Swap(tempChunks[0], tempChunks[1], 16);
 
                 // Write Data to S-Box
-                sBoxes[i][j] = pArray[17] ^ tempChunks[1];
-                sBoxes[i][j + 1] = tempChunks[0];
+                _sBoxes[i][j] = _pArray[17] ^ tempChunks[1];
+                _sBoxes[i][j + 1] = tempChunks[0];
 
                 // Read Data for next Cycle
-                tempChunks[0] = sBoxes[i][j];
-                tempChunks[1] = sBoxes[i][j + 1];
+                tempChunks[0] = _sBoxes[i][j];
+                tempChunks[1] = _sBoxes[i][j + 1];
             }
         }
     }
 
     public byte[] Decrypt(byte[] payload)
     {
+        if (!Initialized)
+        {
+            throw new InvalidOperationException("Attempted to decrypt data using an un-initialized cipher");
+        }
+
         byte[] result = new byte[payload.Length];
 
         // Invalid Payload Alignment / Size (has to be a multiple of 8)
@@ -173,46 +202,45 @@ public class BlowfishProvider
             chunkBuffer[0] = BitConverter.ToUInt32(result, i * 8);
             chunkBuffer[1] = BitConverter.ToUInt32(result, i * 8 + 4);
             // Processing Variables
-            uint runningChunk = 0;
             uint[] tempChunks = { 0, 0 };
 
             // Decrypt Chunk
-            runningChunk = chunkBuffer[0] ^ pArray[17];
+            var runningChunk = chunkBuffer[0] ^ _pArray![17];
             tempChunks[0] = runningChunk;
-            runningChunk = chunkBuffer[1] ^ pArray[16] ^ RotateDword(runningChunk);
+            runningChunk = chunkBuffer[1] ^ _pArray[16] ^ RotateDword(runningChunk);
             tempChunks[1] = runningChunk;
-            runningChunk = pArray[15] ^ RotateDword(runningChunk) ^ tempChunks[0];
+            runningChunk = _pArray[15] ^ RotateDword(runningChunk) ^ tempChunks[0];
             tempChunks[0] = runningChunk;
-            runningChunk = pArray[14] ^ RotateDword(runningChunk) ^ tempChunks[1];
+            runningChunk = _pArray[14] ^ RotateDword(runningChunk) ^ tempChunks[1];
             tempChunks[1] = runningChunk;
-            runningChunk = pArray[13] ^ RotateDword(runningChunk) ^ tempChunks[0];
+            runningChunk = _pArray[13] ^ RotateDword(runningChunk) ^ tempChunks[0];
             tempChunks[0] = runningChunk;
-            runningChunk = pArray[12] ^ RotateDword(runningChunk) ^ tempChunks[1];
+            runningChunk = _pArray[12] ^ RotateDword(runningChunk) ^ tempChunks[1];
             tempChunks[1] = runningChunk;
-            runningChunk = pArray[11] ^ RotateDword(runningChunk) ^ tempChunks[0];
+            runningChunk = _pArray[11] ^ RotateDword(runningChunk) ^ tempChunks[0];
             tempChunks[0] = runningChunk;
-            runningChunk = pArray[10] ^ RotateDword(runningChunk) ^ tempChunks[1];
+            runningChunk = _pArray[10] ^ RotateDword(runningChunk) ^ tempChunks[1];
             tempChunks[1] = runningChunk;
-            runningChunk = pArray[9] ^ RotateDword(runningChunk) ^ tempChunks[0];
+            runningChunk = _pArray[9] ^ RotateDword(runningChunk) ^ tempChunks[0];
             tempChunks[0] = runningChunk;
-            runningChunk = pArray[8] ^ RotateDword(runningChunk) ^ tempChunks[1];
+            runningChunk = _pArray[8] ^ RotateDword(runningChunk) ^ tempChunks[1];
             tempChunks[1] = runningChunk;
-            runningChunk = pArray[7] ^ RotateDword(runningChunk) ^ tempChunks[0];
+            runningChunk = _pArray[7] ^ RotateDword(runningChunk) ^ tempChunks[0];
             tempChunks[0] = runningChunk;
-            runningChunk = pArray[6] ^ RotateDword(runningChunk) ^ tempChunks[1];
+            runningChunk = _pArray[6] ^ RotateDword(runningChunk) ^ tempChunks[1];
             tempChunks[1] = runningChunk;
-            runningChunk = pArray[5] ^ RotateDword(runningChunk) ^ tempChunks[0];
+            runningChunk = _pArray[5] ^ RotateDword(runningChunk) ^ tempChunks[0];
             tempChunks[0] = runningChunk;
-            runningChunk = pArray[4] ^ RotateDword(runningChunk) ^ tempChunks[1];
+            runningChunk = _pArray[4] ^ RotateDword(runningChunk) ^ tempChunks[1];
             tempChunks[1] = runningChunk;
-            runningChunk = pArray[3] ^ RotateDword(runningChunk) ^ tempChunks[0];
+            runningChunk = _pArray[3] ^ RotateDword(runningChunk) ^ tempChunks[0];
             tempChunks[0] = runningChunk;
-            runningChunk = pArray[2] ^ RotateDword(runningChunk) ^ tempChunks[1];
+            runningChunk = _pArray[2] ^ RotateDword(runningChunk) ^ tempChunks[1];
             tempChunks[1] = runningChunk;
-            runningChunk = pArray[1] ^ RotateDword(runningChunk) ^ tempChunks[0];
+            runningChunk = _pArray[1] ^ RotateDword(runningChunk) ^ tempChunks[0];
 
             // Save Plaintext Chunk
-            chunkBuffer[0] = pArray[0] ^ tempChunks[1];
+            chunkBuffer[0] = _pArray[0] ^ tempChunks[1];
             chunkBuffer[1] = runningChunk;
 
             byte[] buff = BitConverter.GetBytes(chunkBuffer[0]);
@@ -234,6 +262,11 @@ public class BlowfishProvider
 
     public byte[] Encrypt(byte[] payload)
     {
+        if (!Initialized)
+        {
+            throw new InvalidOperationException("Attempted to encrypt data using an un-initialized cipher");
+        }
+
         byte[] result = new byte[payload.Length];
 
         // Invalid Payload Alignment / Size (has to be a multiple of 8)
@@ -260,46 +293,45 @@ public class BlowfishProvider
             chunkBuffer[0] = BitConverter.ToUInt32(result, i * 8);
             chunkBuffer[1] = BitConverter.ToUInt32(result, i * 8 + 4);
             // Processing Variables
-            uint runningChunk = 0;
             uint[] tempChunks = { 0, 0 };
 
             // Encrypt Chunk
-            runningChunk = chunkBuffer[0] ^ pArray[0];
+            var runningChunk = chunkBuffer[0] ^ _pArray![0];
             tempChunks[0] = runningChunk;
-            runningChunk = chunkBuffer[1] ^ pArray[1] ^ RotateDword(runningChunk);
+            runningChunk = chunkBuffer[1] ^ _pArray[1] ^ RotateDword(runningChunk);
             tempChunks[1] = runningChunk;
-            runningChunk = pArray[2] ^ RotateDword(runningChunk) ^ tempChunks[0];
+            runningChunk = _pArray[2] ^ RotateDword(runningChunk) ^ tempChunks[0];
             tempChunks[0] = runningChunk;
-            runningChunk = pArray[3] ^ RotateDword(runningChunk) ^ tempChunks[1];
+            runningChunk = _pArray[3] ^ RotateDword(runningChunk) ^ tempChunks[1];
             tempChunks[1] = runningChunk;
-            runningChunk = pArray[4] ^ RotateDword(runningChunk) ^ tempChunks[0];
+            runningChunk = _pArray[4] ^ RotateDword(runningChunk) ^ tempChunks[0];
             tempChunks[0] = runningChunk;
-            runningChunk = pArray[5] ^ RotateDword(runningChunk) ^ tempChunks[1];
+            runningChunk = _pArray[5] ^ RotateDword(runningChunk) ^ tempChunks[1];
             tempChunks[1] = runningChunk;
-            runningChunk = pArray[6] ^ RotateDword(runningChunk) ^ tempChunks[0];
+            runningChunk = _pArray[6] ^ RotateDword(runningChunk) ^ tempChunks[0];
             tempChunks[0] = runningChunk;
-            runningChunk = pArray[7] ^ RotateDword(runningChunk) ^ tempChunks[1];
+            runningChunk = _pArray[7] ^ RotateDword(runningChunk) ^ tempChunks[1];
             tempChunks[1] = runningChunk;
-            runningChunk = pArray[8] ^ RotateDword(runningChunk) ^ tempChunks[0];
+            runningChunk = _pArray[8] ^ RotateDword(runningChunk) ^ tempChunks[0];
             tempChunks[0] = runningChunk;
-            runningChunk = pArray[9] ^ RotateDword(runningChunk) ^ tempChunks[1];
+            runningChunk = _pArray[9] ^ RotateDword(runningChunk) ^ tempChunks[1];
             tempChunks[1] = runningChunk;
-            runningChunk = pArray[10] ^ RotateDword(runningChunk) ^ tempChunks[0];
+            runningChunk = _pArray[10] ^ RotateDword(runningChunk) ^ tempChunks[0];
             tempChunks[0] = runningChunk;
-            runningChunk = pArray[11] ^ RotateDword(runningChunk) ^ tempChunks[1];
+            runningChunk = _pArray[11] ^ RotateDword(runningChunk) ^ tempChunks[1];
             tempChunks[1] = runningChunk;
-            runningChunk = pArray[12] ^ RotateDword(runningChunk) ^ tempChunks[0];
+            runningChunk = _pArray[12] ^ RotateDword(runningChunk) ^ tempChunks[0];
             tempChunks[0] = runningChunk;
-            runningChunk = pArray[13] ^ RotateDword(runningChunk) ^ tempChunks[1];
+            runningChunk = _pArray[13] ^ RotateDword(runningChunk) ^ tempChunks[1];
             tempChunks[1] = runningChunk;
-            runningChunk = pArray[14] ^ RotateDword(runningChunk) ^ tempChunks[0];
+            runningChunk = _pArray[14] ^ RotateDword(runningChunk) ^ tempChunks[0];
             tempChunks[0] = runningChunk;
-            runningChunk = pArray[15] ^ RotateDword(runningChunk) ^ tempChunks[1];
+            runningChunk = _pArray[15] ^ RotateDword(runningChunk) ^ tempChunks[1];
             tempChunks[1] = runningChunk;
-            runningChunk = pArray[16] ^ RotateDword(runningChunk) ^ tempChunks[0];
+            runningChunk = _pArray[16] ^ RotateDword(runningChunk) ^ tempChunks[0];
 
             // Save Encrypted Chunk
-            chunkBuffer[0] = pArray[17] ^ tempChunks[1];
+            chunkBuffer[0] = _pArray[17] ^ tempChunks[1];
             chunkBuffer[1] = runningChunk;
 
             byte[] buff = BitConverter.GetBytes(chunkBuffer[0]);
@@ -320,17 +352,17 @@ public class BlowfishProvider
         return result;
     }
 
-    public uint Swap(uint L, uint R, uint P)
+    public uint Swap(uint l, uint r, uint p)
     {
-        uint result = L;
-        result ^= pArray[P] ^ RotateDword(R);
+        uint result = l;
+        result ^= _pArray![p] ^ RotateDword(r);
         return result;
     }
 
     public uint RotateDword(uint value)
     {
         byte[] buff = BitConverter.GetBytes(value);
-        return sBoxes[3][buff[0]] + (sBoxes[2][buff[1]] ^ (sBoxes[0][buff[3]] + sBoxes[1][buff[2]]));
+        return _sBoxes[3][buff[0]] + (_sBoxes[2][buff[1]] ^ (_sBoxes[0][buff[3]] + _sBoxes[1][buff[2]]));
     }
 
     public static ushort Checksum(byte[] data)
@@ -356,7 +388,7 @@ public class BlowfishProvider
 
     #region defaults
 
-    static readonly uint[] _defaultParray =
+    private static readonly uint[] DefaultParray =
     {
         0x25406B89, 0x86A409D4, 0x141A8B2F, 0x04717445,
         0xA50A3923, 0x2AA032D1, 0x092FFB99, 0xED4F6D8A,
@@ -365,7 +397,7 @@ public class BlowfishProvider
         0x9317D6DA, 0x8A7AFC1C
     };
 
-    static readonly uint[] _defaultSboxes =
+    private static readonly uint[] DefaultSboxes =
     {
         0xD2320CA7, 0x99E0B6AD, 0x30FE73DC, 0xD11BE0B8,
         0xB9E2B0EE, 0x6B277F97, 0xBB7D9146, 0xF22D809A,
