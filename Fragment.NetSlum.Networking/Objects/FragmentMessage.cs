@@ -52,6 +52,7 @@ public class FragmentMessage
         sb.AppendLine("");
         sb.AppendLine("Data:");
         sb.AppendLine(Data.ToHexDump());
+        sb.AppendLine($"({ToArray().ToHexString()})");
 
         return sb.ToString();
     }

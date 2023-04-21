@@ -2,16 +2,19 @@ using System.Buffers;
 using System.Buffers.Binary;
 using Fragment.NetSlum.Networking.Crypto;
 using Fragment.NetSlum.Networking.Objects;
+using Microsoft.Extensions.Logging;
 
 namespace Fragment.NetSlum.Networking.Pipeline.Encoders;
 
 public class EncryptionEncoder : IMessageEncoder
 {
     private readonly CryptoHandler _cryptoHandler;
+    private readonly ILogger _logger;
 
-    public EncryptionEncoder(CryptoHandler cryptoHandler)
+    public EncryptionEncoder(CryptoHandler cryptoHandler, ILogger<EncryptionEncoder> logger)
     {
         _cryptoHandler = cryptoHandler;
+        _logger = logger;
     }
 
     public void Encode(List<FragmentMessage> responseObjects, MemoryStream memoryStream)
@@ -29,6 +32,7 @@ public class EncryptionEncoder : IMessageEncoder
 
             if (_cryptoHandler.TryEncrypt(buffer[..payloadLength].ToArray(), out var encryptedData))
             {
+                _logger.LogDebug("Encrypting packet:\n{HexDump}", response.ToString());
                 response.Encrypted = true;
                 response.Data = encryptedData;
             }
