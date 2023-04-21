@@ -17,7 +17,7 @@ public class FragmentMessage
         var buffer = new byte[Data.Length + 6];
         var span = new Span<byte>(buffer);
 
-        BinaryPrimitives.WriteUInt16BigEndian(span[..2], (ushort)(Data.Length + 6));
+        BinaryPrimitives.WriteUInt16BigEndian(span[..2], (ushort)(Data.Length + 4));
         BinaryPrimitives.WriteUInt16BigEndian(span[2..4], (ushort)OpCode);
         BinaryPrimitives.WriteUInt16BigEndian(span[4..6], Checksum);
         Data.Span.CopyTo(span[6..]);
