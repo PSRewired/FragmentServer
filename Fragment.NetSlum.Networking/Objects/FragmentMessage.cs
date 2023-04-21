@@ -12,15 +12,33 @@ public class FragmentMessage
     public Memory<byte> Data { get; set; }
     public ushort Checksum => BlowfishProvider.Checksum(Data.ToArray());
 
+    public bool Encrypted { get; set; }
+
+    /// <summary>
+    /// Represents the final size of the packet when serialized.
+    /// [DataLength][OpCode][Checksum][UnencryptedPayload]
+    /// [DataLength][OpCode][EncryptedData(checksum included)]
+    /// </summary>
+    public ushort Length => (ushort)(sizeof(ushort) + sizeof(OpCodes) + (Encrypted ? 0 : sizeof(ushort)) + Data.Length);
+
     public byte[] ToArray()
     {
-        var buffer = new byte[Data.Length + 6];
+        var buffer = new byte[Length];
         var span = new Span<byte>(buffer);
+        var dataOffset = 4;
 
-        BinaryPrimitives.WriteUInt16BigEndian(span[..2], (ushort)(Data.Length + 4));
+        BinaryPrimitives.WriteUInt16BigEndian(span[..2], Length);
         BinaryPrimitives.WriteUInt16BigEndian(span[2..4], (ushort)OpCode);
-        BinaryPrimitives.WriteUInt16BigEndian(span[4..6], Checksum);
-        Data.Span.CopyTo(span[6..]);
+
+        // If the data of this message is already encrypted, it is assumed that the checksum was already appended since it needs to be
+        // included in the encrypted payload
+        if (!Encrypted)
+        {
+            BinaryPrimitives.WriteUInt16BigEndian(span[4..6], Checksum);
+            dataOffset += 2;
+        }
+
+        Data.Span.CopyTo(span[dataOffset..]);
 
         return buffer;
     }

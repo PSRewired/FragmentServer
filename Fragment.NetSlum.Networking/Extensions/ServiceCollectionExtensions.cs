@@ -9,6 +9,7 @@ using Fragment.NetSlum.Networking.Sessions;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Fragment.NetSlum.Networking.Crypto;
+using Fragment.NetSlum.Networking.Pipeline.Encoders;
 using Serilog;
 
 namespace Fragment.NetSlum.Networking.Extensions;
@@ -46,7 +47,7 @@ public static class ServiceCollectionExtensions
 
         services.AddPacketPipeline()
             .AddDecoder<FragmentFrameDecoder>()
-            //.AddEncoder<MediusFrameEncoder>()
+            .AddEncoder<EncryptionEncoder>()
             .UsePacketHandler<FragmentMessage, FragmentPacketHandler>()
             .AddSessionPipeline<FragmentPacketPipeline<FragmentTcpSession>>();
     }

@@ -1,5 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
+using Fragment.NetSlum.Core.Extensions;
+using Serilog;
 
 namespace Fragment.NetSlum.Networking.Crypto;
 
@@ -237,6 +239,11 @@ public class BlowfishProvider
         // Invalid Payload Alignment / Size (has to be a multiple of 8)
         if ((payload.Length & 7) != 0)
         {
+            Log.ForContext<BlowfishProvider>()
+                .Warning(
+                    "Received invalid data alignment while encrypting packet. Expected length to be a multiple of 8, got {ActualValue}\n{HexDump}",
+                    payload.Length, payload.ToHexDump());
+
             return result;
         }
 

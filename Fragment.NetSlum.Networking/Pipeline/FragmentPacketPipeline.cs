@@ -77,7 +77,6 @@ public class FragmentPacketPipeline<TSession> : IDisposable where TSession : ISc
                 _responseObjects.AddRange(resp);
             }
 
-            //TODO: Implement encoding pipeline if needed
             // Run message encoders
             foreach (var encoder in _encoders)
             {
