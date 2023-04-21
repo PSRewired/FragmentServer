@@ -1,7 +1,5 @@
-using System.Buffers.Binary;
 using System.Runtime.CompilerServices;
 using Fragment.NetSlum.Networking.Constants;
-using Fragment.NetSlum.Networking.Crypto;
 using Fragment.NetSlum.Networking.Objects;
 using Serilog;
 

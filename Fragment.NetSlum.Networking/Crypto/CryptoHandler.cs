@@ -1,5 +1,4 @@
 using System.Buffers.Binary;
-using System.Data;
 
 namespace Fragment.NetSlum.Networking.Crypto;
 

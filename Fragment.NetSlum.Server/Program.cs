@@ -13,6 +13,7 @@ var builder = Host.CreateDefaultBuilder(args)
         var buildConfigurationName = assemblyConfigurationAttribute?.Configuration;
 
         builder.AddJsonFile("serverConfig.json", false, true);
+        builder.AddJsonFile("serverConfig.Local.json", true, true);
 
         if (buildConfigurationName == "Release")
         {

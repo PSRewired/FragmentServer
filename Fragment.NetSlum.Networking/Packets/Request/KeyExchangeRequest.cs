@@ -20,10 +20,10 @@ public class KeyExchangeRequest : BaseRequest
 
     public override async Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
-        var clientKey = request.Data[4..];
+        var clientKey = request.Data[2..];
 
         var serverCipher = BlowfishProvider.CreateNew(out var serverKey);
-        _cryptoHandler.ServerCipher = serverCipher;
+        //_cryptoHandler.ServerCipher = serverCipher;
 
         Log.Information("Received client key!\n{HexDump}", clientKey.ToHexDump());
         return new[]
