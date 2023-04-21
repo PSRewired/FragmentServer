@@ -17,16 +17,16 @@ public class FragmentPacketHandler : IPacketHandler<FragmentMessage>
         _packetCache = packetCache;
     }
 
-    public async Task<byte[]> CreateResponse<TSession>(TSession session, FragmentMessage o) where TSession : IScopeable
+    public async Task<ICollection<FragmentMessage>> CreateResponse<TSession>(TSession session, FragmentMessage o) where TSession : IScopeable
     {
         BaseRequest? availableResponseObject = GetRequest(session.ServiceScope.ServiceProvider, o);
 
         if (availableResponseObject == null)
         {
-            return Array.Empty<byte>();
+            return Array.Empty<FragmentMessage>();
         }
 
-        return await availableResponseObject.CreateResponse(session, o.Data.ToArray());
+        return await availableResponseObject.CreateResponse(session, o);
     }
 
     private BaseRequest? GetRequest(IServiceProvider serviceProvider, FragmentMessage o)
@@ -49,10 +49,10 @@ public class FragmentPacketHandler : IPacketHandler<FragmentMessage>
             return null;
         }
 
-#if DEBUG
+//#if DEBUG
         _logger.LogDebug("Response available! [{PacketName}] \n{Object}", request.GetType().Name,
             o);
-#endif
+//#endif
         return request;
     }
 }

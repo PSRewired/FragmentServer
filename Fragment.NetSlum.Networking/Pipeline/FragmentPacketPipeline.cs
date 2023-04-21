@@ -25,7 +25,7 @@ public class FragmentPacketPipeline<TSession> : IDisposable where TSession : ISc
 
     private readonly MemoryStream _outBuf = new();
     private readonly List<FragmentMessage> _decodedObjects = new();
-    //private readonly List<FragmentMessage> _responseObjects = new();
+    private readonly List<FragmentMessage> _responseObjects = new();
 
     public FragmentPacketPipeline(IEnumerable<IPacketDecoder> decoders,
         IPacketHandler<FragmentMessage> fragmentPacketHandler, IEnumerable<IMessageEncoder> encoders)
@@ -74,11 +74,9 @@ public class FragmentPacketPipeline<TSession> : IDisposable where TSession : ISc
                 var request = _decodedObjects[i];
                 var resp = await _fragmentPacketHandler.CreateResponse(session, request);
 
-                //TODO: Right now we have no idea what to expect on the way out so just return the responses as they come
-                _outBuf.Write(resp);
+                _responseObjects.AddRange(resp);
             }
 
-            /*
             //TODO: Implement encoding pipeline if needed
             // Run message encoders
             foreach (var encoder in _encoders)
@@ -92,7 +90,6 @@ public class FragmentPacketPipeline<TSession> : IDisposable where TSession : ISc
             {
                 _outBuf.Write(rsp.ToArray());
             }
-            */
 
             cancellationToken.ThrowIfCancellationRequested();
             return _outBuf.ToArray();

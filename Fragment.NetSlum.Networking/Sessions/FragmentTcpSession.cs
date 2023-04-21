@@ -1,6 +1,7 @@
 using System.Runtime.CompilerServices;
 using Fragment.NetSlum.Core.DependencyInjection;
 using Fragment.NetSlum.Core.Extensions;
+using Fragment.NetSlum.Networking.Crypto;
 using Fragment.NetSlum.Networking.Pipeline;
 using Fragment.NetSlum.TcpServer;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,6 +36,7 @@ public class FragmentTcpSession : TcpSession, IScopeable
 
         try
         {
+            var crypto = new BlowfishProvider();
             var resp = await _packetPipeline.Handle(this, data, cancellationToken);
 
             #if (DEBUG)

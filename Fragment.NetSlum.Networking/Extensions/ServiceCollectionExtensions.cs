@@ -8,6 +8,7 @@ using Fragment.NetSlum.Networking.Pipeline.Decoders;
 using Fragment.NetSlum.Networking.Sessions;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using Fragment.NetSlum.Networking.Crypto;
 using Serilog;
 
 namespace Fragment.NetSlum.Networking.Extensions;
@@ -41,6 +42,7 @@ public static class ServiceCollectionExtensions
         Log.Information("Registered {Count} packets into cache", totalPackets);
 
         services.AddSingleton(cache);
+        services.AddScoped<CryptoHandler>();
 
         services.AddPacketPipeline()
             .AddDecoder<FragmentFrameDecoder>()

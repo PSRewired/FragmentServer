@@ -1,3 +1,4 @@
+using Fragment.NetSlum.Networking.Objects;
 using Fragment.NetSlum.Networking.Sessions;
 using Serilog;
 
@@ -7,7 +8,7 @@ public abstract class BaseRequest
 {
     public ILogger Log => Serilog.Log.ForContext(GetType());
 
-    public virtual Task<byte[]> GetResponse(FragmentTcpSession session, byte[] request)
+    public virtual Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         throw new NotImplementedException($"Class [{GetType().Name}] does not support this method.");
     }
