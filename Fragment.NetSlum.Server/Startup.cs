@@ -1,6 +1,8 @@
 using Fragment.NetSlum.Core;
 using Fragment.NetSlum.Networking.Extensions;
 using Fragment.NetSlum.Server.Servers;
+using Fragment.NetSlum.Server.Services;
+using Fragment.NetSlum.TcpServer;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -37,7 +39,8 @@ public class Startup
 
         services.AddPacketHandling();
         services.Configure<ServerConfiguration>(Configuration.GetSection("TcpServer"));
-        services.AddSingleton<IServer, Servers.Server>();
+        services.AddSingleton<ITcpServer, Servers.Server>();
+        services.AddHostedService<ServerBackgroundService>();
     }
 
     public void Configure(IApplicationBuilder app, IHostEnvironment env)
