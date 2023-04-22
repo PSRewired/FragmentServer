@@ -48,7 +48,7 @@ public class FragmentTcpSession : TcpSession, IScopeable
             );
             #endif
 
-            Send(data.Span);
+            Send(resp.Span);
         }
         catch (OperationCanceledException)
         {
