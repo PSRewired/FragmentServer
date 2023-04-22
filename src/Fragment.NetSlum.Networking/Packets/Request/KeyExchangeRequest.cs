@@ -30,10 +30,10 @@ public class KeyExchangeRequest : BaseRequest
         }
 
         var clientKey = request.Data[2..(keySize+2)];
-        //_cryptoHandler.ClientCipher.PrepareNewKey(clientKey.ToArray());
+        _cryptoHandler.ClientCipher.PrepareNewKey(clientKey.ToArray());
 
         var serverCipher = BlowfishProvider.CreateNew(out var serverKey);
-        //_cryptoHandler.ServerCipher.PrepareNewKey(serverKey);
+        _cryptoHandler.ServerCipher.PrepareNewKey(serverKey);
 
         Log.Information("Received client key!\n{HexDump}", clientKey.ToHexDump());
         return new[]
