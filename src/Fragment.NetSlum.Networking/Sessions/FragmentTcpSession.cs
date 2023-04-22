@@ -36,7 +36,6 @@ public class FragmentTcpSession : TcpSession, IScopeable
 
         try
         {
-            var crypto = new BlowfishProvider();
             var resp = await _packetPipeline.Handle(this, data, cancellationToken);
 
             #if (DEBUG)

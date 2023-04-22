@@ -1,3 +1,5 @@
+using System.Buffers.Binary;
+using System.Data;
 using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Networking.Attributes;
 using Fragment.NetSlum.Networking.Constants;
@@ -20,11 +22,18 @@ public class KeyExchangeRequest : BaseRequest
 
     public override async Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
-        var clientKey = request.Data[4..];
-        _cryptoHandler.ClientCipher.PrepareNewKey(clientKey.ToArray());
+        var keySize = BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[..2]);
+
+        if (keySize != 16)
+        {
+            throw new DataException($"Invalid key length for key exchange. Expected 16 got {keySize}");
+        }
+
+        var clientKey = request.Data[2..(keySize+2)];
+        //_cryptoHandler.ClientCipher.PrepareNewKey(clientKey.ToArray());
 
         var serverCipher = BlowfishProvider.CreateNew(out var serverKey);
-        _cryptoHandler.ServerCipher.PrepareNewKey(serverKey);
+        //_cryptoHandler.ServerCipher.PrepareNewKey(serverKey);
 
         Log.Information("Received client key!\n{HexDump}", clientKey.ToHexDump());
         return new[]

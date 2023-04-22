@@ -49,7 +49,7 @@ public class FragmentFrameDecoder : IPacketDecoder
         var code = (OpCodes)BinaryPrimitives.ReadUInt16BigEndian(messageContent[..2]);
         messageContent = messageContent[2..];
 
-        if (messageContent.Length < 1)
+        if (messageContent.Length < 3)
         {
             return pos;
         }
