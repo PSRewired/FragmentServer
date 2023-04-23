@@ -27,7 +27,16 @@ public class EncryptionEncoder : IMessageEncoder
             using var bufferOwner = MemoryPool<byte>.Shared.Rent(payloadLength);
             var buffer = bufferOwner.Memory.Span;
 
-            BinaryPrimitives.WriteUInt16BigEndian(buffer[..2], response.Checksum);
+            if (response.OpCode == Constants.OpCodes.Data)
+            {
+                BinaryPrimitives.WriteUInt16BigEndian(buffer[..2], response.DataChecksum);
+            }
+            else
+            {
+                BinaryPrimitives.WriteUInt16BigEndian(buffer[..2], response.Checksum);
+            }
+
+            
             response.Data.Span.CopyTo(buffer[2..]);
 
             if (_cryptoHandler.TryEncrypt(buffer[..payloadLength].ToArray(), out var encryptedData))
