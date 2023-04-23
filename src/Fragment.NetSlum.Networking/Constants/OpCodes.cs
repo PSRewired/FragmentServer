@@ -2,6 +2,7 @@ namespace Fragment.NetSlum.Networking.Constants;
 
 public enum OpCodes : ushort
 {
+    None = 0x00,
     Ping = 0x02,
 
     Data = 0x30,
@@ -20,19 +21,19 @@ public enum OpCodes : ushort
     LobbyUserEnterGreeting = 0x5,
 
     //MISC_DEFINES
-    ClienttypeGame = 0x7430,
-    ClienttypeAreaserver = 0x7431,
-    ClienttypeWebclient = 0x7432,
+    ClientTypeGame = 0x7430,
+    ClientTypeAreaServer = 0x7431,
+    ClientTypeWebclient = 0x7432,
 
-    AreaserverStatusOpen = 0x00,
-    AreaserverStatusBusy = 0x02,
+    AreaServerStatusOpen = 0x00,
+    AreaServerStatusBusy = 0x02,
 
     //Packet 0x30 subOpcode Defines
     //The area server likes to ping in a DATA packet...
     DataPing = 0x02,
 
     //Nice to know.
-    DataServerkeyChange = 0x31,
+    DataServerKeyChange = 0x31,
 
     //Not sure that's actually what this does.
     DataPing2 = 0x40,
@@ -42,19 +43,19 @@ public enum OpCodes : ushort
     DataLogonRepeat = 0x7000,
     DataLogonResponse = 0x7001,
 
-    //check and see if there's new posts on the BBS?
+    //Check and see if there's new Posts on the BBS?
     DataBbsGetUpdates = 0x786A,
 
 
-    DataLobbyEnterroom = 0x7006,
-    DataLobbyEnterroomOk = 0x7007,
+    DataLobbyEnterRoom = 0x7006,
+    DataLobbyEnterRoomOk = 0x7007,
 
     DataLobbyStatusUpdate = 0x7009,
 
-    DataLobbyChatroomGetlist = 0x7406,
-    DataLobbyChatroomCategory = 0x7407,
+    DataLobbyChatroomGetList = 0x7406,
+    DataLobbyChatrookCategory = 0x7407,
 
-    DataLobbyChatroomListerror = 0x7408,
+    DataLobbyChatroomListError = 0x7408,
 
     //not seen?
     DataLobbyChatroomEntryCategory = 0x7409,
@@ -72,33 +73,33 @@ public enum OpCodes : ushort
     //Doesn't work
     DataLogonAs2Response = 0x701d,
 
-    DataDiskid = 0x7423,
+    DataDiskId = 0x7423,
 
-    DataDiskidOk = 0x7424,
-    DataDiskidBad = 0x7425,
+    DataDiskIdOk = 0x7424,
+    DataDiskIdBad = 0x7425,
 
-    DataSaveid = 0x7426,
-    DataSaveidOk = 0x7427,
+    DataSaveId = 0x7426,
+    DataSaveIdOk = 0x7427,
 
-    DataLobbyExitroom = 0x7444,
-    DataLobbyExitroomOk = 0x7445,
+    DataLobbyExitRoom = 0x7444,
+    DataLobbyExitRoomOk = 0x7445,
 
     DataRegisterChar = 0x742B,
 
-    DataRegisterCharok = 0x742C,
+    DataRegisterCharOk = 0x742C,
 
     DataUnregisterChar = 0x7432,
-    DataUnregisterCharok = 0x7433,
+    DataUnregisterCharOk = 0x7433,
 
     DataReturnDesktop = 0x744a,
     DataReturnDesktopOk = 0x744b,
 
     //main lobby...
-    DataLobbyGetmenu = 0x7500,
-    DataLobbyCategorylist = 0x7501,     // uint16_t numberOfCategories
-    DataLobbyGetmenuFail = 0x7502,     //Failed to get list
+    DataLobbyGetMenu = 0x7500,
+    DataLobbyCategoryList = 0x7501,     // uint16_t numberOfCategories
+    DataLobbyGetMenuFail = 0x7502,     //Failed to get list
     DataLobbyEntryCategory = 0x7503,     //uint16_t categoryNum, char* categoryName
-    DataLobbyLobbylist = 0x7504,     //uint16_t numberOfLobbies
+    DataLobbyLobbyList = 0x7504,     //uint16_t numberOfLobbies
 
     DataLobbyEntryLobby = 0x7505,     //uint16_t lobbyNum, char* lobbyName, uint32_t numUsers (?)
 
@@ -106,26 +107,26 @@ public enum OpCodes : ushort
     DataLobbyEvent = 0x7862,
 
 
-    DataLobbyGetservers = 0x7841,
-    DataLobbyGetserversOk = 0x7842,
+    DataLobbyGetServers = 0x7841,
+    DataLobbyGetServersOk = 0x7842,
 
     //ANOTHER Tree
-    DataLobbyGetserversGetlist = 0x7506,
-    DataLobbyGetserversCategorylist = 0x7507,     //arg is # items?
-    DataLobbyGetserversFail = 0x7508,     //FAILED
-    DataLobbyGetserversEntryCategory = 0x7509,     //The DIRS
-    DataLobbyGetserversServerlist = 0x750A,     //arg is # items?
-    DataLobbyGetserversEntryServer = 0x750B,     //yay...
+    DataLobbyGetServersGetList = 0x7506,
+    DataLobbyGetServersCategoryList = 0x7507,     //arg is # items?
+    DataLobbyGetServersFail = 0x7508,     //FAILED
+    DataLobbyGetServersEntryCategory = 0x7509,     //The DIRS
+    DataLobbyGetServersServerList = 0x750A,     //arg is # items?
+    DataLobbyGetServersEntryServer = 0x750B,     //yay...
 
 
-    DataLobbyGetserversExit = 0x7844,
-    DataLobbyGetserversExitOk = 0x7845,
+    DataLobbyGetServersExit = 0x7844,
+    DataLobbyGetServersExitOk = 0x7845,
 
-    DataNewsGetmenu = 0x784E,
-    DataNewsCategorylist = 0x784F,     //arg is #of items in category list
-    DataNewsGetmenuFailed = 0x7850,     //Failed
+    DataNewsGetMenu = 0x784E,
+    DataNewsCategoryList = 0x784F,     //arg is #of items in category list
+    DataNewsGetMenuFailed = 0x7850,     //Failed
     DataNewsEntryCategory = 0x7851,     //Category list Entry
-    DataNewsArticlelist = 0x7852,     //Article list, Arg is # entries
+    DataNewsArticleList = 0x7852,     //Article list, Arg is # entries
 
     DataNewsEntryArticle = 0x7853,     //Article List Entry
 
@@ -136,24 +137,24 @@ public enum OpCodes : ushort
     //784f - ok
 
 
-    DataNewsGetpost = 0x7854,
+    DataNewsGetPost = 0x7854,
 
-    DataNewsSendpost = 0x7855,
+    DataNewsSendPost = 0x7855,
     //7856
     //7857
     //7855
 
 
     DataMailGet = 0x7803,
-    DataMailGetok = 0x7804,
-    DataMailGetNewmailHeader = 0x788a,
+    DataMailGetOk = 0x7804,
+    DataMailGetNewMailHeader = 0x788a,
     DataMailGetMailBody = 0x7806,
     DataMailGetMailBodyResponse = 0x7807,
 
     //BBS	POSTING	STUFF
-    DataBbsGetmenu = 0x7848,
-    DataBbsCategorylist = 0x7849,
-    DataBbsGetmenuFailed = 0x784a,
+    DataBbsGetMenu = 0x7848,
+    DataBbsCategoryList = 0x7849,
+    DataBbsGetMenuFailed = 0x784a,
     DataBbsEntryCategory = 0x784b,
     DataBbsThreadlist = 0x784c,
 
@@ -162,9 +163,9 @@ public enum OpCodes : ushort
     //784a error
     //784b catEnrty
     //784c threadList
-    //784d threadEnrty			
+    //784d threadEnrty
 
-    DataBbsThreadGetmenu = 0x7818,
+    DataBbsThreadGetMenu = 0x7818,
     DataBbsThreadList = 0x7819,
     DataBbsEntryPostMeta = 0x781a,
     DataBbsThreadEntryPost = 0x781b,
@@ -173,20 +174,19 @@ public enum OpCodes : ushort
     //781a
     //781b
 
-
     RankingViewAll = 0x7832,
     RankingViewPlayer = 0x7838,
 
     //These happen upon entering ALTIMIT DESKTOP
-    DataMailcheck = 0x7867,
-    DataMailcheckOk = 0x7868,
+    DataMailCheck = 0x7867,
+    DataMailCheckOk = 0x7868,
 
-    DataMailcheckFail = 0x7869,
+    DataMailCheckFail = 0x7869,
 
     //
-    DataNewcheck = 0x786D,
+    DataNewCheck = 0x786D,
 
-    DataNewcheckOk = 0x786E,
+    DataNewCheckOk = 0x786E,
     //
 
     DataCom = 0x7876,
@@ -194,10 +194,10 @@ public enum OpCodes : ushort
 
     DataSelectChar = 0x789f,
 
-    DataSelectCharok = 0x78A0,
+    DataSelectCharOk = 0x78A0,
 
     // probably something else but this works in our favor
-    DataSelectChardenied = 0x78a1,
+    DataSelectCharDenied = 0x78a1,
 
 
     DataSelect2Char = 0x78a2,
@@ -205,7 +205,7 @@ public enum OpCodes : ushort
 /*
 DATA_SELECT_CHAR2 seems to be a 1:1 clone of the normal OPCODE_DATA_SELECT_CHAR packet.
 */
-    DataSelect2Charok = 0x78a3,
+    DataSelect2CharOk = 0x78a3,
 
 
     DataLogon = 0x78AB,
@@ -228,12 +228,12 @@ DATA_SELECT_CHAR2 seems to be a 1:1 clone of the normal OPCODE_DATA_SELECT_CHAR 
     ///////////////
     //AREA	SERVER	DEFINES:
     ///////////////
-    DataAsDiskid = 0x785B,
-    DataAsDiskidOk = 0x785C,
-    DataAsDiskidFail = 0x785d,
+    DataAsDiskId = 0x785B,
+    DataAsDiskIdOk = 0x785C,
+    DataAsDiskIdFail = 0x785d,
 
-    DataAsIpport = 0x7013,
-    DataAsIpportOk = 0x7014,
+    DataAsIpPort = 0x7013,
+    DataAsIpPortOk = 0x7014,
 
     DataAsPublish = 0x78AE,
     DataAsPublishOk = 0x78AF,
@@ -255,7 +255,7 @@ DATA_SELECT_CHAR2 seems to be a 1:1 clone of the normal OPCODE_DATA_SELECT_CHAR 
     DataAsPublishDetails4 = 0x7887,
     DataAsPublishDetails4Ok = 0x7888,
 
-    DataAsUpdateUsernum = 0x741D,     //uint32_t numUsers
+    DataAsUpdateUserNum = 0x741D,     //uint32_t numUsers
 
     DataAsPublishDetails5Ok = 0x741e,
     //update user num?
@@ -268,8 +268,8 @@ DATA_SELECT_CHAR2 seems to be a 1:1 clone of the normal OPCODE_DATA_SELECT_CHAR 
 
     DataAsPublishDetails7Ok = 0x780d,
 
-    DataAsNameid = 0x5778,
-    DataAsDiskid2 = 0x78a7,     //again?
+    DataAsNameId = 0x5778,
+    DataAsDiskId2 = 0x78a7,     //again?
 
     LobbyTypeGuild = 0x7418,
     LobbyTypeMain = 0x7403,
@@ -280,7 +280,7 @@ DATA_SELECT_CHAR2 seems to be a 1:1 clone of the normal OPCODE_DATA_SELECT_CHAR 
     PrivateBroadcast = 0x788c,
     DataGuildView = 0x772c,
     DataGetGuildInfoResponse = 0x7740,
-    DataAreaserverOk = 0x78AC,
+    DataAreaServerOk = 0x78AC,
 
 
     DataGuildCreate = 0x7600,
@@ -292,19 +292,19 @@ DATA_SELECT_CHAR2 seems to be a 1:1 clone of the normal OPCODE_DATA_SELECT_CHAR 
     DataGuildGetListOfItems = 0x772F,
     DataGuildItemsCount = 0x7730,
     DataGuildItemDetails = 0x7731,
-    DataGuildGetmenu = 0x7733,
+    DataGuildGetMenu = 0x7733,
     DataGuildGetInfo = 0x7739,
 
 
-    DataGuildLoggedinMembers = 0x789c,
-    DataGuildMemberlist = 0x7610,
-    DataGuildGetitemsTobuy = 0x7708,
-    DataGuildGetitems = 0x7728,
+    DataGuildLoggedInMembers = 0x789c,
+    DataGuildMemberList = 0x7610,
+    DataGuildGetItemsToBuy = 0x7708,
+    DataGuildGetItems = 0x7728,
     DataGuildBuyItem = 0x770C,
     DataGuildDonateItem = 0x7702,
     DataGuildGetDonationSettings = 0x7879,
-    DataGuildUpdateitemPricingAvailability = 0x7703,
-    DataGuildUpdateitemPricing = 0x7712,
+    DataGuildUpdateItemPricingAvailability = 0x7703,
+    DataGuildUpdateItemPricing = 0x7712,
     DataGuildGmLeaving = 0x788D,
     DataGuildPlayerLeaving = 0x7616,
     DataGuildPlayerKicked = 0x7864,

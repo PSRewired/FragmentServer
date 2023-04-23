@@ -5,19 +5,18 @@ namespace Fragment.NetSlum.Networking.Attributes;
 [AttributeUsage(AttributeTargets.Struct|AttributeTargets.Class, AllowMultiple = true)]
 public class FragmentPacket : Attribute
 {
-    public OpCodes OpCode;
-    public uint PacketClass;
-    public uint PacketType;
+    public readonly OpCodes OpCode;
+    public readonly OpCodes DataPacketType;
 
     public FragmentPacket(OpCodes opCode)
     {
         OpCode = opCode;
+        DataPacketType = OpCodes.None;
     }
 
-    public FragmentPacket(OpCodes opCode, uint packetClass, uint packetType)
+    public FragmentPacket(OpCodes opCode, OpCodes dataPacketType)
     {
         OpCode = opCode;
-        PacketClass = packetClass;
-        PacketType = packetType;
+        DataPacketType = dataPacketType;
     }
 }

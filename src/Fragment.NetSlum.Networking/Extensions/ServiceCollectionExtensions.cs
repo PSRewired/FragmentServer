@@ -47,6 +47,7 @@ public static class ServiceCollectionExtensions
 
         services.AddPacketPipeline()
             .AddDecoder<FragmentFrameDecoder>()
+            .AddEncoder<DataTypeEnvelopeEncoder>()
             .AddEncoder<EncryptionEncoder>()
             .UsePacketHandler<FragmentMessage, FragmentPacketHandler>()
             .AddSessionPipeline<FragmentPacketPipeline<FragmentTcpSession>>();

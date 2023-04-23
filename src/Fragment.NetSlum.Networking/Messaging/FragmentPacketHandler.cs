@@ -43,7 +43,7 @@ public class FragmentPacketHandler : IPacketHandler<FragmentMessage>
         if (serviceProvider.GetService(pType) is not BaseRequest request)
         {
             _logger.LogWarning(
-                "A packet containing the [MediusRequest] annotation was found but was not registered for use. Name:  {Object}",
+                "A packet containing the [FragmentPacket] annotation was found but was not registered for use. Name:  {Object}",
                 pType);
 
             return null;

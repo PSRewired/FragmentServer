@@ -9,63 +9,40 @@ namespace Fragment.NetSlum.Networking.Messaging;
 
 public class PacketCache
 {
-    private readonly Dictionary<OpCodes, Dictionary<uint, Dictionary<uint, Type>>> _packetReferences = new();
+    private readonly Dictionary<OpCodes, Dictionary<OpCodes, Type>> _packetReferences = new();
 
     public void AddRequest(FragmentPacket msg, Type t)
     {
         EnsureCreated(msg);
 
-        var existingType = _packetReferences[msg.OpCode][msg.PacketClass][msg.PacketType];
-        if (existingType != null)
+        if (_packetReferences[msg.OpCode].TryGetValue(msg.DataPacketType, out var existingType))
         {
             throw new InvalidConstraintException(
                 $"Attempted to add packet {t.Name} when existing reference already exists. ({existingType.Name})");
         }
 
-        _packetReferences[msg.OpCode][msg.PacketClass][msg.PacketType] = t;
+        _packetReferences[msg.OpCode][msg.DataPacketType] = t;
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveOptimization|MethodImplOptions.AggressiveInlining)]
+    [MethodImpl(MethodImplOptions.AggressiveOptimization | MethodImplOptions.AggressiveInlining)]
     public Type? GetRequest(FragmentMessage o)
     {
-        uint packetClass = 0;
-        uint packetType = 0;
+        var opCode = o.OpCode;
+        var dataPacketType = o.DataPacketType;
 
-        var rtType = o.OpCode;
-
-        if (!_packetReferences.ContainsKey(rtType))
+        if (!_packetReferences.ContainsKey(opCode))
         {
             return null;
         }
 
-        if (!_packetReferences[rtType].ContainsKey(packetClass))
-        {
-            return null;
-        }
-
-        if (!_packetReferences[rtType][packetClass].ContainsKey(packetType))
-        {
-            return null;
-        }
-
-        return _packetReferences[rtType][packetClass][packetType];
+        return !_packetReferences[opCode].ContainsKey(dataPacketType) ? null : _packetReferences[opCode][dataPacketType];
     }
 
     private void EnsureCreated(FragmentPacket msg)
     {
         if (!_packetReferences.ContainsKey(msg.OpCode))
         {
-            _packetReferences[msg.OpCode] = new Dictionary<uint, Dictionary<uint, Type>>();
-        }
-
-        if (!_packetReferences[msg.OpCode].ContainsKey(msg.PacketClass))
-        {
-            _packetReferences[msg.OpCode][msg.PacketClass] = new Dictionary<uint, Type>();
-        }
-
-        if (!_packetReferences[msg.OpCode][msg.PacketClass].ContainsKey(msg.PacketType))
-        {
-            _packetReferences[msg.OpCode][msg.PacketClass][msg.PacketType] = null;
+            _packetReferences[msg.OpCode] = new Dictionary<OpCodes, Type>();
         }
     }
 
@@ -76,13 +53,10 @@ public class PacketCache
 
         foreach (var (type, classes) in _packetReferences)
         {
-            sb.AppendLine($"{type} ({((byte) type):X2})");
+            sb.AppendLine($"{type} ({((byte)type):X2})");
             foreach (var (cls, pTypes) in classes)
             {
-                foreach (var (pType, rType) in pTypes)
-                {
-                    sb.AppendLine($"    Type: {pType:X2} -> {rType}");
-                }
+                sb.AppendLine($"  Type: {cls} -> {pTypes}");
             }
         }
 

@@ -83,8 +83,7 @@ public class FragmentPacketPipeline<TSession> : IDisposable where TSession : ISc
                 encoder.Encode(_responseObjects, _outBuf);
             }
 
-            // This should technically never happen with the frame encoder, but be paranoid and flush anything that may
-            // still exist after the encoding process
+            // Flush encoded messages to the outgoing buffer
             foreach (var rsp in _responseObjects)
             {
                 _outBuf.Write(rsp.ToArray());
@@ -109,7 +108,7 @@ public class FragmentPacketPipeline<TSession> : IDisposable where TSession : ISc
             // Ensure that no matter what happens, we clear out the buffers in case the caller allows this to
             // try running again
             _decodedObjects.Clear();
-            //_responseObjects.Clear();
+            _responseObjects.Clear();
         }
     }
 

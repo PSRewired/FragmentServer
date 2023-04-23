@@ -1,8 +1,9 @@
 using System.Buffers.Binary;
-using Fragment.NetSlum.Networking.Constants;
+using System.Reflection.Emit;
 using Fragment.NetSlum.Networking.Crypto;
 using Fragment.NetSlum.Networking.Objects;
 using Serilog;
+using OpCodes = Fragment.NetSlum.Networking.Constants.OpCodes;
 
 namespace Fragment.NetSlum.Networking.Pipeline.Decoders;
 
@@ -47,10 +48,16 @@ public class FragmentFrameDecoder : IPacketDecoder
         pos += messageContent.Length;
 
         var code = (OpCodes)BinaryPrimitives.ReadUInt16BigEndian(messageContent[..2]);
+
         messageContent = messageContent[2..];
 
-        if (messageContent.Length < 3)
+        if (messageContent.Length < 1)
         {
+            messages.Add(new FragmentMessage
+            {
+                OpCode = code,
+                //Data = decrypted,
+            });
             return pos;
         }
 
@@ -58,12 +65,27 @@ public class FragmentFrameDecoder : IPacketDecoder
 
         Log.Information("[CRYPTO] Decrypt Result: {Result}", ok ? "OK" : "FAIL");
 
+        var dataPacketType = OpCodes.None;
+
+        // For data packets, the payload contains a envelope in the following format
+        // [??:ushort][sequenceNum:ushort][envelopeContentLength:ushort][dataPacketType:ushort][...Data...]
+        if (code == OpCodes.Data)
+        {
+            var decryptedAsSpan = decrypted.AsSpan();
+            var clientSequenceNumber = BinaryPrimitives.ReadUInt16BigEndian(decryptedAsSpan[2..4]);
+            var dataLen = BinaryPrimitives.ReadUInt16BigEndian(decryptedAsSpan[4..6]);
+
+            dataPacketType = (OpCodes) BinaryPrimitives.ReadUInt16BigEndian(decryptedAsSpan[6..8]);
+            decrypted = decrypted[8..(8 + dataLen)];
+        }
+
         messages.Add(new FragmentMessage
         {
             OpCode = code,
+            DataPacketType = dataPacketType,
             Data = decrypted,
         });
 
-        return data.Length;
+        return pos;
     }
 }

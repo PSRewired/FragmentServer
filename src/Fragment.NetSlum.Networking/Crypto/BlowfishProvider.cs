@@ -63,6 +63,7 @@ public class BlowfishProvider
     public void PrepareNewKey(byte[] key)
     {
         _secretKey = key;
+        Log.ForContext<BlowfishProvider>().Debug("Blowfish provider preparing new key for use: {Key} Waiting for Initialization", _secretKey.ToHexString());
     }
 
     /// <summary>
@@ -172,6 +173,7 @@ public class BlowfishProvider
                 tempChunks[1] = _sBoxes[i][j + 1];
             }
         }
+        Log.ForContext<BlowfishProvider>().Debug("Initialized blowfish cipher suite using key {Key}", _secretKey.ToHexString());
     }
 
     public byte[] Decrypt(byte[] payload)

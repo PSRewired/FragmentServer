@@ -2,12 +2,12 @@ using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Extensions;
 using Fragment.NetSlum.Networking.Objects;
 
-namespace Fragment.NetSlum.Networking.Packets.Response;
+namespace Fragment.NetSlum.Networking.Packets.Response.Security;
 
 public class KeyExchangeResponse : BaseResponse
 {
-    private Memory<byte> _clientKey = new byte[16];
-    private Memory<byte> _serverKey = new byte[16];
+    private readonly Memory<byte> _clientKey = new byte[16];
+    private readonly Memory<byte> _serverKey = new byte[16];
 
     public KeyExchangeResponse SetClientKey(Memory<byte> key)
     {

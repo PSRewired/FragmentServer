@@ -4,7 +4,7 @@ using Fragment.NetSlum.Networking.Crypto;
 using Fragment.NetSlum.Networking.Objects;
 using Fragment.NetSlum.Networking.Sessions;
 
-namespace Fragment.NetSlum.Networking.Packets.Request;
+namespace Fragment.NetSlum.Networking.Packets.Request.Security;
 
 [FragmentPacket(OpCodes.KeyExchangeAcknowledgment)]
 public class KeyExchangeAcknowledgementRequest : BaseRequest

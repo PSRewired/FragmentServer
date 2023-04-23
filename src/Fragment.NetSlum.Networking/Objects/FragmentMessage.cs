@@ -8,8 +8,9 @@ namespace Fragment.NetSlum.Networking.Objects;
 
 public class FragmentMessage
 {
-    public OpCodes OpCode { get; set; }
-    public Memory<byte> Data { get; set; }
+    public required OpCodes OpCode { get; set; }
+    public OpCodes DataPacketType { get; set; } = OpCodes.None;
+    public Memory<byte> Data { get; set; } = Array.Empty<byte>();
     public ushort Checksum => BlowfishProvider.Checksum(Data.ToArray());
 
     public bool Encrypted { get; set; }
@@ -19,7 +20,7 @@ public class FragmentMessage
     /// [DataLength][OpCode][Checksum][UnencryptedPayload]
     /// [DataLength][OpCode][EncryptedData(checksum included)]
     /// </summary>
-    public ushort Length => (ushort)(sizeof(OpCodes) + (Encrypted ? 0 : sizeof(ushort)) + Data.Length);
+    public ushort Length => (ushort)(sizeof(OpCodes) + /*(Encrypted ? 0 : sizeof(ushort)) +*/ Data.Length);
 
     public byte[] ToArray()
     {
@@ -34,8 +35,8 @@ public class FragmentMessage
         // included in the encrypted payload
         if (!Encrypted)
         {
-            BinaryPrimitives.WriteUInt16BigEndian(span[4..6], Checksum);
-            dataOffset += 2;
+            //BinaryPrimitives.WriteUInt16BigEndian(span[4..6], Checksum);
+            //dataOffset += 2;
         }
 
         Data.Span.CopyTo(span[dataOffset..]);
@@ -48,6 +49,11 @@ public class FragmentMessage
         var sb = new StringBuilder();
 
         sb.Append($"[OP: {OpCode}({(ushort)OpCode:X4})");
+        if (OpCode == OpCodes.Data)
+        {
+            sb.Append($", DTYPE: {DataPacketType}({(ushort)DataPacketType:X4})");
+        }
+
         sb.Append($", CHK: {Checksum:X4}({Checksum})]");
         sb.AppendLine("");
         sb.AppendLine("Data:");
