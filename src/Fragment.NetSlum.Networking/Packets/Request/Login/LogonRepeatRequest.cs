@@ -16,9 +16,9 @@ namespace Fragment.NetSlum.Networking.Packets.Request.Login
     [FragmentPacket(OpCodes.Data, OpCodes.Data_LogonRepeatRequest)]
     public class LogonRepeatRequest :BaseRequest
     {
-        private readonly ILogger<LogonRequest> _logger;
+        private readonly ILogger<LogonRepeatRequest> _logger;
 
-        public LogonRepeatRequest(ILogger<LogonRequest> logger)
+        public LogonRepeatRequest(ILogger<LogonRepeatRequest> logger)
         {
             _logger = logger;
         }

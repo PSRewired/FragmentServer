@@ -66,4 +66,11 @@ public static class PacketExtensions
             _ => throw new ArgumentException($"{session?.GetType()} is not a valid session type")
         };
     }
+
+    public static string BuildIPStringFromBytes(this byte[] data)
+    {
+        var b = data[0..4].Reverse();
+
+        return string.Join(".", b);
+    }
 }

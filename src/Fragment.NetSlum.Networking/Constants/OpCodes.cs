@@ -232,8 +232,8 @@ DATA_SELECT_CHAR2 seems to be a 1:1 clone of the normal OPCODE_DATA_SELECT_CHAR 
     Data_AreaServerDiskAuthorizationSuccess = 0x785C,
     Data_AreaServerDiskAuthorizationFailed = 0x785d,
 
-    DataAsIpPort = 0x7013,
-    DataAsIpPortOk = 0x7014,
+    Data_AreaServerIpPortRequest = 0x7013,
+    Data_AreaServerIpPortSuccess = 0x7014,
 
     DataAsPublish = 0x78AE,
     DataAsPublishOk = 0x78AF,

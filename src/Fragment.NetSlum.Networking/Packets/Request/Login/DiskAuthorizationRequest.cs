@@ -16,9 +16,9 @@ namespace Fragment.NetSlum.Networking.Packets.Request.Login
     [FragmentPacket(OpCodes.Data, OpCodes.Data_DiskAuthorizationRequest)]
     public class DiskAuthorizationRequest : BaseRequest
     {
-        private readonly ILogger<LogonRequest> _logger;
+        private readonly ILogger<DiskAuthorizationRequest> _logger;
 
-        public DiskAuthorizationRequest(ILogger<LogonRequest> logger)
+        public DiskAuthorizationRequest(ILogger<DiskAuthorizationRequest> logger)
         {
             _logger = logger;
         }

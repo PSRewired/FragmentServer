@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Fragment.NetSlum.Networking.Packets.Response.Login
+namespace Fragment.NetSlum.Networking.Packets.Response.AreaServer
 {
     public class AreaServerIPAddressPortResponse : BaseResponse
     {
@@ -15,7 +15,7 @@ namespace Fragment.NetSlum.Networking.Packets.Response.Login
             return new FragmentMessage
             {
                 OpCode = OpCodes.Data,
-                DataPacketType = OpCodes.Data_AreaServerDiskAuthorizationSuccess,
+                DataPacketType = OpCodes.Data_AreaServerIpPortSuccess,
                 Data = new byte[] { 0x00, 0x00 },
             };
         }

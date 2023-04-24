@@ -12,8 +12,8 @@ public class FragmentFrameDecoderTest
     [Fact]
     public void DecoderCanSuccessfullyParseDataTypePackets()
     {
-        var clientKey = "AFA8BB3A0E88107AC4CAE3B689EEE85D".StringToByteArray();
-        var data = "00120030385DE8434EDBD09DA52449CDF47FD6B2".StringToByteArray();
+        var clientKey = "F26C30B852E4415E1D8B719B3803ECC3".StringToByteArray();
+        var data = "0012003057B9B5EA2691E3E229359DC28AAF0CEB".StringToByteArray();
 
         var crypto = new BlowfishProvider(clientKey);
         crypto.Initialize();

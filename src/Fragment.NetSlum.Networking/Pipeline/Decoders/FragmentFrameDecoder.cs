@@ -76,7 +76,7 @@ public class FragmentFrameDecoder : IPacketDecoder
             var dataLen = BinaryPrimitives.ReadUInt16BigEndian(decryptedAsSpan[4..6]);
 
             dataPacketType = (OpCodes) BinaryPrimitives.ReadUInt16BigEndian(decryptedAsSpan[6..8]);
-            decrypted = decrypted[8..(8 + dataLen)];
+            decrypted = decrypted[8..];
         }
 
         messages.Add(new FragmentMessage
