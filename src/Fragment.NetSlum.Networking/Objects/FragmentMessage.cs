@@ -12,7 +12,6 @@ public class FragmentMessage
     public OpCodes DataPacketType { get; set; } = OpCodes.None;
     public Memory<byte> Data { get; set; } = Array.Empty<byte>();
     public ushort Checksum => BlowfishProvider.Checksum(Data.ToArray());
-    public ushort DataChecksum { get; set; }
     public bool Encrypted { get; set; }
 
     /// <summary>

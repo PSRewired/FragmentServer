@@ -1,5 +1,6 @@
 using System.Buffers;
 using System.Buffers.Binary;
+using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Crypto;
 using Fragment.NetSlum.Networking.Objects;
 using Microsoft.Extensions.Logging;
@@ -21,22 +22,23 @@ public class EncryptionEncoder : IMessageEncoder
     {
         foreach (var response in responseObjects)
         {
+            var checksum = response.Checksum;
+
+            if (response.OpCode == OpCodes.Data)
+            {
+                var paddedBuff = new Memory<byte>(new byte[GetPaddedBufferLength(response.Data.Length)]);
+                response.Data.CopyTo(paddedBuff);
+                response.Data = paddedBuff;
+            }
+
+
             // Need to copy the checksum to the payload before encryption
             var payloadLength = response.Data.Length + 2;
 
             using var bufferOwner = MemoryPool<byte>.Shared.Rent(payloadLength);
             var buffer = bufferOwner.Memory.Span;
 
-            if (response.OpCode == Constants.OpCodes.Data)
-            {
-                BinaryPrimitives.WriteUInt16BigEndian(buffer[..2], response.DataChecksum);
-            }
-            else
-            {
-                BinaryPrimitives.WriteUInt16BigEndian(buffer[..2], response.Checksum);
-            }
-
-            
+            BinaryPrimitives.WriteUInt16BigEndian(buffer[..2],checksum);
             response.Data.Span.CopyTo(buffer[2..]);
 
             if (_cryptoHandler.TryEncrypt(buffer[..payloadLength].ToArray(), out var encryptedData))
@@ -46,5 +48,19 @@ public class EncryptionEncoder : IMessageEncoder
                 response.Data = encryptedData;
             }
         }
+    }
+    /// <summary>
+    /// Fragment requires data packets to be packed into buffers aligned by 8 bytes
+    /// </summary>
+    /// <param name="dataLength"></param>
+    /// <returns></returns>
+    private static int GetPaddedBufferLength(int dataLength)
+    {
+        while ((dataLength + 2 & 7) != 0)
+        {
+            dataLength++;
+        }
+
+        return dataLength;
     }
 }
