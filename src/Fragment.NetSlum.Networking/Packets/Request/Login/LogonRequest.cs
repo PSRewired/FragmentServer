@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.Login;
 
-[FragmentPacket(OpCodes.Data, OpCodes.DataLogon)]
+[FragmentPacket(OpCodes.Data, OpCodes.Data_LogonRequest)]
 public class LogonRequest : BaseRequest
 {
     private readonly ILogger<LogonRequest> _logger;

@@ -40,8 +40,8 @@ public enum OpCodes : ushort
     DataPong2 = 0x41,
 
 
-    DataLogonRepeat = 0x7000,
-    DataLogonResponse = 0x7001,
+    Data_LogonRepeatRequest = 0x7000,
+    Data_LogonResponse = 0x7001,
 
     //Check and see if there's new Posts on the BBS?
     DataBbsGetUpdates = 0x786A,
@@ -73,10 +73,10 @@ public enum OpCodes : ushort
     //Doesn't work
     DataLogonAs2Response = 0x701d,
 
-    DataDiskId = 0x7423,
+    Data_DiskAuthorizationRequest = 0x7423,
 
-    DataDiskIdOk = 0x7424,
-    DataDiskIdBad = 0x7425,
+    Data_DiskAuthorizationSuccess = 0x7424,
+    Data_DiskAuthorizationFailed = 0x7425,
 
     DataSaveId = 0x7426,
     DataSaveIdOk = 0x7427,
@@ -208,7 +208,7 @@ DATA_SELECT_CHAR2 seems to be a 1:1 clone of the normal OPCODE_DATA_SELECT_CHAR 
     DataSelect2CharOk = 0x78a3,
 
 
-    DataLogon = 0x78AB,
+    Data_LogonRequest = 0x78AB,
 
     //Area server doesn't like 0x7001
     DataLogonResponseAs = 0x78AD,
@@ -228,9 +228,9 @@ DATA_SELECT_CHAR2 seems to be a 1:1 clone of the normal OPCODE_DATA_SELECT_CHAR 
     ///////////////
     //AREA	SERVER	DEFINES:
     ///////////////
-    DataAsDiskId = 0x785B,
-    DataAsDiskIdOk = 0x785C,
-    DataAsDiskIdFail = 0x785d,
+    Data_AreaServerDiskAuthorizationRequest = 0x785B,
+    Data_AreaServerDiskAuthorizationSuccess = 0x785C,
+    Data_AreaServerDiskAuthorizationFailed = 0x785d,
 
     DataAsIpPort = 0x7013,
     DataAsIpPortOk = 0x7014,

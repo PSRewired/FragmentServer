@@ -3,7 +3,7 @@ using Fragment.NetSlum.Networking.Objects;
 
 namespace Fragment.NetSlum.Networking.Packets.Response.Login;
 
-public class LogonResponse : BaseResponse
+public class LogonRepeatResponse : BaseResponse
 {
     public override FragmentMessage Build()
     {
@@ -11,7 +11,7 @@ public class LogonResponse : BaseResponse
         {
             OpCode = OpCodes.Data,
             DataPacketType = OpCodes.Data_LogonResponse,
-            Data = new byte[] { 0x74, 0x32 } // Represents "t2" in UTF8?
+            Data = new byte[] { 0x02, 0x10 }
         };
     }
 }
