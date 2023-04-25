@@ -1,0 +1,27 @@
+site_name: FragmentServer
+site_url: https://www.mkdocs.org/
+site_description: A emulated server for the game .hack//Frägment
+site_author: PSRewired
+
+repo_url: https://github.com/PSRewired/FragmentServer/
+edit_uri: blob/master/docs/
+
+theme:
+    name: mkdocs
+    locale: en
+
+nav:
+    - Home: index.md
+    - Networking and Messaging: networking/
+    - About:
+          - Contributing: about/contributing.md
+          - License: about/license.md
+
+markdown_extensions:
+    - toc:
+          permalink: 
+
+copyright: Copyright &copy; 2023 PSRewired
+
+plugins:
+    - search
