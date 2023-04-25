@@ -1,13 +1,10 @@
 using Fragment.NetSlum.Networking.Attributes;
 using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Objects;
-using Fragment.NetSlum.Networking.Packets.Response.Login;
 using Fragment.NetSlum.Networking.Packets.Response;
 using Fragment.NetSlum.Networking.Sessions;
 using Microsoft.Extensions.Logging;
-using System.Net;
-using Fragment.NetSlum.Networking.Extensions;
-using System.Buffers.Binary;
+using Fragment.NetSlum.Networking.Packets.Response.AreaServer;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.AreaServer
 {
@@ -23,9 +20,8 @@ namespace Fragment.NetSlum.Networking.Packets.Request.AreaServer
 
         public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
         {
-           
-            IPAddress areaServerIp = IPAddress.Parse(request.Data[0..4].ToArray().BuildIPStringFromBytes());
-            ushort areaServerPort = BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[4..6]);
+            session.IpAddress = request.Data[0..4].ToArray();
+            session.Port = request.Data[4..6].ToArray();
             BaseResponse response = new AreaServerIPAddressPortResponse();
             return Task.FromResult<ICollection<FragmentMessage>>(new[] { response.Build() });
         }

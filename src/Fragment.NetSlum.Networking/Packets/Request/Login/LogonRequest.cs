@@ -26,6 +26,7 @@ public class LogonRequest : BaseRequest
         {
             case (byte)OpCodes.DataServerKeyChange:
                 _logger.LogInformation("Session {SessionId} has identified itself as an Area Server", session.Id);
+                session.IsAreaServer = true;
                 response = new AreaServerLogonResponse();
                 break;
             default:

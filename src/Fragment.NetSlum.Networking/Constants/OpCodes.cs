@@ -68,8 +68,8 @@ public enum OpCodes : ushort
     DataLobbyChatroomCreateError = 0x7417,
 
     //Why?
-    DataLogonAs2 = 0x7019,
-
+    Data_AreaServerLogon2Request = 0x7019,
+    Data_AreaServerLogon2Response = 0x701C,
     //Doesn't work
     DataLogonAs2Response = 0x701d,
 
