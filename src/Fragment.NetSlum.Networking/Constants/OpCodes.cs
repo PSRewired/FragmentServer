@@ -84,6 +84,7 @@ public enum OpCodes : ushort
     DataLobbyExitRoom = 0x7444,
     DataLobbyExitRoomOk = 0x7445,
 
+    Data_PlayerAccountInfoOk = 0x742A,
     DataRegisterChar = 0x742B,
 
     DataRegisterCharOk = 0x742C,

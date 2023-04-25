@@ -11,6 +11,30 @@ public static class DataExtensions
             .ToArray();
     }
 
+    public static Span<byte> EnsureSize(this Span<byte> arr, int size)
+    {
+        if (arr.Length >= size)
+        {
+            return arr;
+        }
+
+        var resized = new Span<byte>(new byte[size]);
+        arr.CopyTo(resized);
+        return resized;
+    }
+
+    public static Memory<byte> EnsureSize(this Memory<byte> arr, int size)
+    {
+        if (arr.Length >= size)
+        {
+            return arr;
+        }
+
+        var resized = new Memory<byte>(new byte[size]);
+        arr.CopyTo(resized);
+        return resized;
+    }
+
     public static string ToHexString(this Span<byte> ba)
     {
         return ToHexString(ba.ToArray());

@@ -1,3 +1,4 @@
+using System.Text;
 using Fragment.NetSlum.Core;
 using Fragment.NetSlum.Networking.Extensions;
 using Fragment.NetSlum.Server.Servers;
@@ -49,5 +50,8 @@ public class Startup
         {
             ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
         });
+
+        // Register additional encodings, since dotnet core only supports ASCII, ISO-8859, and UTF by default
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
     }
 }
