@@ -15,6 +15,43 @@ public class FragmentTcpSession : TcpSession, IScopeable
     private readonly ILogger<FragmentTcpSession> _logger;
     private readonly FragmentPacketPipeline<FragmentTcpSession> _packetPipeline;
 
+    public byte[] IpAddress { get; set; } = new byte[8];
+    public byte[] Port { get; set; } = new byte[2];
+    public bool IsAreaServer { get; set; } = false;
+    public DateTime LastContacted { get; set; } = DateTime.UtcNow;
+
+    //Fields only used for a Player
+    public int PlayerAccountId { get; set; }
+    public byte PlayerSaveSlot { get; set; }
+    public byte[] PlayerSaveId { get; set; }
+    public byte[] PlayerCharacterName { get; set; }
+    public byte[] PlayerCharacterId { get; set; }
+    public byte PlayerCharacterClass { get; set; }
+    public ushort PlayerCharacterLevel { get; set; }
+    public byte[] PlayerCharacterGreeting { get; set; }
+    public uint PlayerCharacterModel { get; set; }
+    public ushort PlayerCharacterHP { get; set; }
+    public ushort PlayerCharacterSP { get; set; }
+    public uint PlayerCharacterGP { get; set; }
+    public ushort PlayerCharacterOnlineStatueDCounter { get; set; }
+    public ushort PlayerCharacterOfflineStatueCounter { get; set; }
+    public ushort PlayerCharacterGoldCoinCount { get; set; }
+    public ushort PlayerCharacterSilveCoinCount { get; set; }
+    public ushort PlayerCharacterBronzeCoinCount { get; set; }
+    public char PlayerCharacterClassLetter { get; set; }
+    public int PlayerCharacterModelNumber { get; set; }
+    public char PlayerCharacterModelType { get; set; }
+    public string PlayerCharacterColorCode { get; set; }
+    public string PlayerCharacterModelFile { get; set; }
+
+    //Area Server Fields
+    public byte[] AreaServerName { get; set; }
+    public ushort AreaServerLevel { get; set; }
+    public byte AreaServerStatus { get; set; }
+    public ushort AreaServerPlayerCount { get;set; }
+
+
+
     public FragmentTcpSession(ITcpServer server, IServiceScope serviceScope) : base(server)
     {
         ServiceScope = serviceScope;
