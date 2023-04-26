@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace Fragment.NetSlum.Core.Entities;
+namespace Fragment.NetSlum.Persistence.Entities.Deprecated;
 
 [Table("news_section")]
 [Index("ArticleId", Name = "news_section_articleID_uindex", IsUnique = true)]

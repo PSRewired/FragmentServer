@@ -1,4 +1,5 @@
 using System.Buffers.Binary;
+using Fragment.NetSlum.Core.Constants;
 using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Objects;
 

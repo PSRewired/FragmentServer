@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace Fragment.NetSlum.Core.Entities;
+namespace Fragment.NetSlum.Persistence.Entities.Deprecated;
 
 [Table("bbs_post_body")]
 [Index("PostId", Name = "BBS_Post_Body_BBS_Post_Meta_postID_fk")]

@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Fragment.NetSlum.Core\Fragment.NetSlum.Core.csproj" />
+      <ProjectReference Include="..\Fragment.NetSlum.Persistence\Fragment.NetSlum.Persistence.csproj" />
       <ProjectReference Include="..\Fragment.NetSlum.TcpServer\Fragment.NetSlum.TcpServer.csproj" />
     </ItemGroup>
 

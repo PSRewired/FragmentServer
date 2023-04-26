@@ -1,4 +1,4 @@
-namespace Fragment.NetSlum.Networking.Constants;
+namespace Fragment.NetSlum.Core.Constants;
 
 public enum GuildStatus : byte
 {

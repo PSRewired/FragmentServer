@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace Fragment.NetSlum.Core.Entities;
+namespace Fragment.NetSlum.Persistence.Entities.Deprecated;
 
 [Table("mail_body")]
 [Index("MailId", Name = "MAIL_BODY_MAIL_ID_uindex", IsUnique = true)]

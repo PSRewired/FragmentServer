@@ -1,7 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace Fragment.NetSlum.Core.Entities;
+namespace Fragment.NetSlum.Persistence.Entities.Deprecated;
 
 [Keyless]
 [Table("failed_jobs")]

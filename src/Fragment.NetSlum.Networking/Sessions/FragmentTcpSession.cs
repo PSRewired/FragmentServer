@@ -1,7 +1,9 @@
 using System.Runtime.CompilerServices;
 using Fragment.NetSlum.Core.DependencyInjection;
 using Fragment.NetSlum.Core.Extensions;
+using Fragment.NetSlum.Core.Models;
 using Fragment.NetSlum.Networking.Crypto;
+using Fragment.NetSlum.Networking.Objects;
 using Fragment.NetSlum.Networking.Pipeline;
 using Fragment.NetSlum.TcpServer;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,27 +24,8 @@ public class FragmentTcpSession : TcpSession, IScopeable
 
     //Fields only used for a Player
     public int PlayerAccountId { get; set; }
-    public byte PlayerSaveSlot { get; set; }
-    public byte[] PlayerSaveId { get; set; }
-    public byte[] PlayerCharacterName { get; set; }
-    public byte[] PlayerCharacterId { get; set; }
-    public byte PlayerCharacterClass { get; set; }
-    public ushort PlayerCharacterLevel { get; set; }
-    public byte[] PlayerCharacterGreeting { get; set; }
-    public uint PlayerCharacterModel { get; set; }
-    public ushort PlayerCharacterHP { get; set; }
-    public ushort PlayerCharacterSP { get; set; }
-    public uint PlayerCharacterGP { get; set; }
-    public ushort PlayerCharacterOnlineStatueDCounter { get; set; }
-    public ushort PlayerCharacterOfflineStatueCounter { get; set; }
-    public ushort PlayerCharacterGoldCoinCount { get; set; }
-    public ushort PlayerCharacterSilveCoinCount { get; set; }
-    public ushort PlayerCharacterBronzeCoinCount { get; set; }
-    public char PlayerCharacterClassLetter { get; set; }
-    public int PlayerCharacterModelNumber { get; set; }
-    public char PlayerCharacterModelType { get; set; }
-    public string PlayerCharacterColorCode { get; set; }
-    public string PlayerCharacterModelFile { get; set; }
+
+    public CharacterInfo? CharacterInfo { get; set; }
 
     //Area Server Fields
     public byte[] AreaServerName { get; set; }

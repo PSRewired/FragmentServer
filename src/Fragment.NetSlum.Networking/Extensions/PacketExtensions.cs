@@ -7,18 +7,6 @@ namespace Fragment.NetSlum.Networking.Extensions;
 
 public static class PacketExtensions
 {
-    /// <summary>
-    /// Read an array of bytes until a string until a null terminator is encountered.
-    /// If no null terminator is found, the array is assumed to be the entire string content
-    /// </summary>
-    /// <param name="data"></param>
-    /// <returns></returns>
-    public static string GetNullTerminatedString(this byte[] data)
-    {
-        var inx = Array.FindIndex(data, 0, (x) => x == 0);//search for 0
-
-        return inx >= 0 ? Encoding.UTF8.GetString(data, 0, inx) : Encoding.UTF8.GetString(data);
-    }
 
     /// <summary>
     /// Replaces bytes in an existing packet with new data specified.

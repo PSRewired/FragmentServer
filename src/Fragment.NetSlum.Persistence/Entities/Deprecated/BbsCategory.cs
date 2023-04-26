@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace Fragment.NetSlum.Core.Entities;
+namespace Fragment.NetSlum.Persistence.Entities.Deprecated;
 
 [Table("bbs_category")]
 [Index("CategoryId", Name = "BBS_Category_categoryID_uindex", IsUnique = true)]

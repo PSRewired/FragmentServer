@@ -1,15 +1,17 @@
-﻿using Fragment.NetSlum.Core.Entities;
+﻿using System;
+using Fragment.NetSlum.Persistence.Entities.Deprecated;
 using Microsoft.EntityFrameworkCore;
 
-namespace Fragment.NetSlum.Core;
+namespace Fragment.NetSlum.Persistence;
 
-public class FragmentContext : DbContext
+[Obsolete("This database context is for migration or testing purposes only.")]
+public class OldFragmentContext : DbContext
 {
-    public FragmentContext()
+    public OldFragmentContext()
     {
     }
 
-    public FragmentContext(DbContextOptions<FragmentContext> options)
+    public OldFragmentContext(DbContextOptions<OldFragmentContext> options)
         : base(options)
     {
     }
