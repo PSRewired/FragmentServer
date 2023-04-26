@@ -236,41 +236,31 @@ DATA_SELECT_CHAR2 seems to be a 1:1 clone of the normal OPCODE_DATA_SELECT_CHAR 
     Data_AreaServerIpPortRequest = 0x7013,
     Data_AreaServerIpPortSuccess = 0x7014,
 
-    DataAsPublish = 0x78AE,
-    DataAsPublishOk = 0x78AF,
+    Data_AreaServerPublishRequest = 0x78AE,
+    Data_AreaServerPublishSucess = 0x78AF,
 
 
-    DataAsPublishDetails1 = 0x7011,
+    Data_AreaServerPublishDetails1Request = 0x7011,
+    Data_AreaServerPublishDetails2Request = 0x7016,
+    Data_AreaServerPublishDetails3Request = 0x7881,
+    Data_AreaServerPublishDetails4Request = 0x7887,
+    Data_AreaServerPublishDetails6Request = 0x78a7,
 
-    DataAsPublishDetails1Ok = 0x7012,
-
-    DataAsPublishDetails2 = 0x7016,
-
-    DataAsPublishDetails2Ok = 0x7017,
-    //I'm still not sure what's up with this dude.
-
-
-    DataAsPublishDetails3 = 0x7881,
-    DataAsPublishDetails3Ok = 0x7882,
-
-    DataAsPublishDetails4 = 0x7887,
-    DataAsPublishDetails4Ok = 0x7888,
-
-    DataAsUpdateUserNum = 0x741D,     //uint32_t numUsers
-
-    DataAsPublishDetails5Ok = 0x741e,
-    //update user num?
+    Data_AreaServerPublishDetails1Success = 0x7012,
+    Data_AreaServerPublishDetails2Success = 0x7017,
+    Data_AreaServerPublishDetails3Success = 0x7882,
+    Data_AreaServerPublishDetails4Success = 0x7888,
+    Data_AreaServerPublishDetails5Success = 0x741e,
+    Data_AreaServerPublishDetails6Success = 0x78a8,
+    Data_AreaServerPublishDetails7Success = 0x780d,
 
 
-    DataAsPublishDetails6 = 0x78a7,
-    DataAsPublishDetails6Ok = 0x78a8,
+    Data_AreaServerUpdateUserCountRequest = 0x741D,     //uint32_t numUsers
+    Data_AreaServerUpdateStatusRequest = 0x780C,
 
-    DataAsUpdateStatus = 0x780C,
-
-    DataAsPublishDetails7Ok = 0x780d,
+   
 
     DataAsNameId = 0x5778,
-    DataAsDiskId2 = 0x78a7,     //again?
 
     LobbyTypeGuild = 0x7418,
     LobbyTypeMain = 0x7403,

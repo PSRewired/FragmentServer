@@ -11,9 +11,9 @@ namespace Fragment.NetSlum.Networking.Packets.Request.Login;
 [FragmentPacket(OpCodes.Data, OpCodes.Data_AreaServerLogon2Request)]
 public class AreaServerLogon2Request : BaseRequest
 {
-    private readonly ILogger<LogonRequest> _logger;
+    private readonly ILogger<AreaServerLogon2Request> _logger;
 
-    public AreaServerLogon2Request(ILogger<LogonRequest> logger)
+    public AreaServerLogon2Request(ILogger<AreaServerLogon2Request> logger)
     {
         _logger = logger;
     }
