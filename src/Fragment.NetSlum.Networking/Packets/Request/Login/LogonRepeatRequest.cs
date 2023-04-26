@@ -5,11 +5,6 @@ using Fragment.NetSlum.Networking.Packets.Response.Login;
 using Fragment.NetSlum.Networking.Packets.Response;
 using Fragment.NetSlum.Networking.Sessions;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.Login
 {

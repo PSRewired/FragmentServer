@@ -1,6 +1,4 @@
 using Fragment.NetSlum.Networking.Objects;
-using Fragment.NetSlum.Networking.Packets.Response.AreaServer;
-using Fragment.NetSlum.Networking.Packets.Response;
 using Fragment.NetSlum.Networking.Sessions;
 using Microsoft.Extensions.Logging;
 using System.Buffers.Binary;

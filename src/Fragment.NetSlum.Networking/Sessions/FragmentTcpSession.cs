@@ -2,8 +2,6 @@ using System.Runtime.CompilerServices;
 using Fragment.NetSlum.Core.DependencyInjection;
 using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Core.Models;
-using Fragment.NetSlum.Networking.Crypto;
-using Fragment.NetSlum.Networking.Objects;
 using Fragment.NetSlum.Networking.Pipeline;
 using Fragment.NetSlum.TcpServer;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,7 +26,7 @@ public class FragmentTcpSession : TcpSession, IScopeable
     public CharacterInfo? CharacterInfo { get; set; }
 
     //Area Server Fields
-    public byte[] AreaServerName { get; set; }
+    public byte[] AreaServerName { get; set; } = Array.Empty<byte>();
     public ushort AreaServerLevel { get; set; }
     public byte AreaServerStatus { get; set; }
     public ushort AreaServerPlayerCount { get;set; }

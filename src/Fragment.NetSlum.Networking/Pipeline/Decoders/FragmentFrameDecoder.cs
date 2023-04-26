@@ -1,5 +1,4 @@
 using System.Buffers.Binary;
-using System.Reflection.Emit;
 using Fragment.NetSlum.Networking.Crypto;
 using Fragment.NetSlum.Networking.Objects;
 using Serilog;

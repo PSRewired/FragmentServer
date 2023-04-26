@@ -33,7 +33,7 @@ public class PooledBuffer
             Buffer.BlockCopy(data.Array!, data.Offset, pooledBuffer, 0, data.Count);
 
             var segment = new ArraySegment<byte>(pooledBuffer, 0, data.Count);
-            
+
             _buffer.Enqueue(segment);
         }
     }
@@ -53,7 +53,7 @@ public class PooledBuffer
         return true;
     }
 
-    public bool Pop(ref byte[] payload, out int size)
+    public bool Pop(ref byte[]? payload, out int size)
     {
         lock (this)
         {
@@ -63,12 +63,12 @@ public class PooledBuffer
             {
                 return false;
             }
-            
+
             if (payload == null || payload.Length < msg.Count)
             {
                 payload = new byte[msg.Count];
             }
-            
+
             Buffer.BlockCopy(msg.Array!, msg.Offset, payload, 0, msg.Count);
             size = msg.Count;
 
@@ -77,8 +77,8 @@ public class PooledBuffer
 
         return true;
     }
-    
-    public bool Peek(ref byte[] payload, out int size)
+
+    public bool Peek(ref byte[]? payload, out int size)
     {
         lock (this)
         {
@@ -88,12 +88,12 @@ public class PooledBuffer
             {
                 return false;
             }
-            
+
             if (payload == null || payload.Length < msg.Count)
             {
                 payload = new byte[msg.Count];
             }
-            
+
             Buffer.BlockCopy(msg.Array!, msg.Offset, payload, 0, msg.Count);
             size = msg.Count;
         }
@@ -101,7 +101,7 @@ public class PooledBuffer
         return true;
     }
 
-    public bool Flush(ref byte[] payload, out int size)
+    public bool Flush(ref byte[]? payload, out int size)
     {
         lock (this)
         {
@@ -111,7 +111,7 @@ public class PooledBuffer
             {
                 return false;
             }
-            
+
             foreach (var message in _buffer)
             {
                 size += message.Count;
@@ -121,7 +121,7 @@ public class PooledBuffer
             {
                 payload = new byte[size];
             }
-            
+
             var offset = 0;
             while (_buffer.TryDequeue(out var msg))
             {

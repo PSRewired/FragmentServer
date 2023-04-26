@@ -1,5 +1,4 @@
 using System.Buffers.Binary;
-using System.Text;
 using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Objects;

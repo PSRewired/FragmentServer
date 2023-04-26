@@ -1,5 +1,5 @@
 using System.Text;
-using Fragment.NetSlum.Core;
+using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Networking.Extensions;
 using Fragment.NetSlum.Persistence;
 using Fragment.NetSlum.Server.Servers;
@@ -8,7 +8,6 @@ using Fragment.NetSlum.TcpServer;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,6 +38,7 @@ public class Startup
             .AddProcessAllocatedMemoryHealthCheck(2048)
         ;
 
+        services.AddCommandBus(typeof(Startup), typeof(Networking.Entrypoint));
         services.AddPacketHandling();
         services.Configure<ServerConfiguration>(Configuration.GetSection("TcpServer"));
         services.AddSingleton<ITcpServer, Servers.Server>();

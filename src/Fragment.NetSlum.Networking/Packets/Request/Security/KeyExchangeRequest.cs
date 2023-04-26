@@ -20,7 +20,7 @@ public class KeyExchangeRequest : BaseRequest
         _cryptoHandler = cryptoHandler;
     }
 
-    public override async Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         var keySize = BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[..2]);
 
@@ -36,12 +36,13 @@ public class KeyExchangeRequest : BaseRequest
         _cryptoHandler.ServerCipher.PrepareNewKey(serverKey);
 
         Log.Information("Received client key!\n{HexDump}", clientKey.ToHexDump());
-        return new[]
+
+        return Task.FromResult<ICollection<FragmentMessage>>(new[]
         {
             new KeyExchangeResponse()
                 .SetClientKey(clientKey)
                 .SetServerKey(serverKey)
                 .Build(),
-        };
+        });
     }
 }

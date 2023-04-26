@@ -4,8 +4,6 @@ using System.Security.Cryptography;
 using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Networking.Crypto;
 using Fragment.NetSlum.Networking.Objects;
-using Fragment.NetSlum.Networking.Packets.Request;
-using Fragment.NetSlum.Networking.Packets.Response;
 using Fragment.NetSlum.Networking.Pipeline.Decoders;
 using Fragment.NetSlum.Networking.Pipeline.Encoders;
 using Microsoft.Extensions.Logging;
