@@ -24,10 +24,7 @@ Current Status:
 - Mail #GOnline#W!
 - Guilds #GOnline#W!
 - Ranking #GOnline#W!
-- News #GOnline#W!
-
-WEB: bit.ly/3LvsZYD
-DISCORD: AMqgeFVzBw";
+- News #GOnline#W!";
 
         return Task.FromResult<ICollection<FragmentMessage>>(new[]
         {

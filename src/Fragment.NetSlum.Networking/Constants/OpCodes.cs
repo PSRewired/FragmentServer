@@ -44,8 +44,8 @@ public enum OpCodes : ushort
     Data_LogonResponse = 0x7001,
 
     //Check and see if there's new Posts on the BBS?
-    DataBbsGetUpdates = 0x786A,
-
+    Data_BBSGetUpdatesRequest = 0x786A,
+    Data_BBSGetUpdatesSuccess = 0x786b,
 
     DataLobbyEnterRoom = 0x7006,
     DataLobbyEnterRoomOk = 0x7007,
@@ -206,8 +206,8 @@ public enum OpCodes : ushort
 /*
 DATA_SELECT_CHAR2 seems to be a 1:1 clone of the normal OPCODE_DATA_SELECT_CHAR packet.
 */
-    DataSelect2CharOk = 0x78a3,
-
+    Data_Select2_CharacterSuccess = 0x78a3,
+    
 
     Data_LogonRequest = 0x78AB,
 

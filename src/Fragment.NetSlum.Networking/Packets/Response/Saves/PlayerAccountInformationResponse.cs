@@ -1,4 +1,5 @@
 using System.Buffers.Binary;
+using System.Text;
 using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Objects;
@@ -27,12 +28,14 @@ public class PlayerAccountInformationResponse : BaseResponse
     public override FragmentMessage Build()
     {
         var motd = _motd.ToShiftJis();
+      
         var bufferMemory = new Memory<byte>(new byte[motd.Length + (sizeof(int) * 2)]);
         var buffer = bufferMemory.Span;
 
-        BinaryPrimitives.WriteInt32BigEndian(buffer[..4], _accountId);
-        BinaryPrimitives.WriteInt32BigEndian(buffer[4..8], motd.Length - 1);
-        motd.CopyTo(buffer[8..(8+motd.Length)]);
+        BinaryPrimitives.WriteUInt32LittleEndian(buffer[..4], (uint)_accountId);
+        buffer[3] = (byte)(motd.Length - 1);
+        //BinaryPrimitives.WriteInt32BigEndian(buffer[..4], motd.Length - 1);
+        motd.CopyTo(buffer[4..(4 + motd.Length)]);
 
         return new FragmentMessage
         {

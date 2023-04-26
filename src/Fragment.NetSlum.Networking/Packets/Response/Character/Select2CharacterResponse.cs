@@ -10,7 +10,7 @@ public class Select2CharacterResponse : BaseResponse
         return new FragmentMessage
         {
             OpCode = OpCodes.Data,
-            DataPacketType = OpCodes.DataSelectCharOk,
+            DataPacketType = OpCodes.Data_Select2_CharacterSuccess,
             Data = new Memory<byte>(new byte[] {0x30, 0x30, 0x30, 0x30}), // Apparently represents "0000" literally
         };
     }
