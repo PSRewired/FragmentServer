@@ -22,7 +22,8 @@ public class FragmentTcpSession : TcpSession, IScopeable
 
     //Fields only used for a Player
     public int PlayerAccountId { get; set; }
-
+    public int ChatRoomId { get; set; }
+    public int GuildId { get; set; }
     public CharacterInfo? CharacterInfo { get; set; }
 
     //Area Server Fields
