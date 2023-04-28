@@ -1,3 +1,4 @@
+using System.Data;
 using System.Text;
 using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Networking.Extensions;
@@ -14,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 
 namespace Fragment.NetSlum.Server;
 
@@ -28,11 +30,16 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddDbContext<FragmentContext>(opt =>
-            {
-                var connectionString = Configuration.GetConnectionString("Database");
-                opt.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-            })
+        var connectionString = Configuration.GetConnectionString("Database");
+
+        // Add failsafe to ensure the database is never executed on the original one
+        if (connectionString!.Contains("Database=fragment;"))
+        {
+            throw new ConstraintException("Auto-migrations have been disabled. The connection string contains the old database information!");
+        }
+
+        services
+            .AddDbContext<FragmentContext>(opt => opt.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)))
             .AddAutoMigrations<FragmentContext>();
 
         services.AddHealthChecks()
