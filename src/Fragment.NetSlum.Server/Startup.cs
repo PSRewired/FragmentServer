@@ -2,6 +2,8 @@ using System.Text;
 using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Networking.Extensions;
 using Fragment.NetSlum.Persistence;
+using Fragment.NetSlum.Persistence.Entities;
+using Fragment.NetSlum.Persistence.Extensions;
 using Fragment.NetSlum.Server.Servers;
 using Fragment.NetSlum.Server.Services;
 using Fragment.NetSlum.TcpServer;
@@ -17,7 +19,7 @@ namespace Fragment.NetSlum.Server;
 
 public class Startup
 {
-    public IConfiguration Configuration { get; }
+    private IConfiguration Configuration { get; }
 
     public Startup(IConfiguration configuration)
     {
@@ -27,10 +29,11 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddDbContext<FragmentContext>(opt =>
-        {
-            var connectionString = Configuration.GetConnectionString("Database");
-            opt.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-        });
+            {
+                var connectionString = Configuration.GetConnectionString("Database");
+                opt.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+            })
+            .AddAutoMigrations<FragmentContext>();
 
         services.AddHealthChecks()
             .AddDbContextCheck<FragmentContext>()
@@ -39,6 +42,8 @@ public class Startup
         ;
 
         services.AddCommandBus(typeof(Startup), typeof(Networking.Entrypoint));
+        services.AddAutoMapper(typeof(Startup));
+
         services.AddPacketHandling();
         services.Configure<ServerConfiguration>(Configuration.GetSection("TcpServer"));
         services.AddSingleton<ITcpServer, Servers.Server>();

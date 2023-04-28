@@ -1,5 +1,6 @@
 using Fragment.NetSlum.Core.CommandBus;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 
 namespace Fragment.NetSlum.Core.Extensions;
 
@@ -16,6 +17,11 @@ public static class ServiceCollectionExtensions
         services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssemblies(types.Select(t => t.Assembly).ToArray());
+            cfg.TypeEvaluator = t =>
+            {
+                Log.Information(t.Name);
+                return true;
+            };
         });
 
         services.AddScoped<ICommandBus, MediatorCommandBus>();

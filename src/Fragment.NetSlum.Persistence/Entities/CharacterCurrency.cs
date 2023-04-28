@@ -10,7 +10,7 @@ public class CharacterCurrency
     public int Id { get; set; }
 
     public int CharacterId { get; set; }
-    public required Character Character { get; set; }
+    public Character? Character { get; set; }
 
     public int GoldAmount { get; set; }
     public int SilverAmount { get; set; }

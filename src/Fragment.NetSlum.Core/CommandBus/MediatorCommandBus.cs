@@ -22,13 +22,12 @@ public class MediatorCommandBus : ICommandBus
         await _mediator.Publish(eventInfo, cancellationToken);
     }
 
-    public async Task<TResult> GetResult<TQuery, TResult>(TQuery query, CancellationToken cancellationToken = default) where TQuery : IQuery<TResult>
+    public async Task<TResult> GetResult<TResult>(IQuery<TResult> query, CancellationToken cancellationToken = default)
     {
         return await _mediator.Send(query, cancellationToken);
     }
 
-    public async Task<TResult> Execute<TCommand, TResult>(TCommand command, CancellationToken cancellationToken = default)
-        where TCommand : ICommand<TResult>
+    public async Task<TResult> Execute<TResult>(ICommand<TResult> command, CancellationToken cancellationToken = default)
     {
         return await _mediator.Send(command, cancellationToken);
     }

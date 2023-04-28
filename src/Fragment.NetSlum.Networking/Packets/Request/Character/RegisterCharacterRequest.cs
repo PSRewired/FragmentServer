@@ -1,5 +1,7 @@
+using Fragment.NetSlum.Core.CommandBus;
 using Fragment.NetSlum.Core.Models;
 using Fragment.NetSlum.Networking.Attributes;
+using Fragment.NetSlum.Networking.Commands.Characters;
 using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Objects;
 using Fragment.NetSlum.Networking.Packets.Response.Character;
@@ -12,21 +14,25 @@ namespace Fragment.NetSlum.Networking.Packets.Request.Character;
 public class RegisterCharacterRequest : BaseRequest
 {
     private readonly ILogger<RegisterCharacterRequest> _logger;
+    private readonly ICommandBus _commandBus;
 
-    public RegisterCharacterRequest(ILogger<RegisterCharacterRequest> logger)
+    public RegisterCharacterRequest(ILogger<RegisterCharacterRequest> logger, ICommandBus commandBus)
     {
         _logger = logger;
+        _commandBus = commandBus;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override async Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         session.CharacterInfo = CharacterInfo.FromBinaryData(request.Data.Span);
         _logger.LogInformation("Registering character:\n{CharInfo}", session.CharacterInfo.ToString());
 
-        return Task.FromResult<ICollection<FragmentMessage>>(new[]
+        var character = await _commandBus.Execute(new RegisterCharacterCommand(session.CharacterInfo));
+
+        return new[]
         {
             new RegisterCharacterResponse()
                 .Build()
-        });
+        };
     }
 }

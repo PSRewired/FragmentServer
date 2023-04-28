@@ -11,6 +11,6 @@ namespace Fragment.NetSlum.Core.CommandBus;
 public interface ICommandBus
 {
     Task Notify<TEvent>(TEvent eventInfo, CancellationToken cancellationToken = default) where TEvent : IEvent;
-    Task<TResult> GetResult<TQuery, TResult>(TQuery query, CancellationToken cancellationToken = default) where TQuery : IQuery<TResult>;
-    Task<TResult> Execute<TCommand, TResult>(TCommand command, CancellationToken cancellationToken = default) where TCommand : ICommand<TResult>;
+    Task<TResult> GetResult<TResult>(IQuery<TResult> query, CancellationToken cancellationToken = default);
+    Task<TResult> Execute<TResult>(ICommand<TResult> command, CancellationToken cancellationToken = default);
 }

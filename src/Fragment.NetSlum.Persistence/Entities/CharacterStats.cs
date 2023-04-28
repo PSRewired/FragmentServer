@@ -10,7 +10,7 @@ public class CharacterStats
     public int Id { get; set; }
 
     public int CharacterId { get; set; }
-    public required Character Character { get; set; }
+    public Character? Character { get; set; }
 
     public int CurrentHp { get; set; }
     public int CurrentSp { get; set; }
