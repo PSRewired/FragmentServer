@@ -13,9 +13,11 @@ public class PingRequest : BaseRequest
 {
     public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
+        session.LastContacted = DateTime.UtcNow;
+
         BaseResponse response = new PingResponse();
 
         return Task.FromResult<ICollection<FragmentMessage>>(new[] { response.Build() });
-      
+
     }
 }

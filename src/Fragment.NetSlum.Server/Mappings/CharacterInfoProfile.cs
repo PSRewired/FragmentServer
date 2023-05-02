@@ -17,21 +17,14 @@ public class CharacterInfoProfile : Profile
             .ForMember(x => x.FullModelId, y => y.MapFrom(z => z.ModelId))
             .AfterMap((src, dst, context) => dst.CharacterStats = context.Mapper.Map<CharacterInfo, CharacterStats>(src))
             .AfterMap((src, dst, context) => dst.PlayerAccount = context.Mapper.Map<CharacterInfo, PlayerAccount>(src))
-            .AfterMap((src, dst, context) => dst.CharacterCurrency = context.Mapper.Map<CharacterInfo, CharacterCurrency>(src))
         ;
 
         CreateMap<CharacterInfo, CharacterStats>()
             .ForMember(x => x.CurrentHp, y => y.MapFrom(z => z.SaveSlot))
             .ForMember(x => x.CurrentSp, y => y.MapFrom(z => z.SaveSlot))
             .ForMember(x => x.CurrentGp, y => y.MapFrom(z => z.SaveSlot))
-            .ForMember(x => x.GodOffline, y => y.MapFrom(z => z.SaveSlot))
-            .ForMember(x => x.GodOnline, y => y.MapFrom(z => z.SaveSlot))
-        ;
-
-        CreateMap<CharacterInfo, CharacterCurrency>()
-            .ForMember(x => x.BronzeAmount, y => y.MapFrom(z => z.BronzeCoinCount))
-            .ForMember(x => x.BronzeAmount, y => y.MapFrom(z => z.SilverCoinCount))
-            .ForMember(x => x.BronzeAmount, y => y.MapFrom(z => z.GoldCoinCount))
+            .ForMember(x => x.OnlineTreasures, y => y.MapFrom(z => z.OnlineStatueCounter))
+            .ForMember(x => x.AverageFieldLevel, y => y.MapFrom(z => z.OfflineStatueCounter))
         ;
 
         CreateMap<CharacterInfo, PlayerAccount>()

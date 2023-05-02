@@ -27,14 +27,13 @@ public class PlayerAccountInformationResponse : BaseResponse
     public override FragmentMessage Build()
     {
         var motd = _motd.ToShiftJis();
-      
-        var bufferMemory = new Memory<byte>(new byte[motd.Length + (sizeof(int) * 2)]);
+
+        var bufferMemory = new Memory<byte>(new byte[motd.Length + sizeof(int) + 1]);
         var buffer = bufferMemory.Span;
 
-        BinaryPrimitives.WriteUInt32LittleEndian(buffer[..4], (uint)_accountId);
-        buffer[3] = (byte)(motd.Length - 1);
-        //BinaryPrimitives.WriteInt32BigEndian(buffer[..4], motd.Length - 1);
-        motd.CopyTo(buffer[4..(4 + motd.Length)]);
+        BinaryPrimitives.WriteUInt32BigEndian(buffer[..4], (uint)_accountId);
+        buffer[4] = (byte)(motd.Length - 1);
+        motd.CopyTo(buffer[5..]);
 
         return new FragmentMessage
         {

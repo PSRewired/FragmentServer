@@ -3,8 +3,8 @@ using System.Text;
 using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Networking.Extensions;
 using Fragment.NetSlum.Persistence;
-using Fragment.NetSlum.Persistence.Entities;
 using Fragment.NetSlum.Persistence.Extensions;
+using Fragment.NetSlum.Persistence.Listeners;
 using Fragment.NetSlum.Server.Servers;
 using Fragment.NetSlum.Server.Services;
 using Fragment.NetSlum.TcpServer;
@@ -15,7 +15,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Serilog;
 
 namespace Fragment.NetSlum.Server;
 
@@ -41,6 +40,10 @@ public class Startup
         services
             .AddDbContext<FragmentContext>(opt => opt.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)))
             .AddAutoMigrations<FragmentContext>();
+
+        services.UseEntityListener()
+            .AddListener<TimestampableEntityListener>()
+            .AddListener<CharacterStatsChangeListener>();
 
         services.AddHealthChecks()
             .AddDbContextCheck<FragmentContext>()

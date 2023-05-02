@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Fragment.NetSlum.Core.Constants;
@@ -16,7 +17,6 @@ public class Character : IConfigurableEntity<Character>
     public PlayerAccount? PlayerAccount { get; set; }
 
     public CharacterStats CharacterStats { get; set; } = new();
-    public CharacterCurrency CharacterCurrency { get; set; } = new();
 
     [MySqlCharSet("sjis")]
     [MySqlCollation("sjis_japanese_ci")]
@@ -32,6 +32,9 @@ public class Character : IConfigurableEntity<Character>
 
     public required uint FullModelId { get; set; }
     public required CharacterClass Class { get; set; }
+
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime? LastLoginAt { get; set; }
 
     void IConfigurableEntity<Character>.Configure(EntityTypeBuilder<Character> entityBuilder)
     {

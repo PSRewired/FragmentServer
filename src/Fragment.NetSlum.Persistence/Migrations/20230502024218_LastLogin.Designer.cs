@@ -3,6 +3,7 @@ using System;
 using Fragment.NetSlum.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Fragment.NetSlum.Persistence.Migrations
 {
     [DbContext(typeof(FragmentContext))]
-    partial class FragmentContextModelSnapshot : ModelSnapshot
+    [Migration("20230502024218_LastLogin")]
+    partial class LastLogin
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -223,41 +226,9 @@ namespace Fragment.NetSlum.Persistence.Migrations
                         .HasName("pk_player_accounts");
 
                     b.HasIndex("SaveId")
-                        .IsUnique()
                         .HasDatabaseName("ix_player_accounts_save_id");
 
                     b.ToTable("player_accounts", (string)null);
-                });
-
-            modelBuilder.Entity("Fragment.NetSlum.Persistence.Entities.ServerNews", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("varchar(500)")
-                        .HasColumnName("content");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("created_at");
-
-                    b.HasKey("Id")
-                        .HasName("pk_server_news");
-
-                    b.ToTable("server_news", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Content = "Welcome to Netslum-Redux!\nCurrent Status:\n- Lobby #GOnline#W!\n- BBS #GOnline#W!\n- Mail #GOnline#W!\n- Guilds #GOnline#W!\n- Ranking #GOnline#W!\n- News #GOnline#W!",
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
                 });
 
             modelBuilder.Entity("Fragment.NetSlum.Persistence.Entities.Character", b =>

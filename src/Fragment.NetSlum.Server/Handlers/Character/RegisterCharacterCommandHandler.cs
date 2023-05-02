@@ -25,7 +25,6 @@ public class RegisterCharacterCommandHandler : CommandHandler<RegisterCharacterC
         Persistence.Entities.Character? character = await _database.Characters
             .Include(c => c.PlayerAccount)
             .Include(c => c.CharacterStats)
-            .Include(c => c.CharacterCurrency)
             .Where(c => characterInfo.CharacterName == c.CharacterName &&
                         c.PlayerAccount != null && c.PlayerAccount!.SaveId == characterInfo.SaveId)
             .FirstOrDefaultAsync(cancellationToken);
@@ -39,6 +38,8 @@ public class RegisterCharacterCommandHandler : CommandHandler<RegisterCharacterC
         {
             character.PlayerAccount = playerAccount;
         }
+
+        character.LastLoginAt = DateTime.UtcNow;
 
         _database.Update(character);
         await _database.SaveChangesAsync(cancellationToken);

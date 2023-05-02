@@ -13,4 +13,8 @@
       <ProjectReference Include="..\Fragment.NetSlum.Core\Fragment.NetSlum.Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Migrations\" />
+    </ItemGroup>
+
 </Project>

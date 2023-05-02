@@ -22,7 +22,6 @@ namespace Fragment.NetSlum.Networking.Packets.Request.BBS
         {
             BaseResponse response = new GetBBSUpdatesResponse();
 
-
             return Task.FromResult<ICollection<FragmentMessage>>(new[] { response.Build() });
         }
     }
