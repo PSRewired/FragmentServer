@@ -4,36 +4,71 @@ using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Objects;
 using Fragment.NetSlum.Networking.Packets.Response.Articles;
 using Fragment.NetSlum.Networking.Sessions;
+using Fragment.NetSlum.Persistence;
+using Fragment.NetSlum.Persistence.Entities;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.Articles;
 
 [FragmentPacket(OpCodes.Data, OpCodes.DataNewsGetMenu)]
 public class GetNewsArticlesRequest : BaseRequest
 {
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    private readonly FragmentContext _database;
+
+    public GetNewsArticlesRequest(FragmentContext database)
     {
-        var includeCategories = BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[..2]);
-
-        // we are skipping category listing and we will list only the articles , but either way here is the code for it
-        // Ignore categories only send the article list
-        /*
-        if (u == 0)
-        {
-            ushort count = 1;
-            await SendDataPacket(OpCodes.OPCODE_DATA_NEWS_CATEGORYLIST, BitConverter.GetBytes(swap16(count)));
-
-            ushort catID = 1;
-            string catName = "Testing Category";
-            using MemoryStream memoryStream = new MemoryStream();
-            await memoryStream.WriteAsync(BitConverter.GetBytes(swap16(catID)));
-            await memoryStream.WriteAsync(encoding.GetBytes(catName + char.MinValue));
-            await SendDataPacket(OpCodes.OPCODE_DATA_NEWS_ENTRY_CATEGORY, memoryStream.ToArray());
-        }
-        */
-
-        var articleListResponse = new NewsArticleListResponse();
-
-        return Task.FromResult<ICollection<FragmentMessage>>(new[] { articleListResponse.Build() });
+        _database = database;
     }
 
+    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    {
+        var categoryId = BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[..2]);
+
+        var responses = new List<FragmentMessage>();
+
+        var newsCategories = Array.Empty<WebNewsCategory>();
+
+        if (categoryId < 1)
+        {
+            newsCategories = _database.WebNewsCategories.ToArray();
+        }
+
+        IQueryable<WebNewsArticle> newsArticlesQuery = _database.WebNewsArticles
+            .OrderByDescending(n => n.CreatedAt);
+
+        // Send back categories and articles related
+        if (newsCategories.Any())
+        {
+            responses.Add(new NewsCategoryCountResponse((ushort)newsCategories.Length).Build());
+            responses.AddRange(newsCategories.Select(n => new NewsCategoryEntryResponse()
+                .SetCategoryId(n.Id)
+                .SetCategoryName(n.CategoryName)
+                .Build()
+            ));
+
+            newsArticlesQuery = newsArticlesQuery
+                .Where(n => n.WebNewsCategoryId.HasValue && n.WebNewsCategoryId.Value == categoryId);
+        }
+
+
+        var newsArticles = newsArticlesQuery
+            .Select(n => new
+            {
+                Article = n,
+                HasBeenRead = _database.WebNewsReadLogs.Any(l =>
+                    l.PlayerAccountId == session.PlayerAccountId && l.WebNewsArticleId == n.Id),
+            })
+            .ToArray();
+
+        responses.Add(new NewsArticleCountResponse((ushort)newsArticles.Length).Build());
+        responses.AddRange(newsArticles.Select(n => new NewsArticleEntryResponse()
+            .SetArticleId(n.Article.Id)
+            .SetTitle(n.Article.Title)
+            .SetContent(n.Article.Content)
+            .SetArticleCreationDate(n.Article.CreatedAt)
+            .IsRead(n.HasBeenRead)
+            .Build()
+        ));
+
+        return Task.FromResult<ICollection<FragmentMessage>>(responses);
+    }
 }

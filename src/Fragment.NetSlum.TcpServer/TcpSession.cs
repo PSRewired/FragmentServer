@@ -88,6 +88,7 @@ public class TcpSession : IDisposable
                 _cancellationTokenSource.Token.ThrowIfCancellationRequested();
                 Socket!.SendBufferSize = 8192; //TODO: Max configurable
                 Socket!.ReceiveBufferSize = 8192; //TODO: Max configurable
+                Socket!.ReceiveTimeout = 120000;
 
                 // This synchronous call will block until data is received or the configured ReceiveTimeout has elapsed.
                 var read = Socket!.Receive(_receiveBuffer, SocketFlags.None);

@@ -49,4 +49,7 @@ public class FragmentContext : DbContext
     public virtual DbSet<PlayerAccount> PlayerAccounts { get; set; }
     public virtual DbSet<CharacterStatHistory> CharacterStatHistory { get; set; }
     public virtual DbSet<ServerNews> ServerNews { get; set; }
+    public virtual DbSet<WebNewsCategory> WebNewsCategories { get; set; }
+    public virtual DbSet<WebNewsArticle> WebNewsArticles { get; set; }
+    public virtual DbSet<WebNewsReadLog> WebNewsReadLogs { get; set; }
 }
