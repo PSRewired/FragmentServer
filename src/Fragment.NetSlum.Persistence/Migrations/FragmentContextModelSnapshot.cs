@@ -240,7 +240,10 @@ namespace Fragment.NetSlum.Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("varchar(500)")
-                        .HasColumnName("content");
+                        .HasColumnName("content")
+                        .UseCollation("sjis_japanese_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Content"), "sjis");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)")
@@ -269,8 +272,12 @@ namespace Fragment.NetSlum.Persistence.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasColumnName("content");
+                        .HasMaxLength(412)
+                        .HasColumnType("varchar(412)")
+                        .HasColumnName("content")
+                        .UseCollation("sjis_japanese_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Content"), "sjis");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)")
@@ -278,22 +285,22 @@ namespace Fragment.NetSlum.Persistence.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasColumnName("title");
+                        .HasMaxLength(33)
+                        .HasColumnType("varchar(33)")
+                        .HasColumnName("title")
+                        .UseCollation("sjis_japanese_ci");
 
-                    b.Property<int?>("WebNewsCategoryId")
-                        .HasColumnType("int")
-                        .HasColumnName("web_news_category_id");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Title"), "sjis");
 
-                    b.Property<ushort?>("WebNewsCategoryId1")
+                    b.Property<ushort?>("WebNewsCategoryId")
                         .HasColumnType("smallint unsigned")
-                        .HasColumnName("web_news_category_id1");
+                        .HasColumnName("web_news_category_id");
 
                     b.HasKey("Id")
                         .HasName("pk_web_news_articles");
 
-                    b.HasIndex("WebNewsCategoryId1")
-                        .HasDatabaseName("ix_web_news_articles_web_news_category_id1");
+                    b.HasIndex("WebNewsCategoryId")
+                        .HasDatabaseName("ix_web_news_articles_web_news_category_id");
 
                     b.ToTable("web_news_articles", (string)null);
                 });
@@ -307,8 +314,12 @@ namespace Fragment.NetSlum.Persistence.Migrations
 
                     b.Property<string>("CategoryName")
                         .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasColumnName("category_name");
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64)")
+                        .HasColumnName("category_name")
+                        .UseCollation("sjis_japanese_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("CategoryName"), "sjis");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)")
@@ -343,13 +354,9 @@ namespace Fragment.NetSlum.Persistence.Migrations
                         .HasColumnType("int")
                         .HasColumnName("player_account_id");
 
-                    b.Property<int>("WebNewsArticleId")
-                        .HasColumnType("int")
-                        .HasColumnName("web_news_article_id");
-
-                    b.Property<ushort>("WebNewsArticleId1")
+                    b.Property<ushort>("WebNewsArticleId")
                         .HasColumnType("smallint unsigned")
-                        .HasColumnName("web_news_article_id1");
+                        .HasColumnName("web_news_article_id");
 
                     b.HasKey("Id")
                         .HasName("pk_web_news_read_logs");
@@ -357,8 +364,8 @@ namespace Fragment.NetSlum.Persistence.Migrations
                     b.HasIndex("PlayerAccountId")
                         .HasDatabaseName("ix_web_news_read_logs_player_account_id");
 
-                    b.HasIndex("WebNewsArticleId1")
-                        .HasDatabaseName("ix_web_news_read_logs_web_news_article_id1");
+                    b.HasIndex("WebNewsArticleId")
+                        .HasDatabaseName("ix_web_news_read_logs_web_news_article_id");
 
                     b.ToTable("web_news_read_logs", (string)null);
                 });
@@ -403,8 +410,8 @@ namespace Fragment.NetSlum.Persistence.Migrations
                 {
                     b.HasOne("Fragment.NetSlum.Persistence.Entities.WebNewsCategory", "WebNewsCategory")
                         .WithMany()
-                        .HasForeignKey("WebNewsCategoryId1")
-                        .HasConstraintName("fk_web_news_articles_web_news_categories_web_news_category_id1");
+                        .HasForeignKey("WebNewsCategoryId")
+                        .HasConstraintName("fk_web_news_articles_web_news_categories_web_news_category_id");
 
                     b.Navigation("WebNewsCategory");
                 });
@@ -420,10 +427,10 @@ namespace Fragment.NetSlum.Persistence.Migrations
 
                     b.HasOne("Fragment.NetSlum.Persistence.Entities.WebNewsArticle", "WebNewsArticle")
                         .WithMany()
-                        .HasForeignKey("WebNewsArticleId1")
+                        .HasForeignKey("WebNewsArticleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_web_news_read_logs_web_news_articles_web_news_article_id1");
+                        .HasConstraintName("fk_web_news_read_logs_web_news_articles_web_news_article_id");
 
                     b.Navigation("PlayerAccount");
 

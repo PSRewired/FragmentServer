@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Fragment.NetSlum.Persistence.Entities;
@@ -12,6 +13,8 @@ public class ServerNews : IConfigurableEntity<ServerNews>
     public int Id { get; set; }
 
     [MaxLength(500)]
+    [MySqlCharSet("sjis")]
+    [MySqlCollation("sjis_japanese_ci")]
     public string Content { get; set; } = null!;
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

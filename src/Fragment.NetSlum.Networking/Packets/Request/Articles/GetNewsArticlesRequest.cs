@@ -46,7 +46,7 @@ public class GetNewsArticlesRequest : BaseRequest
             ));
 
             newsArticlesQuery = newsArticlesQuery
-                .Where(n => n.WebNewsCategoryId.HasValue && n.WebNewsCategoryId.Value == categoryId);
+                .Where(n => n.WebNewsCategoryId == categoryId);
         }
 
 

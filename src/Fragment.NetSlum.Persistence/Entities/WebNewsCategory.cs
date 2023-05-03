@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Fragment.NetSlum.Persistence.Entities;
@@ -11,6 +12,9 @@ public class WebNewsCategory : IConfigurableEntity<WebNewsCategory>
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public ushort Id { get; set; }
 
+    [MySqlCharSet("sjis")]
+    [MySqlCollation("sjis_japanese_ci")]
+    [MaxLength(64)]
     public required string CategoryName { get; set; }
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

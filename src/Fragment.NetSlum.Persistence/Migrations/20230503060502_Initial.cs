@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Fragment.NetSlum.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialTest : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,6 +32,38 @@ namespace Fragment.NetSlum.Persistence.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "server_news",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    content = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false, collation: "sjis_japanese_ci")
+                        .Annotation("MySql:CharSet", "sjis"),
+                    created_at = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_server_news", x => x.id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "web_news_categories",
+                columns: table => new
+                {
+                    id = table.Column<ushort>(type: "smallint unsigned", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    category_name = table.Column<string>(type: "varchar(64)", maxLength: 64, nullable: false, collation: "sjis_japanese_ci")
+                        .Annotation("MySql:CharSet", "sjis"),
+                    created_at = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_web_news_categories", x => x.id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "characters",
                 columns: table => new
                 {
@@ -46,7 +78,8 @@ namespace Fragment.NetSlum.Persistence.Migrations
                     current_level = table.Column<int>(type: "int", nullable: false),
                     full_model_id = table.Column<uint>(type: "int unsigned", nullable: false),
                     @class = table.Column<byte>(name: "class", type: "tinyint unsigned", nullable: false),
-                    created_at = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    created_at = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    last_login_at = table.Column<DateTime>(type: "datetime(6)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -57,6 +90,30 @@ namespace Fragment.NetSlum.Persistence.Migrations
                         principalTable: "player_accounts",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "web_news_articles",
+                columns: table => new
+                {
+                    id = table.Column<ushort>(type: "smallint unsigned", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    web_news_category_id = table.Column<ushort>(type: "smallint unsigned", nullable: true),
+                    title = table.Column<string>(type: "varchar(33)", maxLength: 33, nullable: false, collation: "sjis_japanese_ci")
+                        .Annotation("MySql:CharSet", "sjis"),
+                    content = table.Column<string>(type: "varchar(412)", maxLength: 412, nullable: false, collation: "sjis_japanese_ci")
+                        .Annotation("MySql:CharSet", "sjis"),
+                    created_at = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_web_news_articles", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_web_news_articles_web_news_categories_web_news_category_id",
+                        column: x => x.web_news_category_id,
+                        principalTable: "web_news_categories",
+                        principalColumn: "id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -119,6 +176,44 @@ namespace Fragment.NetSlum.Persistence.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "web_news_read_logs",
+                columns: table => new
+                {
+                    id = table.Column<ushort>(type: "smallint unsigned", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    player_account_id = table.Column<int>(type: "int", nullable: false),
+                    web_news_article_id = table.Column<ushort>(type: "smallint unsigned", nullable: false),
+                    created_at = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_web_news_read_logs", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_web_news_read_logs_player_accounts_player_account_id",
+                        column: x => x.player_account_id,
+                        principalTable: "player_accounts",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "fk_web_news_read_logs_web_news_articles_web_news_article_id",
+                        column: x => x.web_news_article_id,
+                        principalTable: "web_news_articles",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.InsertData(
+                table: "server_news",
+                columns: new[] { "id", "content", "created_at" },
+                values: new object[] { 1, "Welcome to Netslum-Redux!\nCurrent Status:\n- Lobby #GOnline#W!\n- BBS #GOnline#W!\n- Mail #GOnline#W!\n- Guilds #GOnline#W!\n- Ranking #GOnline#W!\n- News #GOnline#W!", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) });
+
+            migrationBuilder.InsertData(
+                table: "web_news_categories",
+                columns: new[] { "id", "category_name", "created_at" },
+                values: new object[] { (ushort)1, "Netslum News", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) });
+
             migrationBuilder.CreateIndex(
                 name: "ix_character_stat_history_character_id",
                 table: "character_stat_history",
@@ -148,7 +243,23 @@ namespace Fragment.NetSlum.Persistence.Migrations
             migrationBuilder.CreateIndex(
                 name: "ix_player_accounts_save_id",
                 table: "player_accounts",
-                column: "save_id");
+                column: "save_id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_web_news_articles_web_news_category_id",
+                table: "web_news_articles",
+                column: "web_news_category_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_web_news_read_logs_player_account_id",
+                table: "web_news_read_logs",
+                column: "player_account_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_web_news_read_logs_web_news_article_id",
+                table: "web_news_read_logs",
+                column: "web_news_article_id");
         }
 
         /// <inheritdoc />
@@ -161,10 +272,22 @@ namespace Fragment.NetSlum.Persistence.Migrations
                 name: "character_stats");
 
             migrationBuilder.DropTable(
+                name: "server_news");
+
+            migrationBuilder.DropTable(
+                name: "web_news_read_logs");
+
+            migrationBuilder.DropTable(
                 name: "characters");
 
             migrationBuilder.DropTable(
+                name: "web_news_articles");
+
+            migrationBuilder.DropTable(
                 name: "player_accounts");
+
+            migrationBuilder.DropTable(
+                name: "web_news_categories");
         }
     }
 }

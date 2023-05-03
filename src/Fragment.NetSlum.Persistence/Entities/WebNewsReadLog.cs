@@ -13,7 +13,7 @@ public class WebNewsReadLog
     public int PlayerAccountId { get; set; }
     public PlayerAccount PlayerAccount { get; set; } = null!;
 
-    public int WebNewsArticleId { get; set; }
+    public ushort WebNewsArticleId { get; set; }
     public WebNewsArticle WebNewsArticle { get; set; } = null!;
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
