@@ -1,4 +1,4 @@
-﻿#nullable disable
+#nullable disable
 
 using System;
 using System.Linq;
@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Fragment.NetSlum.Persistence;
 
+//dotnet ef migrations add Initial -s .\src\Fragment.NetSlum.Server\ -p .\src\Fragment.NetSlum.Persistence\ --context FragmentContext
 public class FragmentContext : DbContext
 {
     public FragmentContext()
@@ -52,4 +53,5 @@ public class FragmentContext : DbContext
     public virtual DbSet<WebNewsCategory> WebNewsCategories { get; set; }
     public virtual DbSet<WebNewsArticle> WebNewsArticles { get; set; }
     public virtual DbSet<WebNewsReadLog> WebNewsReadLogs { get; set; }
+    public virtual DbSet<ChatLobbies> ChatLobbies { get; set;}
 }

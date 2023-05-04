@@ -202,6 +202,58 @@ namespace Fragment.NetSlum.Persistence.Migrations
                     b.ToTable("character_stats", (string)null);
                 });
 
+            modelBuilder.Entity("Fragment.NetSlum.Persistence.Entities.ChatLobbies", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<string>("ChatLobbyName")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)")
+                        .HasColumnName("chat_lobby_name")
+                        .UseCollation("sjis_japanese_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ChatLobbyName"), "sjis");
+
+                    b.Property<bool>("DefaultChannel")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("default_channel");
+
+                    b.Property<bool>("GuildLobby")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("guild_lobby");
+
+                    b.Property<bool>("PlayerLobby")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("player_lobby");
+
+                    b.HasKey("Id")
+                        .HasName("pk_chat_lobbies");
+
+                    b.ToTable("chat_lobbies", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ChatLobbyName = "Main",
+                            DefaultChannel = true,
+                            GuildLobby = false,
+                            PlayerLobby = false
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ChatLobbyName = "Main 2",
+                            DefaultChannel = true,
+                            GuildLobby = false,
+                            PlayerLobby = false
+                        });
+                });
+
             modelBuilder.Entity("Fragment.NetSlum.Persistence.Entities.PlayerAccount", b =>
                 {
                     b.Property<int>("Id")
@@ -258,7 +310,7 @@ namespace Fragment.NetSlum.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            Content = "Welcome to Netslum-Redux!\nCurrent Status:\n- Lobby #GOnline#W!\n- BBS #GOnline#W!\n- Mail #GOnline#W!\n- Guilds #GOnline#W!\n- Ranking #GOnline#W!\n- News #GOnline#W!",
+                            Content = "Welcome to Netslum-Redux!\r\nCurrent Status:\r\n- Lobby #GOnline#W!\r\n- BBS #GOnline#W!\r\n- Mail #GOnline#W!\r\n- Guilds #GOnline#W!\r\n- Ranking #GOnline#W!\r\n- News #GOnline#W!",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
