@@ -7,7 +7,7 @@ using Fragment.NetSlum.Networking.Sessions;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.Misc;
 
-[FragmentPacket(OpCodes.Ping)]
+[FragmentPacket(OpCodes.PingRequest)]
 [FragmentPacket(OpCodes.Data, OpCodes.DataPing)]
 public class PingRequest : BaseRequest
 {

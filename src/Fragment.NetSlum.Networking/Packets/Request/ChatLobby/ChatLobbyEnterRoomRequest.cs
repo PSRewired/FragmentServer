@@ -8,7 +8,7 @@ using System.Buffers.Binary;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.ChatLobby
 {
-    [FragmentPacket(OpCodes.Data, OpCodes.DataLobbyEnterRoom)]
+    [FragmentPacket(OpCodes.Data, OpCodes.DataLobbyEnterRoomRequest)]
     public class ChatLobbyEnterRoomRequest:BaseRequest
     {
         private readonly ILogger<ChatLobbyEnterRoomRequest> _logger;

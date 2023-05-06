@@ -7,7 +7,7 @@ using Fragment.NetSlum.Networking.Sessions;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.Mail;
 
-[FragmentPacket(OpCodes.Data, OpCodes.DataMailCheck)]
+[FragmentPacket(OpCodes.Data, OpCodes.DataMailCheckRequest)]
 public class MailCheckRequest : BaseRequest
 {
     public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)

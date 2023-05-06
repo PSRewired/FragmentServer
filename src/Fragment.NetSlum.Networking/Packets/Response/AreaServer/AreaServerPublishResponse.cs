@@ -10,7 +10,7 @@ namespace Fragment.NetSlum.Networking.Packets.Response.AreaServer
             return new FragmentMessage
             {
                 OpCode = OpCodes.Data,
-                DataPacketType = OpCodes.Data_AreaServerPublishSucess,
+                DataPacketType = OpCodes.Data_AreaServerPublishSuccess,
                 Data = new byte[] { 0x00, 0x00 },
             };
         }

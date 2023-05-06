@@ -10,7 +10,7 @@ public class SelectCharacterResponse : BaseResponse
         return new FragmentMessage
         {
             OpCode = OpCodes.Data,
-            DataPacketType = OpCodes.DataSelectCharOk,
+            DataPacketType = OpCodes.DataSelectCharSuccess,
             Data = new Memory<byte>(new byte[2]),
         };
     }

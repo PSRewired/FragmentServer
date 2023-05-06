@@ -3,12 +3,12 @@ namespace Fragment.NetSlum.Networking.Constants;
 public enum OpCodes : ushort
 {
     None = 0x00,
-    Ping = 0x02,
+    PingRequest = 0x02,
 
     Data = 0x30,
     KeyExchangeRequest = 0x34,
     KeyExchangeResponse = 0x35,
-    KeyExchangeAcknowledgment = 0x36,
+    KeyExchangeAcknowledgmentRequest = 0x36,
 
 
     MaxAsNameLen = 0x14,
@@ -44,10 +44,10 @@ public enum OpCodes : ushort
     DataLogonResponse = 0x7001,
 
     //Check and see if there's new Posts on the BBS?
-    DataBBSGetUpdatesRequest = 0x786A,
+    DataBBSGetUpdatesRequestRequest = 0x786A,
     DataBBSGetUpdatesSuccess = 0x786b,
 
-    DataLobbyEnterRoom = 0x7006,
+    DataLobbyEnterRoomRequest = 0x7006,
     DataLobbyEnterRoomSuccess = 0x7007,
 
     DataLobbyStatusUpdate = 0x7009,
@@ -77,25 +77,25 @@ public enum OpCodes : ushort
     DataDiskAuthorizationSuccess = 0x7424,
     DataDiskAuthorizationFailed = 0x7425,
 
-    DataSaveId = 0x7426,
-    DataSaveIdOk = 0x7427,
+    DataSaveIdRequest = 0x7426,
+    DataSaveIdSuccess = 0x7427,
 
     DataLobbyExitRoom = 0x7444,
     DataLobbyExitRoomOk = 0x7445,
 
     DataPlayerAccountInfoSuccess = 0x742A,
-    DataRegisterChar = 0x742B,
+    DataRegisterCharRequest = 0x742B,
 
-    DataRegisterCharOk = 0x742C,
+    DataRegisterCharSuccess = 0x742C,
 
-    DataUnregisterChar = 0x7432,
-    DataUnregisterCharOk = 0x7433,
+    DataUnregisterCharRequest = 0x7432,
+    DataUnregisterCharSuccess = 0x7433,
 
     DataReturnDesktop = 0x744a,
     DataReturnDesktopOk = 0x744b,
 
     //main lobby...
-    DataLobbyGetMenu = 0x7500,
+    DataLobbyGetMenuRequest = 0x7500,
     DataLobbyCategoryList = 0x7501,     // uint16_t numberOfCategories
     DataLobbyGetMenuFail = 0x7502,     //Failed to get list
     DataLobbyEntryCategory = 0x7503,     //uint16_t categoryNum, char* categoryName
@@ -122,7 +122,7 @@ public enum OpCodes : ushort
     DataLobbyGetServersExit = 0x7844,
     DataLobbyGetServersExitOk = 0x7845,
 
-    DataNewsGetMenu = 0x784E,
+    DataNewsGetMenuRequest = 0x784E,
     DataNewsCategoryList = 0x784F,     //arg is #of items in category list
     DataNewsGetMenuFailed = 0x7850,     //Failed
     DataNewsEntryCategory = 0x7851,     //Category list Entry
@@ -178,29 +178,29 @@ public enum OpCodes : ushort
     RankingViewPlayer = 0x7838,
 
     //These happen upon entering ALTIMIT DESKTOP
-    DataMailCheck = 0x7867,
-    DataMailCheckOk = 0x7868,
+    DataMailCheckRequest = 0x7867,
+    DataMailCheckSuccess = 0x7868,
 
     DataMailCheckFail = 0x7869,
 
     //
-    DataNewCheck = 0x786D,
+    DataNewCheckRequest = 0x786D,
 
-    DataNewCheckOk = 0x786E,
+    DataNewCheckSuccess = 0x786E,
     //
 
-    DataCom = 0x7876,
-    DataComOk = 0x7877,
+    DataComRequest = 0x7876,
+    DataComSuccess = 0x7877,
 
-    DataSelectChar = 0x789f,
+    DataSelectCharRequest = 0x789f,
 
-    DataSelectCharOk = 0x78A0,
+    DataSelectCharSuccess = 0x78A0,
 
     // probably something else but this works in our favor
     DataSelectCharDenied = 0x78a1,
 
 
-    DataSelect2Char = 0x78a2,
+    DataSelect2CharRequest = 0x78a2,
 
 /*
 DATA_SELECT_CHAR2 seems to be a 1:1 clone of the normal OPCODE_DATA_SELECT_CHAR packet.
@@ -236,7 +236,7 @@ DATA_SELECT_CHAR2 seems to be a 1:1 clone of the normal OPCODE_DATA_SELECT_CHAR 
     Data_AreaServerIpPortSuccess = 0x7014,
 
     Data_AreaServerPublishRequest = 0x78AE,
-    Data_AreaServerPublishSucess = 0x78AF,
+    Data_AreaServerPublishSuccess = 0x78AF,
 
 
     Data_AreaServerPublishDetails1Request = 0x7011,
@@ -270,7 +270,7 @@ DATA_SELECT_CHAR2 seems to be a 1:1 clone of the normal OPCODE_DATA_SELECT_CHAR 
     PrivateBroadcast = 0x788c,
     DataGuildView = 0x772c,
     DataGetGuildInfoResponse = 0x7740,
-    DataAreaServerOk = 0x78AC,
+    DataAreaServerSuccess = 0x78AC,
 
 
     DataGuildCreate = 0x7600,

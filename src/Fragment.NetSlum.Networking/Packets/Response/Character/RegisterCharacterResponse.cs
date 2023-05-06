@@ -35,7 +35,7 @@ public class RegisterCharacterResponse : BaseResponse
         return new FragmentMessage
         {
             OpCode = OpCodes.Data,
-            DataPacketType = OpCodes.DataRegisterCharOk,
+            DataPacketType = OpCodes.DataRegisterCharSuccess,
             Data = buffer,
         };
     }

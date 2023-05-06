@@ -6,7 +6,7 @@ using Fragment.NetSlum.Networking.Sessions;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.Character;
 
-[FragmentPacket(OpCodes.Data, OpCodes.DataUnregisterChar)]
+[FragmentPacket(OpCodes.Data, OpCodes.DataUnregisterCharRequest)]
 public class UnregisterCharacterRequest : BaseRequest
 {
     public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)

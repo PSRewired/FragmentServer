@@ -6,7 +6,7 @@ using Fragment.NetSlum.Networking.Sessions;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.Articles;
 
-[FragmentPacket(OpCodes.Data, OpCodes.DataNewCheck)]
+[FragmentPacket(OpCodes.Data, OpCodes.DataNewCheckRequest)]
 public class ArticleCheckRequest : BaseRequest
 {
     public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
