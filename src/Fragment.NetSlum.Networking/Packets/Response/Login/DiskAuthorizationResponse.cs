@@ -10,7 +10,7 @@ namespace Fragment.NetSlum.Networking.Packets.Response.Login
             return new FragmentMessage
             {
                 OpCode = OpCodes.Data,
-                DataPacketType = OpCodes.Data_DiskAuthorizationSuccess,
+                DataPacketType = OpCodes.DataDiskAuthorizationSuccess,
                 Data = new byte[] { 0x78, 0x94 },
             };
         }

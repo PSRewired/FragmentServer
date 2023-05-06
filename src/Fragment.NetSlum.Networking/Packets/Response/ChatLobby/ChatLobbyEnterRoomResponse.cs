@@ -24,7 +24,7 @@ namespace Fragment.NetSlum.Networking.Packets.Response.ChatLobby
             return new FragmentMessage
             {
                 OpCode = OpCodes.Data,
-                DataPacketType = OpCodes.DataLobbyEnterRoomOk,
+                DataPacketType = OpCodes.DataLobbyEnterRoomSuccess,
                 Data = bufferMemory,
             };
         }

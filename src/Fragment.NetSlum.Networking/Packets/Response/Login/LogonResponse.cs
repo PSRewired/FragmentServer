@@ -10,7 +10,7 @@ public class LogonResponse : BaseResponse
         return new FragmentMessage
         {
             OpCode = OpCodes.Data,
-            DataPacketType = OpCodes.Data_LogonResponse,
+            DataPacketType = OpCodes.DataLogonResponse,
             Data = new byte[] { 0x74, 0x32 } // Represents "t2" in UTF8?
         };
     }

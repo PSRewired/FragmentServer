@@ -40,15 +40,15 @@ public enum OpCodes : ushort
     DataPong2 = 0x41,
 
 
-    Data_LogonRepeatRequest = 0x7000,
-    Data_LogonResponse = 0x7001,
+    DataLogonRepeatRequest = 0x7000,
+    DataLogonResponse = 0x7001,
 
     //Check and see if there's new Posts on the BBS?
-    Data_BBSGetUpdatesRequest = 0x786A,
-    Data_BBSGetUpdatesSuccess = 0x786b,
+    DataBBSGetUpdatesRequest = 0x786A,
+    DataBBSGetUpdatesSuccess = 0x786b,
 
     DataLobbyEnterRoom = 0x7006,
-    DataLobbyEnterRoomOk = 0x7007,
+    DataLobbyEnterRoomSuccess = 0x7007,
 
     DataLobbyStatusUpdate = 0x7009,
 
@@ -67,16 +67,15 @@ public enum OpCodes : ushort
     DataLobbyChatroomCreateOk = 0x7416,
     DataLobbyChatroomCreateError = 0x7417,
 
-    //Why?
-    Data_AreaServerLogon2Request = 0x7019,
-    Data_AreaServerLogon2Response = 0x701C,
+    DataAreaServerLogon2Request = 0x7019,
+    DataAreaServerLogon2Response = 0x701C,
     //Doesn't work
     DataLogonAs2Response = 0x701d,
 
-    Data_DiskAuthorizationRequest = 0x7423,
+    DataDiskAuthorizationRequest = 0x7423,
 
-    Data_DiskAuthorizationSuccess = 0x7424,
-    Data_DiskAuthorizationFailed = 0x7425,
+    DataDiskAuthorizationSuccess = 0x7424,
+    DataDiskAuthorizationFailed = 0x7425,
 
     DataSaveId = 0x7426,
     DataSaveIdOk = 0x7427,
@@ -84,7 +83,7 @@ public enum OpCodes : ushort
     DataLobbyExitRoom = 0x7444,
     DataLobbyExitRoomOk = 0x7445,
 
-    Data_PlayerAccountInfoOk = 0x742A,
+    DataPlayerAccountInfoSuccess = 0x742A,
     DataRegisterChar = 0x742B,
 
     DataRegisterCharOk = 0x742C,

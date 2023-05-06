@@ -10,7 +10,7 @@ namespace Fragment.NetSlum.Networking.Packets.Response.BBS
             return new FragmentMessage
             {
                 OpCode = OpCodes.Data,
-                DataPacketType = OpCodes.Data_BBSGetUpdatesSuccess,
+                DataPacketType = OpCodes.DataBBSGetUpdatesSuccess,
                 Data = new Memory<byte>(new byte[] { 0x00, 0x00 }), 
             };
         }

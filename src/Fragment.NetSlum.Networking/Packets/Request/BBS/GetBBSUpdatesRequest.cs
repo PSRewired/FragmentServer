@@ -8,7 +8,7 @@ using Fragment.NetSlum.Networking.Packets.Response.BBS;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.BBS
 {
-    [FragmentPacket(OpCodes.Data, OpCodes.Data_BBSGetUpdatesRequest)]
+    [FragmentPacket(OpCodes.Data, OpCodes.DataBBSGetUpdatesRequest)]
     public class GetBBSUpdatesRequest:BaseRequest
     {
         private readonly ILogger<GetBBSUpdatesRequest> _logger;

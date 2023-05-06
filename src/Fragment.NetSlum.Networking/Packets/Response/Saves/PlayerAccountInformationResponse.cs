@@ -38,7 +38,7 @@ public class PlayerAccountInformationResponse : BaseResponse
         return new FragmentMessage
         {
             OpCode = OpCodes.Data,
-            DataPacketType = OpCodes.Data_PlayerAccountInfoOk,
+            DataPacketType = OpCodes.DataPlayerAccountInfoSuccess,
             Data = bufferMemory.EnsureSize(0x200),
         };
     }
