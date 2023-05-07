@@ -2,7 +2,7 @@ using Fragment.NetSlum.Core.CommandBus.Contracts.Commands;
 
 namespace Fragment.NetSlum.Core.CommandBus.Contracts.Queries;
 
-public interface IQueryHandler<in TCommand, TResult> where TCommand : ICommand<TResult>
+public interface IQueryHandler<in TQuery, TResult> where TQuery : IQuery<TResult>
 {
-    public Task<TResult> Handle(TCommand command, CancellationToken cancellationToken);
+    public Task<TResult> Handle(TQuery command, CancellationToken cancellationToken);
 }

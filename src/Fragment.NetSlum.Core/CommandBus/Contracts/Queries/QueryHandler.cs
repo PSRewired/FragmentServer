@@ -10,7 +10,7 @@ namespace Fragment.NetSlum.Core.CommandBus.Contracts.Queries;
 /// <typeparam name="TCommand"></typeparam>
 /// <typeparam name="TResult"></typeparam>
 public abstract class QueryHandler<TCommand, TResult> : IQueryHandler<TCommand, TResult>, IRequestHandler<TCommand, TResult>
-    where TCommand : ICommand<TResult>
+    where TCommand : IQuery<TResult>
 {
     public abstract Task<TResult> Handle(TCommand command, CancellationToken cancellationToken);
 }

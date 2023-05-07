@@ -140,9 +140,9 @@ public enum OpCodes : ushort
     DataNewsGetPost = 0x7854,
 
     DataNewsSendPost = 0x7855,
-    //7856
-    //7857
-    //7855
+    DataNewsPostDetailsResponse = 0x7856,
+    DataNewsPostSizeInfoResponse = 0x7857,
+    DataNewsPostErrorResponse = 0x7855,
 
 
     DataMailGet = 0x7803,
@@ -206,7 +206,7 @@ public enum OpCodes : ushort
 DATA_SELECT_CHAR2 seems to be a 1:1 clone of the normal OPCODE_DATA_SELECT_CHAR packet.
 */
     Data_Select2_CharacterSuccess = 0x78a3,
-    
+
 
     Data_LogonRequest = 0x78AB,
 
@@ -257,7 +257,7 @@ DATA_SELECT_CHAR2 seems to be a 1:1 clone of the normal OPCODE_DATA_SELECT_CHAR 
     Data_AreaServerUpdateUserCountRequest = 0x741D,     //uint32_t numUsers
     Data_AreaServerUpdateStatusRequest = 0x780C,
 
-   
+
 
     DataAsNameId = 0x5778,
 

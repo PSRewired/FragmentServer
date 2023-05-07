@@ -33,6 +33,8 @@ public class GetAccountInfoForSaveIdRequest : BaseRequest
             accountId = await _commandBus.Execute(new RegisterPlayerAccountCommand(saveId));
         }
 
+        session.PlayerAccountId = accountId.Value;
+
         var serverNews = _database.ServerNews
             .Select(n => n.Content)
             .ToArray();
