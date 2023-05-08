@@ -139,10 +139,9 @@ public enum OpCodes : ushort
 
     DataNewsGetPost = 0x7854,
 
-    DataNewsSendPost = 0x7855,
+    DataNewsPostSizeInfoResponse = 0x7855,
     DataNewsPostDetailsResponse = 0x7856,
-    DataNewsPostSizeInfoResponse = 0x7857,
-    DataNewsPostErrorResponse = 0x7855,
+    DataNewsPostErrorResponse = 0x7857,
 
 
     DataMailGet = 0x7803,

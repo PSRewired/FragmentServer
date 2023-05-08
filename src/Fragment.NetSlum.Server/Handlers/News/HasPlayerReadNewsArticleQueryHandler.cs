@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fragment.NetSlum.Server.Handlers.News;
 
-public class HasPlayerReadNewsArticleQueryHandler : IQueryHandler<HasPlayerReadNewsArticle, bool>
+public class HasPlayerReadNewsArticleQueryHandler : QueryHandler<HasPlayerReadNewsArticle, bool>
 {
     private readonly FragmentContext _database;
 
@@ -14,7 +14,7 @@ public class HasPlayerReadNewsArticleQueryHandler : IQueryHandler<HasPlayerReadN
         _database = database;
     }
 
-    public Task<bool> Handle(HasPlayerReadNewsArticle command, CancellationToken cancellationToken)
+    public override Task<bool> Handle(HasPlayerReadNewsArticle command, CancellationToken cancellationToken)
     {
         return _database.WebNewsReadLogs.AnyAsync(
             wnl => wnl.PlayerAccountId == command.PlayerId && wnl.WebNewsArticleId == command.ArticleId,

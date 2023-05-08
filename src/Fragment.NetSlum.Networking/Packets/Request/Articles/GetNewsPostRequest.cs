@@ -5,7 +5,10 @@ using Fragment.NetSlum.Networking.Commands.News;
 using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Objects;
 using Fragment.NetSlum.Networking.Packets.Response.Articles;
+using Fragment.NetSlum.Networking.Queries.Images;
 using Fragment.NetSlum.Networking.Sessions;
+using Fragment.NetSlum.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.Articles;
 
@@ -13,10 +16,12 @@ namespace Fragment.NetSlum.Networking.Packets.Request.Articles;
 public class GetNewsPostRequest : BaseRequest
 {
     private readonly ICommandBus _commandBus;
+    private readonly FragmentContext _database;
 
-    public GetNewsPostRequest(ICommandBus commandBus)
+    public GetNewsPostRequest(ICommandBus commandBus, FragmentContext database)
     {
         _commandBus = commandBus;
+        _database = database;
     }
 
     public override async Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
@@ -25,6 +30,21 @@ public class GetNewsPostRequest : BaseRequest
 
         await _commandBus.Execute<bool>(new MarkNewsArticleReadCommand(articleId, session.PlayerAccountId));
 
-        return new[] { new GetNewsPostErrorResponse().Build() };
+        var post = _database.WebNewsArticles
+            .AsNoTracking()
+            .FirstOrDefault(a => a.Id == articleId);
+
+        if (post?.Image == null)
+        {
+            return new[] { new GetNewsPostErrorResponse().Build() };
+        }
+
+        var articleImageInfo = await _commandBus.GetResult(new GetImageInfoQuery(post.Image));
+
+        return new[]
+        {
+            new NewsPostImageSizeResponse((uint)articleImageInfo.ImageSize, articleImageInfo.ChunkCount).Build(),
+            new NewsPostImageDetailsResponse(articleImageInfo.ColorData, articleImageInfo.ImageData).Build()
+        };
     }
 }

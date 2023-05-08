@@ -24,5 +24,7 @@ public class WebNewsArticle
     [MaxLength(412)]
     public string Content { get; set; } = "";
 
+    public byte[]? Image { get; set; }
+
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }

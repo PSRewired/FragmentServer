@@ -5,6 +5,7 @@ using Fragment.NetSlum.Networking.Extensions;
 using Fragment.NetSlum.Persistence;
 using Fragment.NetSlum.Persistence.Extensions;
 using Fragment.NetSlum.Persistence.Listeners;
+using Fragment.NetSlum.Server.Converters;
 using Fragment.NetSlum.Server.Servers;
 using Fragment.NetSlum.Server.Services;
 using Fragment.NetSlum.TcpServer;
@@ -53,6 +54,8 @@ public class Startup
 
         services.AddCommandBus(typeof(Startup), typeof(Networking.Entrypoint));
         services.AddAutoMapper(typeof(Startup));
+
+        services.AddSingleton<ImageConverter>();
 
         services.AddPacketHandling();
         services.Configure<ServerConfiguration>(Configuration.GetSection("TcpServer"));
