@@ -9,12 +9,12 @@ using System.Buffers.Binary;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.ChatLobby
 {
-    [FragmentPacket(OpCodes.Data, OpCodes.DataLobbyEnterRoomRequest)]
-    public class ChatLobbyEnterRoomRequest:BaseRequest
+    [FragmentPacket(OpCodes.Data, OpCodes.DataLobbyStatusUpdate)]
+    public class ChatLobbyStatusUpdateRequest:BaseRequest
     {
-        private readonly ILogger<ChatLobbyEnterRoomRequest> _logger;
+        private readonly ILogger<ChatLobbyStatusUpdateRequest> _logger;
         private readonly ChatLobbyStore _chatLobbyStore;
-        public ChatLobbyEnterRoomRequest(ILogger<ChatLobbyEnterRoomRequest> logger, ChatLobbyStore chatLobbyStore)
+        public ChatLobbyStatusUpdateRequest(ILogger<ChatLobbyStatusUpdateRequest> logger, ChatLobbyStore chatLobbyStore)
         {
             _logger = logger;
             _chatLobbyStore = chatLobbyStore;
@@ -22,18 +22,16 @@ namespace Fragment.NetSlum.Networking.Packets.Request.ChatLobby
 
         public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
         {
-            ushort chatLobbyId = (ushort)(BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[0..2]) -1);
 
-            var chatLobby = _chatLobbyStore.GetLobby(chatLobbyId);
-
-            chatLobby.AddPlayer(new Models.ChatLobbyPlayerModel() { PlayerAccountId = session.PlayerAccountId });
-
-            session.ChatRoomId = chatLobbyId;
-            var clientCount = session.Server.Sessions.Where(c => ((FragmentTcpSession)c).ChatRoomId == chatLobbyId).Count();
+            var buffer = new Memory<byte>(new byte[request.Length + 2]);
+            var bufferSpan = buffer.Span;
+            var cl = _chatLobbyStore.GetLobby(session.ChatRoomId);
+            ushort playerIndex = cl.GetPlayerByAccountId(session.PlayerAccountId).PlayerIndex;
+            ushort clientCount = cl.PlayerCount;
             var response = new ChatLobbyEnterRoomResponse().SetClientCount((ushort)clientCount).Build();
 
             //We have to send out a status update to all clients in this chat room but I don't understand where that comes from?
-            foreach( var c in session.Server.Sessions )
+            foreach (var c in session.Server.Sessions)
             {
                 var playerSession = ((FragmentTcpSession)c);
                 if (playerSession.PlayerAccountId != session.PlayerAccountId && session.ChatRoomId == playerSession.ChatRoomId)

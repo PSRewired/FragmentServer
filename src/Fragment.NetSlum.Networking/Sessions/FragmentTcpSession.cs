@@ -21,17 +21,18 @@ public class FragmentTcpSession : TcpSession, IScopeable
     public DateTime LastContacted { get; set; } = DateTime.UtcNow;
 
     //Fields only used for a Player
-    public int PlayerAccountId { get; set; }
-    public int ChatRoomId { get; set; }
+    public uint PlayerAccountId { get; set; }
+    public ushort ChatRoomId { get; set; }
     public int GuildId { get; set; }
     public CharacterInfo? CharacterInfo { get; set; }
+    public byte[] LastStatus { get; set; } = Array.Empty<byte>();
 
     //Area Server Fields
     public byte[] AreaServerName { get; set; } = Array.Empty<byte>();
     public ushort AreaServerLevel { get; set; }
     public byte AreaServerStatus { get; set; }
     public ushort AreaServerPlayerCount { get;set; }
-
+   
 
 
     public FragmentTcpSession(ITcpServer server, IServiceScope serviceScope) : base(server)

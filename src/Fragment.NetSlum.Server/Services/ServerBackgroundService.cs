@@ -1,3 +1,6 @@
+using Fragment.NetSlum.Networking.Models;
+using Fragment.NetSlum.Networking.Stores;
+using Fragment.NetSlum.Persistence;
 using Fragment.NetSlum.TcpServer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -11,10 +14,14 @@ namespace Fragment.NetSlum.Server.Services;
 public class ServerBackgroundService : BackgroundService
 {
     private readonly IServiceScopeFactory _scopeFactory;
+    private readonly FragmentContext _database;
+    private readonly ChatLobbyStore _chatLobbyStore;
 
-    public ServerBackgroundService(IServiceScopeFactory scopeFactory)
+    public ServerBackgroundService(IServiceScopeFactory scopeFactory,FragmentContext database, ChatLobbyStore chatLobbyStore)
     {
         _scopeFactory = scopeFactory;
+        _database = database;
+        _chatLobbyStore = chatLobbyStore;
     }
 
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -27,6 +34,11 @@ public class ServerBackgroundService : BackgroundService
         foreach (var server in servers)
         {
             startTasks.Add(Task.Run(server.Start, stoppingToken));
+        }
+
+        foreach(var cl in _database.ChatLobbies.Where(c=> c.DefaultChannel == true))
+        {
+            _chatLobbyStore.AddLobby(new ChatLobbyModel() { ChatLobby = cl });
         }
 
         Task.WaitAll(startTasks.ToArray(), stoppingToken);

@@ -2,6 +2,7 @@ using System.Data;
 using System.Text;
 using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Networking.Extensions;
+using Fragment.NetSlum.Networking.Stores;
 using Fragment.NetSlum.Persistence;
 using Fragment.NetSlum.Persistence.Extensions;
 using Fragment.NetSlum.Persistence.Listeners;
@@ -60,6 +61,7 @@ public class Startup
         services.AddPacketHandling();
         services.Configure<ServerConfiguration>(Configuration.GetSection("TcpServer"));
         services.AddSingleton<ITcpServer, Servers.Server>();
+        services.AddSingleton(typeof(ChatLobbyStore));
         services.AddHostedService<ServerBackgroundService>();
     }
 
