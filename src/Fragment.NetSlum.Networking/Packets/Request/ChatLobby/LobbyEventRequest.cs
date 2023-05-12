@@ -1,3 +1,4 @@
+using System.Data;
 using Fragment.NetSlum.Networking.Attributes;
 using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Objects;
@@ -22,7 +23,12 @@ public class LobbyEventRequest : BaseRequest
 
     public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
-        var chatLobbyPlayer = _chatLobbyStore.GetLobby(session.ChatRoomId).GetPlayerByAccountId(session.PlayerAccountId);
+        var chatLobbyPlayer = _chatLobbyStore.GetLobbyBySession(session)?.GetPlayerByAccountId(session.PlayerAccountId);
+
+        if (chatLobbyPlayer == null)
+        {
+            throw new DataException("Could not find player reference for this session");
+        }
 
         var response = new LobbyEventResponse()
             .SetData(request.Data)

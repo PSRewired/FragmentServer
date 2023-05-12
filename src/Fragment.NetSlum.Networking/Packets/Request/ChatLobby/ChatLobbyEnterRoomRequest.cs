@@ -27,14 +27,16 @@ public class ChatLobbyEnterRoomRequest:BaseRequest
 
         var chatLobby = _chatLobbyStore.GetLobby(chatLobbyId);
 
+        if (chatLobby == null)
+        {
+            throw new ArgumentException($"Attempted to enter {chatLobbyId} which is not a valid chat room");
+        }
+
         var myPlayer = new ChatLobbyPlayer(session);
         chatLobby.AddPlayer(myPlayer);
 
-        session.ChatRoomId = chatLobbyId;
-        var clientCount = session.Server.Sessions.Count(c => ((FragmentTcpSession)c).ChatRoomId == chatLobbyId);
-
         var response = new ChatLobbyEnterRoomResponse()
-            .SetClientCount((ushort)clientCount)
+            .SetClientCount(chatLobby.PlayerCount)
             .Build();
 
         //We have to send out a status update to all clients in this chat room but I don't understand where that comes from?

@@ -1,3 +1,4 @@
+using System.Data;
 using Fragment.NetSlum.Networking.Attributes;
 using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Objects;
@@ -21,26 +22,23 @@ public class ChatLobbyStatusUpdateRequest:BaseRequest
 
     public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
+        var cl = _chatLobbyStore.GetLobbyBySession(session);
 
-        var buffer = new Memory<byte>(new byte[request.Length + 2]);
-        var bufferSpan = buffer.Span;
-        var cl = _chatLobbyStore.GetLobby(session.ChatRoomId);
-        ushort playerIndex = cl.GetPlayerByAccountId(session.PlayerAccountId).PlayerIndex;
+        var myChatLobbyPlayer = cl?.GetPlayerByAccountId(session.PlayerAccountId);
+
+        if (cl == null || myChatLobbyPlayer == null)
+        {
+            throw new DataException("Invalid chat room or player not found");
+        }
+
         ushort clientCount = cl.PlayerCount;
         var response = new ChatLobbyEnterRoomResponse().SetClientCount((ushort)clientCount).Build();
 
         //We have to send out a status update to all clients in this chat room but I don't understand where that comes from?
-        foreach (var c in session.Server.Sessions)
-        {
-            var playerSession = ((FragmentTcpSession)c);
-            if (playerSession.PlayerAccountId != session.PlayerAccountId && session.ChatRoomId == playerSession.ChatRoomId)
-            {
+        cl.NotifyAllExcept(myChatLobbyPlayer, new ChatLobbyStatusUpdateResponse()
+            .SetLastStatus(session.LastStatus)
+            .Build());
 
-                c.SendAsync(new ChatLobbyStatusUpdateResponse()
-                    .SetLastStatus(session.LastStatus)
-                    .Build().ToArray());
-            }
-        }
         return Task.FromResult<ICollection<FragmentMessage>>(new[] { response });
     }
 }

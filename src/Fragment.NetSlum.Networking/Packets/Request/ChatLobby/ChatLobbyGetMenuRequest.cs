@@ -28,13 +28,11 @@ public class ChatLobbyGetMenuRequest:BaseRequest
         //Add the ChatLobby count response to the collection list
         responses.Add(new ChatLobbyCountResponse().SetChatLobbyCount((ushort)chatLobbies.Count).Build());
 
-        var sessions = session.Server.Sessions;
-
         //Build the Chat Lobby List
         responses.AddRange(chatLobbies.Select(c => new ChatLobbyEntryResponse()
             .SetChatLobbyName(c.LobbyName)
             .SetChatLobbyId((ushort)c.LobbyId)
-            .SetClientCount((ushort)sessions.Count(s => ((FragmentTcpSession)s).ChatRoomId == c.LobbyId))
+            .SetClientCount(c.PlayerCount)
             .Build()));
 
         return Task.FromResult<ICollection<FragmentMessage>>(responses);

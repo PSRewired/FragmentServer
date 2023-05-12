@@ -1,5 +1,6 @@
 using Fragment.NetSlum.Networking.Models;
 using System.Text;
+using Fragment.NetSlum.Networking.Sessions;
 
 namespace Fragment.NetSlum.Networking.Stores;
 
@@ -79,6 +80,30 @@ public class ChatLobbyStore :IDisposable
         {
             _rwLock.ExitReadLock();
         }
+    }
+
+    public ChatLobbyModel? GetLobbyBySession(FragmentTcpSession session)
+    {
+        try
+        {
+            _rwLock.EnterReadLock();
+
+            foreach (var lobby in _chatLobbies.Values)
+            {
+                var player = lobby.GetPlayerByAccountId(session.PlayerAccountId);
+
+                if (player != null)
+                {
+                    return lobby;
+                }
+            }
+        }
+        finally
+        {
+            _rwLock.ExitReadLock();
+        }
+
+        return null;
     }
 
     public void RemoveChatLobbyById(ushort id)

@@ -19,8 +19,8 @@ public class ChatLobbyEnterRoomResponse:BaseResponse
         var bufferMemory = new Memory<byte>(new byte[2]);
         var buffer = bufferMemory.Span;
 
-        BinaryPrimitives.WriteUInt16BigEndian(buffer[..2], _clientCount);
-           
+        BinaryPrimitives.WriteUInt16BigEndian(buffer, _clientCount);
+
         return new FragmentMessage
         {
             OpCode = OpCodes.Data,

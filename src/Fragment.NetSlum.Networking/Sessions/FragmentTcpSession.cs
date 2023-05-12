@@ -23,7 +23,6 @@ public class FragmentTcpSession : TcpSession, IScopeable
 
     //Fields only used for a Player
     public int PlayerAccountId { get; set; }
-    public ushort ChatRoomId { get; set; }
     public int GuildId { get; set; }
     public CharacterInfo? CharacterInfo { get; set; }
     public byte[] LastStatus { get; set; } = Array.Empty<byte>();
