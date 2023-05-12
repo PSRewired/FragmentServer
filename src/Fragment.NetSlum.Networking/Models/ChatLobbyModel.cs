@@ -69,7 +69,7 @@ namespace Fragment.NetSlum.Networking.Models
                 playerIdxLock.Release();
             }
         }
-        public ChatLobbyPlayerModel GetPlayerByAccountId(uint accountId)
+        public ChatLobbyPlayerModel GetPlayerByAccountId(int accountId)
         {
             foreach (var player in ChatLobbyPlayers)
             {

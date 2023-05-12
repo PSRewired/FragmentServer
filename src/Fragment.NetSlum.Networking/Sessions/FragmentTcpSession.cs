@@ -21,7 +21,7 @@ public class FragmentTcpSession : TcpSession, IScopeable
     public DateTime LastContacted { get; set; } = DateTime.UtcNow;
 
     //Fields only used for a Player
-    public uint PlayerAccountId { get; set; }
+    public int PlayerAccountId { get; set; }
     public ushort ChatRoomId { get; set; }
     public int GuildId { get; set; }
     public CharacterInfo? CharacterInfo { get; set; }
