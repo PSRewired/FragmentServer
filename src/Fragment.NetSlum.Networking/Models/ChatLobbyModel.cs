@@ -1,97 +1,159 @@
 using Fragment.NetSlum.Persistence.Entities;
-using MediatR;
-using Serilog;
-using System.Xml.Linq;
+using Fragment.NetSlum.Networking.Objects;
 
-namespace Fragment.NetSlum.Networking.Models
+namespace Fragment.NetSlum.Networking.Models;
+
+public class ChatLobbyModel
 {
-    public class ChatLobbyModel
+    private const ushort MaxPlayers = 255;
+
+    public int LobbyId { get; private set; }
+    public string LobbyName { get; private set; }
+
+    private readonly ChatLobbyPlayer?[] _chatLobbyPlayers;
+
+    public ushort PlayerCount => (ushort)GetPlayers().Length;
+    private readonly Semaphore _playerIdxLock = new(1, 1);
+
+    public ChatLobbyModel(int id, string name)
     {
-        public ChatLobbies ChatLobby;
-        private ushort MaxPlayers = 255;
-        private readonly ChatLobbyPlayerModel[] ChatLobbyPlayers;
-       
-        public ushort PlayerCount => (ushort)GetPlayers().Length;
-        private readonly Semaphore playerIdxLock = new(1, 1);
+        LobbyId = id;
+        LobbyName = name;
+        _chatLobbyPlayers = new ChatLobbyPlayer[MaxPlayers];
+    }
 
-        public ChatLobbyModel()
+    public static ChatLobbyModel FromEntity(ChatLobbies lobbyEntity)
+    {
+        return new ChatLobbyModel(lobbyEntity.Id, lobbyEntity.ChatLobbyName);
+    }
+
+    public int AddPlayer(ChatLobbyPlayer player)
+    {
+
+        try
         {
-            ChatLobbyPlayers = new ChatLobbyPlayerModel[MaxPlayers];
+            _playerIdxLock.WaitOne();
+            var idx = GetAvailablePlayerIndex();
+            player.PlayerIndex = idx;
+            player.ChatLobby = this;
+
+            _chatLobbyPlayers[idx] = player;
+            return idx;
         }
-
-        public int AddPlayer(ChatLobbyPlayerModel player)
+        finally
         {
-
-            try
-            {
-                playerIdxLock.WaitOne();
-                var idx = GetAvailablePlayerIndex();
-                player.PlayerIndex = idx;
-
-                ChatLobbyPlayers[idx] = player;
-                return idx;
-            }
-            finally
-            {
-                playerIdxLock.Release();
-            }
+            _playerIdxLock.Release();
         }
-        public ChatLobbyPlayerModel[] GetPlayers()
-        {
-            return ChatLobbyPlayers.Where(p => p != null).ToArray();
-        }
-        public void RemovePlayer(ChatLobbyPlayerModel player)
-        {
-            if (player == null)
-            {
-                return;
-            }
+    }
+    public ChatLobbyPlayer[] GetPlayers()
+    {
+        return _chatLobbyPlayers.Where(p => p != null).ToArray()!;
+    }
 
-            playerIdxLock.WaitOne();
+    public void RemovePlayer(ChatLobbyPlayer player)
+    {
+        _playerIdxLock.WaitOne();
 
-            try
+        try
+        {
+            // If for some reason this player has multiple connections, we need to remove them all
+            for (var pIdx = 0; pIdx < _chatLobbyPlayers.Length; pIdx++)
             {
-                // If for some reason this player has multiple connections, we need to remove them all
-                for (var pIdx = 0; pIdx < ChatLobbyPlayers.Length; pIdx++)
+                var chatPlayer = _chatLobbyPlayers[pIdx];
+
+                if (chatPlayer?.PlayerAccountId != player.PlayerAccountId)
                 {
-                    var chatPlayer = ChatLobbyPlayers[pIdx];
-
-                    if (chatPlayer?.PlayerAccountId != player.PlayerAccountId)
-                    {
-                        continue;
-                    }
-
-                    ChatLobbyPlayers[pIdx] = null;
+                    continue;
                 }
-            }
-            finally
-            {
-                playerIdxLock.Release();
+
+                _chatLobbyPlayers[pIdx] = null;
             }
         }
-        public ChatLobbyPlayerModel GetPlayerByAccountId(int accountId)
+        finally
         {
-            foreach (var player in ChatLobbyPlayers)
-            {
-                if(player?.PlayerAccountId == accountId)
-                {
-                    return player;
-                }
-            }
-            return null;
+            _playerIdxLock.Release();
         }
+    }
 
-        private ushort GetAvailablePlayerIndex()
+    public ChatLobbyPlayer? GetPlayerByAccountId(int accountId)
+    {
+        foreach (var player in _chatLobbyPlayers)
         {
-            for (ushort i = 0; i < ChatLobbyPlayers.Length; i++)
+            if(player?.PlayerAccountId == accountId)
             {
-                if (ChatLobbyPlayers[i] == null)
-                {
-                    return i;
-                }
+                return player;
             }
-            throw new Exception("Chat lobby is full!");
         }
 
+        return null;
+    }
+
+    /// <summary>
+    /// Sends message data to all players in the room except for the sender
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="messages"></param>
+    public void NotifyAllExcept(ChatLobbyPlayer sender, List<FragmentMessage> messages)
+    {
+        foreach (var player in _chatLobbyPlayers)
+        {
+            if (player == null || player.PlayerIndex == sender.PlayerIndex)
+            {
+                continue;
+            }
+
+            player.Send(messages);
+        }
+    }
+
+    /// <summary>
+    /// Sends message data to all players in the room except for the sender
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="message"></param>
+    public void NotifyAllExcept(ChatLobbyPlayer sender, FragmentMessage message)
+    {
+        NotifyAllExcept(sender, new List<FragmentMessage> { message });
+    }
+
+    /// <summary>
+    /// Sends message data to the given player index
+    /// </summary>
+    /// <param name="messages"></param>
+    public void SendTo(ushort idx, List<FragmentMessage> messages)
+    {
+        foreach (var player in _chatLobbyPlayers)
+        {
+            if (player?.PlayerIndex != idx)
+            {
+                continue;
+            }
+
+            player.Send(messages);
+            break;
+
+        }
+    }
+
+    /// <summary>
+    /// Sends message data to the given player index
+    /// </summary>
+    /// <param name="idx"></param>
+    /// <param name="message"></param>
+    public void SendTo(ushort idx, FragmentMessage message)
+    {
+        SendTo(idx, new List<FragmentMessage> {message});
+    }
+
+    private ushort GetAvailablePlayerIndex()
+    {
+        for (ushort i = 0; i < _chatLobbyPlayers.Length; i++)
+        {
+            if (_chatLobbyPlayers[i] == null)
+            {
+                return i;
+            }
+        }
+        throw new Exception("Chat lobby is full!");
     }
 }

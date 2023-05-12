@@ -6,23 +6,22 @@ using Fragment.NetSlum.Networking.Packets.Response;
 using Fragment.NetSlum.Networking.Sessions;
 using Microsoft.Extensions.Logging;
 
-namespace Fragment.NetSlum.Networking.Packets.Request.Login
+namespace Fragment.NetSlum.Networking.Packets.Request.Login;
+
+[FragmentPacket(OpCodes.Data, OpCodes.DataLogonRepeatRequest)]
+public class LogonRepeatRequest :BaseRequest
 {
-    [FragmentPacket(OpCodes.Data, OpCodes.DataLogonRepeatRequest)]
-    public class LogonRepeatRequest :BaseRequest
+    private readonly ILogger<LogonRepeatRequest> _logger;
+
+    public LogonRepeatRequest(ILogger<LogonRepeatRequest> logger)
     {
-        private readonly ILogger<LogonRepeatRequest> _logger;
+        _logger = logger;
+    }
 
-        public LogonRepeatRequest(ILogger<LogonRepeatRequest> logger)
-        {
-            _logger = logger;
-        }
+    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    {
+        BaseResponse response = new LogonRepeatResponse();
 
-        public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
-        {
-            BaseResponse response = new LogonRepeatResponse();
-
-            return Task.FromResult<ICollection<FragmentMessage>>(new[] { response.Build() });
-        }
+        return Task.FromResult<ICollection<FragmentMessage>>(new[] { response.Build() });
     }
 }

@@ -1,4 +1,3 @@
-using Fragment.NetSlum.Core.CommandBus.Contracts.Commands;
 using MediatR;
 
 namespace Fragment.NetSlum.Core.CommandBus.Contracts.Queries;

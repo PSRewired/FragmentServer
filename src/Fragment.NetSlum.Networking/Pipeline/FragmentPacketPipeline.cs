@@ -77,20 +77,7 @@ public class FragmentPacketPipeline<TSession> : IDisposable where TSession : ISc
                 _responseObjects.AddRange(resp);
             }
 
-            // Run message encoders
-            foreach (var encoder in _encoders)
-            {
-                encoder.Encode(_responseObjects, _outBuf);
-            }
-
-            // Flush encoded messages to the outgoing buffer
-            foreach (var rsp in _responseObjects)
-            {
-                _outBuf.Write(rsp.ToArray());
-            }
-
-            cancellationToken.ThrowIfCancellationRequested();
-            return _outBuf.ToArray();
+            return Encode(_responseObjects, cancellationToken);
         }
         catch (ObjectDisposedException)
         {
@@ -99,16 +86,39 @@ public class FragmentPacketPipeline<TSession> : IDisposable where TSession : ISc
         }
         finally
         {
+            // Ensure that no matter what happens, we clear out the buffers in case the caller allows this to
+            // try running again
+            _decodedObjects.Clear();
+            _responseObjects.Clear();
+        }
+    }
+
+    public ReadOnlyMemory<byte> Encode(List<FragmentMessage> messages, CancellationToken cancellationToken)
+    {
+        try
+        {
+            // Run message encoders
+            foreach (var encoder in _encoders)
+            {
+                encoder.Encode(messages, _outBuf);
+            }
+
+            // Flush encoded messages to the outgoing buffer
+            foreach (var rsp in messages)
+            {
+                _outBuf.Write(rsp.ToArray());
+            }
+
+            cancellationToken.ThrowIfCancellationRequested();
+            return _outBuf.ToArray();
+        }
+        finally
+        {
             // SetLength is a fairly expensive call, so only run it if data was sent to the output buffer
             if (_outBuf.Length > 0)
             {
                 _outBuf.SetLength(0);
             }
-
-            // Ensure that no matter what happens, we clear out the buffers in case the caller allows this to
-            // try running again
-            _decodedObjects.Clear();
-            _responseObjects.Clear();
         }
     }
 

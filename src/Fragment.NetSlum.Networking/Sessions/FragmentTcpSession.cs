@@ -2,6 +2,7 @@ using System.Runtime.CompilerServices;
 using Fragment.NetSlum.Core.DependencyInjection;
 using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Core.Models;
+using Fragment.NetSlum.Networking.Objects;
 using Fragment.NetSlum.Networking.Pipeline;
 using Fragment.NetSlum.TcpServer;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,7 +33,7 @@ public class FragmentTcpSession : TcpSession, IScopeable
     public ushort AreaServerLevel { get; set; }
     public byte AreaServerStatus { get; set; }
     public ushort AreaServerPlayerCount { get;set; }
-   
+
 
 
     public FragmentTcpSession(ITcpServer server, IServiceScope serviceScope) : base(server)
@@ -79,6 +80,16 @@ public class FragmentTcpSession : TcpSession, IScopeable
             _logger.LogCritical("Buffer Content: {Content}", data.ToHexDump());
             Disconnect();
         }
+    }
+
+    /// <summary>
+    /// Sends data to this client, ensuring it has been encoded using the configured pipeline for them
+    /// </summary>
+    /// <param name="data"></param>
+    /// <returns></returns>
+    protected internal void Send(List<FragmentMessage> data)
+    {
+       Send(_packetPipeline.Encode(data, CancellationToken.None).Span);
     }
 
     protected override void OnDisconnected()

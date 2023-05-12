@@ -6,22 +6,21 @@ using Fragment.NetSlum.Networking.Packets.Response;
 using Fragment.NetSlum.Networking.Sessions;
 using Microsoft.Extensions.Logging;
 
-namespace Fragment.NetSlum.Networking.Packets.Request.Login
+namespace Fragment.NetSlum.Networking.Packets.Request.Login;
+
+[FragmentPacket(OpCodes.Data, OpCodes.Data_AreaServerDiskAuthorizationRequest)]
+public class AreaServerIPAddressPortRequest : BaseRequest
 {
-    [FragmentPacket(OpCodes.Data, OpCodes.Data_AreaServerDiskAuthorizationRequest)]
-    public class AreaServerIPAddressPortRequest : BaseRequest
+    private readonly ILogger<AreaServerIPAddressPortRequest> _logger;
+
+    public AreaServerIPAddressPortRequest(ILogger<AreaServerIPAddressPortRequest> logger)
     {
-        private readonly ILogger<AreaServerIPAddressPortRequest> _logger;
+        _logger = logger;
+    }
 
-        public AreaServerIPAddressPortRequest(ILogger<AreaServerIPAddressPortRequest> logger)
-        {
-            _logger = logger;
-        }
-
-        public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
-        {
-            BaseResponse response = new AreaServerDiskAuthorizationResponse();
-            return Task.FromResult<ICollection<FragmentMessage>>(new[] { response.Build() });
-        }
+    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    {
+        BaseResponse response = new AreaServerDiskAuthorizationResponse();
+        return Task.FromResult<ICollection<FragmentMessage>>(new[] { response.Build() });
     }
 }

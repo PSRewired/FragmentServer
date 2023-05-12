@@ -6,22 +6,21 @@ using Fragment.NetSlum.Networking.Sessions;
 using Microsoft.Extensions.Logging;
 using Fragment.NetSlum.Networking.Packets.Response.AreaServer;
 
-namespace Fragment.NetSlum.Networking.Packets.Request.AreaServer
+namespace Fragment.NetSlum.Networking.Packets.Request.AreaServer;
+
+[FragmentPacket(OpCodes.Data, OpCodes.Data_AreaServerPublishRequest)]
+public class AreaServerPublshRequest :BaseRequest
 {
-    [FragmentPacket(OpCodes.Data, OpCodes.Data_AreaServerPublishRequest)]
-    public class AreaServerPublshRequest :BaseRequest
+    private readonly ILogger<AreaServerPublshRequest> _logger;
+
+    public AreaServerPublshRequest(ILogger<AreaServerPublshRequest> logger)
     {
-        private readonly ILogger<AreaServerPublshRequest> _logger;
+        _logger = logger;
+    }
 
-        public AreaServerPublshRequest(ILogger<AreaServerPublshRequest> logger)
-        {
-            _logger = logger;
-        }
-
-        public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
-        {
-            BaseResponse response = new AreaServerPublishResponse();
-            return Task.FromResult<ICollection<FragmentMessage>>(new[] { response.Build() });
-        }
+    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    {
+        BaseResponse response = new AreaServerPublishResponse();
+        return Task.FromResult<ICollection<FragmentMessage>>(new[] { response.Build() });
     }
 }

@@ -1,18 +1,17 @@
 using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Objects;
 
-namespace Fragment.NetSlum.Networking.Packets.Response.Login
+namespace Fragment.NetSlum.Networking.Packets.Response.Login;
+
+public class AreaServerLogon2Response : BaseResponse
 {
-    public class AreaServerLogon2Response : BaseResponse
+    public override FragmentMessage Build()
     {
-        public override FragmentMessage Build()
+        return new FragmentMessage
         {
-            return new FragmentMessage
-            {
-                OpCode = OpCodes.Data,
-                DataPacketType = OpCodes.DataAreaServerLogon2Response,
-                Data = new byte[] { 0x02, 0x11 },
-            };
-        }
+            OpCode = OpCodes.Data,
+            DataPacketType = OpCodes.DataAreaServerLogon2Response,
+            Data = new byte[] { 0x02, 0x11 },
+        };
     }
 }

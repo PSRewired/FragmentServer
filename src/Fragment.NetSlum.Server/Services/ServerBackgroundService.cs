@@ -38,7 +38,7 @@ public class ServerBackgroundService : BackgroundService
 
         foreach(var cl in _database.ChatLobbies.Where(c=> c.DefaultChannel == true))
         {
-            _chatLobbyStore.AddLobby(new ChatLobbyModel() { ChatLobby = cl });
+            _chatLobbyStore.AddLobby(ChatLobbyModel.FromEntity(cl));
         }
 
         Task.WaitAll(startTasks.ToArray(), stoppingToken);

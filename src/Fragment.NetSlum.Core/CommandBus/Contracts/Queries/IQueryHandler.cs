@@ -1,5 +1,3 @@
-using Fragment.NetSlum.Core.CommandBus.Contracts.Commands;
-
 namespace Fragment.NetSlum.Core.CommandBus.Contracts.Queries;
 
 public interface IQueryHandler<in TQuery, TResult> where TQuery : IQuery<TResult>

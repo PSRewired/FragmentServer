@@ -1,7 +1,6 @@
 using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Core.Models;
 using ImageMagick;
-using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace Fragment.NetSlum.Server.Converters;

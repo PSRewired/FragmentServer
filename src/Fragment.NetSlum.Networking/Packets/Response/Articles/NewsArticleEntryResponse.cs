@@ -1,7 +1,6 @@
 using System.Buffers.Binary;
 using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Networking.Objects;
-using CommunityToolkit.HighPerformance.Streams;
 using Fragment.NetSlum.Networking.Constants;
 
 namespace Fragment.NetSlum.Networking.Packets.Response.Articles;

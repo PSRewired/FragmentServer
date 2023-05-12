@@ -1,18 +1,17 @@
 using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Objects;
 
-namespace Fragment.NetSlum.Networking.Packets.Response.Login
+namespace Fragment.NetSlum.Networking.Packets.Response.Login;
+
+public class DiskAuthorizationResponse :BaseResponse
 {
-    public class DiskAuthorizationResponse :BaseResponse
+    public override FragmentMessage Build()
     {
-        public override FragmentMessage Build()
+        return new FragmentMessage
         {
-            return new FragmentMessage
-            {
-                OpCode = OpCodes.Data,
-                DataPacketType = OpCodes.DataDiskAuthorizationSuccess,
-                Data = new byte[] { 0x78, 0x94 },
-            };
-        }
+            OpCode = OpCodes.Data,
+            DataPacketType = OpCodes.DataDiskAuthorizationSuccess,
+            Data = new byte[] { 0x78, 0x94 },
+        };
     }
 }
