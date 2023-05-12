@@ -1,4 +1,5 @@
 using System.Data;
+using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Networking.Attributes;
 using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Objects;
@@ -31,14 +32,15 @@ public class ChatLobbyStatusUpdateRequest:BaseRequest
             throw new DataException("Invalid chat room or player not found");
         }
 
-        ushort clientCount = cl.PlayerCount;
-        var response = new ChatLobbyEnterRoomResponse().SetClientCount((ushort)clientCount).Build();
+        _logger.LogInformation("Player {PlayerName} sent chat lobby status update of:\n{HexDump}", session.CharacterInfo?.CharacterName, request.Data.ToHexDump());
+        session.LastStatus = request.Data.ToArray();
 
         //We have to send out a status update to all clients in this chat room but I don't understand where that comes from?
         cl.NotifyAllExcept(myChatLobbyPlayer, new ChatLobbyStatusUpdateResponse()
+            .SetPlayerIndex(myChatLobbyPlayer.PlayerIndex)
             .SetLastStatus(session.LastStatus)
             .Build());
 
-        return Task.FromResult<ICollection<FragmentMessage>>(new[] { response });
+        return Task.FromResult<ICollection<FragmentMessage>>(Array.Empty<FragmentMessage>());
     }
 }

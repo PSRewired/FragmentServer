@@ -32,18 +32,24 @@ public class ChatLobbyEnterRoomRequest:BaseRequest
             throw new ArgumentException($"Attempted to enter {chatLobbyId} which is not a valid chat room");
         }
 
+        // We need to send the current lobby state before adding the player to the chat lobby
+        var responses = new List<FragmentMessage>
+        {
+            new ChatLobbyEnterRoomResponse()
+                .SetClientCount(chatLobby.PlayerCount)
+                .Build()
+        };
+
+        foreach (var player in chatLobby.GetPlayers())
+        {
+            responses.Add(new ChatLobbyStatusUpdateResponse()
+                .SetLastStatus(player.TcpSession.LastStatus)
+                .Build());
+        }
+
         var myPlayer = new ChatLobbyPlayer(session);
         chatLobby.AddPlayer(myPlayer);
 
-        var response = new ChatLobbyEnterRoomResponse()
-            .SetClientCount(chatLobby.PlayerCount)
-            .Build();
-
-        //We have to send out a status update to all clients in this chat room but I don't understand where that comes from?
-        chatLobby.NotifyAllExcept(myPlayer, new ChatLobbyStatusUpdateResponse()
-            .SetLastStatus(session.LastStatus)
-            .Build());
-
-        return Task.FromResult<ICollection<FragmentMessage>>(new[] { response });
+        return Task.FromResult<ICollection<FragmentMessage>>(responses);
     }
 }
