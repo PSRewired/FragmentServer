@@ -1,5 +1,8 @@
 using Fragment.NetSlum.Persistence.Entities;
 using Fragment.NetSlum.Networking.Objects;
+using Microsoft.Extensions.Logging;
+using Serilog;
+using ILogger = Serilog.ILogger;
 
 namespace Fragment.NetSlum.Networking.Models;
 
@@ -11,6 +14,7 @@ public class ChatLobbyModel
     public string LobbyName { get; private set; }
 
     private readonly ChatLobbyPlayer?[] _chatLobbyPlayers;
+    private static ILogger Log => Serilog.Log.ForContext<ChatLobbyModel>();
 
     public ushort PlayerCount => (ushort)GetPlayers().Length;
     private readonly Semaphore _playerIdxLock = new(1, 1);
@@ -29,7 +33,6 @@ public class ChatLobbyModel
 
     public int AddPlayer(ChatLobbyPlayer player)
     {
-
         try
         {
             _playerIdxLock.WaitOne();
@@ -42,6 +45,7 @@ public class ChatLobbyModel
         }
         finally
         {
+            Log.Information("Added player {PlayerName} at index {PlayerIndex} to chat lobby {LobbyName}({LobbyId})", player.PlayerName, player.PlayerIndex, LobbyName, LobbyId);
             _playerIdxLock.Release();
         }
     }
@@ -71,6 +75,7 @@ public class ChatLobbyModel
         }
         finally
         {
+            Log.Information("Removed player {PlayerName} at index {PlayerIndex} from chat lobby {LobbyName}({LobbyId})", player.PlayerName, player.PlayerIndex, LobbyName, LobbyId);
             _playerIdxLock.Release();
         }
     }
@@ -119,6 +124,7 @@ public class ChatLobbyModel
     /// <summary>
     /// Sends message data to the given player index
     /// </summary>
+    /// <param name="idx"></param>
     /// <param name="messages"></param>
     public void SendTo(ushort idx, List<FragmentMessage> messages)
     {

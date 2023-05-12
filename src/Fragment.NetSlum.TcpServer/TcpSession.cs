@@ -93,8 +93,6 @@ public class TcpSession : IDisposable
                 // This synchronous call will block until data is received or the configured ReceiveTimeout has elapsed.
                 var read = Socket!.Receive(_receiveBuffer, SocketFlags.None);
 
-                Log.Debug("Bytes read: {Read}", read);
-
                 // If zero bytes were received, this indicates that the socket has timed out or disconnected
                 if (read < 1)
                 {

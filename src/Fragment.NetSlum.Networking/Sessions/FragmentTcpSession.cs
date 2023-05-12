@@ -60,7 +60,8 @@ public class FragmentTcpSession : TcpSession, IScopeable
             var resp = await _packetPipeline.Handle(this, data, cancellationToken);
 
             #if (DEBUG)
-            _logger.LogDebug("[{ClsName}] Sending packet\n{LineBreak1}\n{HexDump}\n{LineBreak2}",
+            _logger.LogDebug("[{ClsName}] Sending packet to {SessionId}\n{LineBreak1}\n{HexDump}\n{LineBreak2}",
+                Id,
                 GetType().Name,
                 new string('=', 32),
                 resp.Span.ToHexDump(),
