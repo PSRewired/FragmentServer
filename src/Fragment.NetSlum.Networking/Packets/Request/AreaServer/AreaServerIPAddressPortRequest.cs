@@ -22,6 +22,7 @@ public class AreaServerIPAddressPortRequest : BaseRequest
     {
         session.IpAddress = request.Data[0..4].ToArray();
         session.Port = request.Data[4..6].ToArray();
+
         BaseResponse response = new AreaServerIPAddressPortResponse();
         return Task.FromResult<ICollection<FragmentMessage>>(new[] { response.Build() });
     }

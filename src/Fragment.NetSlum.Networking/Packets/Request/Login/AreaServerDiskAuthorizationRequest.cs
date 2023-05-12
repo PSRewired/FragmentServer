@@ -9,11 +9,11 @@ using Microsoft.Extensions.Logging;
 namespace Fragment.NetSlum.Networking.Packets.Request.Login;
 
 [FragmentPacket(OpCodes.Data, OpCodes.Data_AreaServerDiskAuthorizationRequest)]
-public class AreaServerIPAddressPortRequest : BaseRequest
+public class AreaServerDiskAuthorizationRequset : BaseRequest
 {
-    private readonly ILogger<AreaServerIPAddressPortRequest> _logger;
+    private readonly ILogger<AreaServerDiskAuthorizationRequset> _logger;
 
-    public AreaServerIPAddressPortRequest(ILogger<AreaServerIPAddressPortRequest> logger)
+    public AreaServerDiskAuthorizationRequset(ILogger<AreaServerDiskAuthorizationRequset> logger)
     {
         _logger = logger;
     }

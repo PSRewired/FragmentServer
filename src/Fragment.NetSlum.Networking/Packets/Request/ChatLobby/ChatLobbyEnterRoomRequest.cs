@@ -32,6 +32,9 @@ public class ChatLobbyEnterRoomRequest:BaseRequest
             throw new ArgumentException($"Attempted to enter {chatLobbyId} which is not a valid chat room");
         }
 
+        var myPlayer = new ChatLobbyPlayer(session);
+        chatLobby.AddPlayer(myPlayer);
+
         // We need to send the current lobby state before adding the player to the chat lobby
         var responses = new List<FragmentMessage>
         {
@@ -46,9 +49,6 @@ public class ChatLobbyEnterRoomRequest:BaseRequest
                 .SetLastStatus(player.TcpSession.LastStatus)
                 .Build());
         }
-
-        var myPlayer = new ChatLobbyPlayer(session);
-        chatLobby.AddPlayer(myPlayer);
 
         return Task.FromResult<ICollection<FragmentMessage>>(responses);
     }

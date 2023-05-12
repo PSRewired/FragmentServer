@@ -36,16 +36,12 @@ public class AreaServerPublishDetailsRequest:BaseRequest
             case OpCodes.Data_AreaServerPublishDetails2Request:
                 response = new AreaServerPublishDetailsResponse() { PacketType = OpCodes.Data_AreaServerPublishDetails2Success, Data = new byte[] { 0xDE, 0xAD } };
                 break;
+
             case OpCodes.Data_AreaServerPublishDetails3Request:
-                return Task.FromResult<ICollection<FragmentMessage>>(Array.Empty<FragmentMessage>());
             case OpCodes.Data_AreaServerPublishDetails4Request:
-                return Task.FromResult<ICollection<FragmentMessage>>(Array.Empty<FragmentMessage>());
             case OpCodes.Data_AreaServerPublishDetails6Request:
-                response = new AreaServerPublishDetailsResponse() { PacketType = OpCodes.Data_AreaServerPublishDetails2Success, Data = new byte[] { 0xDE, 0xAD } };
-                break;
             default:
-                response = new AreaServerPublishDetailsResponse();
-                break;
+                return Task.FromResult<ICollection<FragmentMessage>>(Array.Empty<FragmentMessage>());
         }
 
 
