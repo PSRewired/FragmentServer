@@ -7,7 +7,15 @@ namespace Fragment.NetSlum.Networking.Packets.Response.ChatLobby;
 
 public class LobbyServerCategoryEntryResponse : BaseResponse
 {
+    private ushort _id;
     private string _name = "";
+
+    public LobbyServerCategoryEntryResponse SetCategoryId(ushort id)
+    {
+        _id = id;
+
+        return this;
+    }
 
     public LobbyServerCategoryEntryResponse SetCategoryName(string name)
     {
@@ -21,10 +29,11 @@ public class LobbyServerCategoryEntryResponse : BaseResponse
 
         var nameBytes = _name.ToShiftJis();
         var writer = new MemoryWriter(nameBytes.Length + sizeof(ushort) * 2);
-        writer.Write((ushort)1);
+        writer.Write(_id);
         writer.Write(nameBytes);
+
+        // Null terminator for string
         writer.Write((byte)0);
-        //writer.Write("ne".ToShiftJis());
 
         return new FragmentMessage
         {

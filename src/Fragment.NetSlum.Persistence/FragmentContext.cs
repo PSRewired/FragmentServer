@@ -15,8 +15,7 @@ public class FragmentContext : DbContext
     {
     }
 
-    public FragmentContext(DbContextOptions<FragmentContext> options)
-        : base(options)
+    public FragmentContext(DbContextOptions<FragmentContext> options) : base(options)
     {
     }
 
@@ -53,5 +52,6 @@ public class FragmentContext : DbContext
     public virtual DbSet<WebNewsCategory> WebNewsCategories { get; set; }
     public virtual DbSet<WebNewsArticle> WebNewsArticles { get; set; }
     public virtual DbSet<WebNewsReadLog> WebNewsReadLogs { get; set; }
-    public virtual DbSet<ChatLobbies> ChatLobbies { get; set;}
+    public virtual DbSet<ChatLobby> ChatLobbies { get; set;}
+    public virtual DbSet<AreaServerCategory> AreaServerCategories { get; set;}
 }

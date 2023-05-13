@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Fragment.NetSlum.Persistence.Entities;
 
-public class ChatLobbies : IConfigurableEntity<ChatLobbies>
+public class ChatLobby : IConfigurableEntity<ChatLobby>
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -19,15 +19,15 @@ public class ChatLobbies : IConfigurableEntity<ChatLobbies>
     public bool PlayerLobby { get; set; } = false;
     public bool GuildLobby { get; set; } = false;
 
-    public void Configure(EntityTypeBuilder<ChatLobbies> entityBuilder)
+    public void Configure(EntityTypeBuilder<ChatLobby> entityBuilder)
     {
-        entityBuilder.HasData(new ChatLobbies
+        entityBuilder.HasData(new ChatLobby
         {
             Id = 1,
             ChatLobbyName = "Main",
             DefaultChannel = true,
         });
-        entityBuilder.HasData(new ChatLobbies
+        entityBuilder.HasData(new ChatLobby
         {
             Id = 2,
             ChatLobbyName = "Main 2",

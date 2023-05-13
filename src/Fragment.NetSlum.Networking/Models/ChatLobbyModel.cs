@@ -26,7 +26,7 @@ public class ChatLobbyModel
         _chatLobbyPlayers = new ChatLobbyPlayer[MaxPlayers];
     }
 
-    public static ChatLobbyModel FromEntity(ChatLobbies lobbyEntity)
+    public static ChatLobbyModel FromEntity(ChatLobby lobbyEntity)
     {
         return new ChatLobbyModel(lobbyEntity.Id, lobbyEntity.ChatLobbyName);
     }

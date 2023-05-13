@@ -14,14 +14,10 @@ namespace Fragment.NetSlum.Server.Services;
 public class ServerBackgroundService : BackgroundService
 {
     private readonly IServiceScopeFactory _scopeFactory;
-    private readonly FragmentContext _database;
-    private readonly ChatLobbyStore _chatLobbyStore;
 
-    public ServerBackgroundService(IServiceScopeFactory scopeFactory,FragmentContext database, ChatLobbyStore chatLobbyStore)
+    public ServerBackgroundService(IServiceScopeFactory scopeFactory)
     {
         _scopeFactory = scopeFactory;
-        _database = database;
-        _chatLobbyStore = chatLobbyStore;
     }
 
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -36,9 +32,12 @@ public class ServerBackgroundService : BackgroundService
             startTasks.Add(Task.Run(server.Start, stoppingToken));
         }
 
-        foreach(var cl in _database.ChatLobbies.Where(c=> c.DefaultChannel == true))
+        var database = scope.ServiceProvider.GetRequiredService<FragmentContext>();
+        var chatLobbyStore = scope.ServiceProvider.GetRequiredService<ChatLobbyStore>();
+
+        foreach(var cl in database.ChatLobbies.Where(c=> c.DefaultChannel == true))
         {
-            _chatLobbyStore.AddLobby(ChatLobbyModel.FromEntity(cl));
+            chatLobbyStore.AddLobby(ChatLobbyModel.FromEntity(cl));
         }
 
         Task.WaitAll(startTasks.ToArray(), stoppingToken);

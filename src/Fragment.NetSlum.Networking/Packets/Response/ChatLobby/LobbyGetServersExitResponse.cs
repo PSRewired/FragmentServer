@@ -11,7 +11,7 @@ public class LobbyGetServersExitResponse : BaseResponse
         {
             OpCode = OpCodes.Data,
             DataPacketType = OpCodes.DataLobbyGetServersExitOk,
-            Data = new byte[2]
+            Data = new byte[2],
         };
     }
 }
