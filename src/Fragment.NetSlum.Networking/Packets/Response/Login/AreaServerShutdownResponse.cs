@@ -3,14 +3,14 @@ using Fragment.NetSlum.Networking.Objects;
 
 namespace Fragment.NetSlum.Networking.Packets.Response.Login;
 
-public class AreaServerLogon2Response : BaseResponse
+public class AreaServerShutdownResponse : BaseResponse
 {
     public override FragmentMessage Build()
     {
         return new FragmentMessage
         {
             OpCode = OpCodes.Data,
-            DataPacketType = OpCodes.DataAreaServerLogon2Response,
+            DataPacketType = OpCodes.AreaServerShutdownResponse,
             Data = new byte[] { 0x02, 0x11 },
         };
     }

@@ -51,22 +51,29 @@ public class FragmentPacketPipeline<TSession> : IDisposable where TSession : ISc
 
         try
         {
-            // Check that cancellation token has not been cancelled before and after processing
-            cancellationToken.ThrowIfCancellationRequested();
-
-            // Run decoders
-            foreach (var decoder in _decoders)
+            // Continuously run the decoders until we've exhausted the buffer content, or no other data can be read
+            int bytesRead = 0;
+            do
             {
-                // Each decoder is able to read from the buffer so we need to make sure that we are always
-                // trimming the stream on each decoder call to account for the changes the previous one made
-                var bytesRead = decoder.Decode(_inBuf[.._inBufLength], _decodedObjects);
-                _inBufLength -= bytesRead;
+                // Check that cancellation token has not been cancelled before and after processing
+                cancellationToken.ThrowIfCancellationRequested();
 
-                if (bytesRead > 0)
+                // Run decoders
+                foreach (var decoder in _decoders)
                 {
+                    // Each decoder is able to read from the buffer so we need to make sure that we are always
+                    // trimming the stream on each decoder call to account for the changes the previous one made
+                    bytesRead = decoder.Decode(_inBuf[.._inBufLength], _decodedObjects);
+                    _inBufLength -= bytesRead;
+
+                    if (bytesRead <= 0)
+                    {
+                        break;
+                    }
+
                     _inBuf[bytesRead..].CopyTo(_inBuf);
                 }
-            }
+            } while (bytesRead > 0 && _inBufLength > 0);
 
             // Run response handler for each decoded message
             for (var i = 0; i < _decodedObjects.Count; i++)

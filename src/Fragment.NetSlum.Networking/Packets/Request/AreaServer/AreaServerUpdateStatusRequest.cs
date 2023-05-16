@@ -20,14 +20,18 @@ public class AreaServerUpdateStatusRequest :BaseRequest
 
     public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
-          
-        byte[] diskId = request.Data[0..64].ToArray();
-        string areaServerName = request.Data.Span[67..].ToShiftJisString();
-        var pos = 67 + areaServerName.Length +1;
-        session.AreaServerLevel = BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[pos..(pos + 2)]);
+        //byte[] diskId = request.Data[0..64].ToArray();
+        var pos = 0x43;
+        var serverNameBytes = request.Data[pos..].Span.ReadToNullByte();
+        pos += serverNameBytes.Length;
+        session.AreaServerInfo!.ServerName = serverNameBytes.ToShiftJisString();
+        session.AreaServerInfo!.Level = BinaryPrimitives.ReadUInt16BigEndian(request.Data[pos..(pos + 2)].Span);
+        //pos + 2 is some sort of status flag
         pos += 4;
-        session.AreaServerStatus = request.Data.Span[pos];
+        session.AreaServerInfo!.State = request.Data.Span[pos++];
+        session.AreaServerInfo!.Detail = request.Data[pos..];
 
+        _logger.LogDebug("Area server status update:\n{Details}", session.AreaServerInfo.ToString());
 
         return Task.FromResult<ICollection<FragmentMessage>>(Array.Empty<FragmentMessage>());
     }

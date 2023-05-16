@@ -8,19 +8,19 @@ using Microsoft.Extensions.Logging;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.Login;
 
-[FragmentPacket(OpCodes.Data, OpCodes.DataAreaServerLogon2Request)]
-public class AreaServerLogon2Request : BaseRequest
+[FragmentPacket(OpCodes.Data, OpCodes.AreaServerShutdownRequest)]
+public class AreaServerShutdownRequest : BaseRequest
 {
-    private readonly ILogger<AreaServerLogon2Request> _logger;
+    private readonly ILogger<AreaServerShutdownRequest> _logger;
 
-    public AreaServerLogon2Request(ILogger<AreaServerLogon2Request> logger)
+    public AreaServerShutdownRequest(ILogger<AreaServerShutdownRequest> logger)
     {
         _logger = logger;
     }
 
     public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
-        BaseResponse response = new AreaServerLogon2Response();
+        BaseResponse response = new AreaServerShutdownResponse();
 
         return Task.FromResult<ICollection<FragmentMessage>>(new[] { response.Build() });
     }

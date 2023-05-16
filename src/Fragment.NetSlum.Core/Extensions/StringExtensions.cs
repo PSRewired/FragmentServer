@@ -28,7 +28,7 @@ public static class StringExtensions
     }
 
     /// <summary>
-    /// Read an array of bytes until a string until a null terminator is encountered.
+    /// Read an array of bytes of a string until a null terminator is encountered.
     /// If no null terminator is found, the array is assumed to be the entire string content
     /// </summary>
     /// <param name="data"></param>
@@ -40,7 +40,7 @@ public static class StringExtensions
         return Encoding.UTF8.GetString(data);
     }
 
-    private static Span<byte> ReadToNullByte(this Span<byte> arr)
+    public static Span<byte> ReadToNullByte(this Span<byte> arr)
     {
         var nullIndex = 0;
 
@@ -54,6 +54,6 @@ public static class StringExtensions
             nullIndex++;
         }
 
-        return arr[..nullIndex];
+        return arr[..(nullIndex+1)];
     }
 }

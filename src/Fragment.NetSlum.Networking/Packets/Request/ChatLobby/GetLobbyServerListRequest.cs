@@ -29,9 +29,28 @@ public class GetLobbyServerListRequest : BaseRequest
 
         var areaServers = session.Server.Sessions
             .Cast<FragmentTcpSession>()
-            .Where(s => s.IsAreaServer);
+            .Where(s => s.IsAreaServer)
+            .ToArray();
 
-        return Task.FromResult<ICollection<FragmentMessage>>(Array.Empty<FragmentMessage>());
+        var responses = new List<FragmentMessage>();
+
+        responses.Add(new LobbyServerEntryCountResponse((ushort)areaServers.Length).Build());
+
+        ushort cId = 0;
+        foreach (var server in areaServers)
+        {
+            responses.Add(new LobbyServerEntryResponse()
+                .SetServerId(cId++)
+                .SetLevel(server.AreaServerInfo!.Level)
+                .SetStatus(server.AreaServerInfo.State)
+                .SetExternalAddress(server.AreaServerInfo!.ConnectionEndpoint!)
+                .SetDetails(server.AreaServerInfo.Detail)
+                .SetPlayerCount(server.AreaServerInfo.CurrentPlayerCount)
+                .SetServerName(server.AreaServerInfo.ServerName)
+                .Build());
+        }
+
+        return Task.FromResult<ICollection<FragmentMessage>>(responses);
     }
 
     private ICollection<FragmentMessage> HandleCategories()

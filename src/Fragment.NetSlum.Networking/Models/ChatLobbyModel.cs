@@ -1,7 +1,5 @@
 using Fragment.NetSlum.Persistence.Entities;
 using Fragment.NetSlum.Networking.Objects;
-using Microsoft.Extensions.Logging;
-using Serilog;
 using ILogger = Serilog.ILogger;
 
 namespace Fragment.NetSlum.Networking.Models;

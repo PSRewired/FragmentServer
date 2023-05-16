@@ -1,5 +1,6 @@
 using Fragment.NetSlum.Networking.Attributes;
 using Fragment.NetSlum.Networking.Constants;
+using Fragment.NetSlum.Networking.Models;
 using Fragment.NetSlum.Networking.Objects;
 using Fragment.NetSlum.Networking.Packets.Response;
 using Fragment.NetSlum.Networking.Packets.Response.Login;
@@ -26,7 +27,7 @@ public class LogonRequest : BaseRequest
         {
             case (byte)OpCodes.DataServerKeyChange:
                 _logger.LogInformation("Session {SessionId} has identified itself as an Area Server", session.Id);
-                session.IsAreaServer = true;
+                session.AreaServerInfo = new AreaServerInformation();
                 response = new AreaServerLogonResponse();
                 break;
             default:

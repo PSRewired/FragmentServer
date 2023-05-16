@@ -1,3 +1,5 @@
+using System.Buffers.Binary;
+using System.Net;
 using Fragment.NetSlum.Networking.Attributes;
 using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Objects;
@@ -20,8 +22,12 @@ public class AreaServerIPAddressPortRequest : BaseRequest
 
     public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
-        session.IpAddress = request.Data[0..4].ToArray();
-        session.Port = request.Data[4..6].ToArray();
+        var ipAddressBytes = new Span<byte>(new byte[4]);
+        request.Data.Span[..4].CopyTo(ipAddressBytes);
+        ipAddressBytes.Reverse();
+
+        session.AreaServerInfo!.ConnectionEndpoint = new IPEndPoint(
+            new IPAddress(ipAddressBytes.ToArray()), BinaryPrimitives.ReadUInt16BigEndian(request.Data[4..6].Span));
 
         BaseResponse response = new AreaServerIPAddressPortResponse();
         return Task.FromResult<ICollection<FragmentMessage>>(new[] { response.Build() });

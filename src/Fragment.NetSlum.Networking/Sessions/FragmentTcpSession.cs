@@ -2,6 +2,7 @@ using System.Runtime.CompilerServices;
 using Fragment.NetSlum.Core.DependencyInjection;
 using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Core.Models;
+using Fragment.NetSlum.Networking.Models;
 using Fragment.NetSlum.Networking.Objects;
 using Fragment.NetSlum.Networking.Pipeline;
 using Fragment.NetSlum.TcpServer;
@@ -16,23 +17,17 @@ public class FragmentTcpSession : TcpSession, IScopeable
     private readonly ILogger<FragmentTcpSession> _logger;
     private readonly FragmentPacketPipeline<FragmentTcpSession> _packetPipeline;
 
-    public byte[] IpAddress { get; set; } = new byte[8];
-    public byte[] Port { get; set; } = new byte[2];
-    public bool IsAreaServer { get; set; } = false;
+    public bool IsAreaServer => AreaServerInfo != null;
+    public AreaServerInformation? AreaServerInfo { get; set; }
+
     public DateTime LastContacted { get; set; } = DateTime.UtcNow;
 
     //Fields only used for a Player
     public int PlayerAccountId { get; set; }
     public int GuildId { get; set; }
+
     public CharacterInfo? CharacterInfo { get; set; }
     public byte[] LastStatus { get; set; } = Array.Empty<byte>();
-
-    //Area Server Fields
-    public byte[] AreaServerName { get; set; } = Array.Empty<byte>();
-    public ushort AreaServerLevel { get; set; }
-    public byte AreaServerStatus { get; set; }
-    public ushort AreaServerPlayerCount { get;set; }
-
 
 
     public FragmentTcpSession(ITcpServer server, IServiceScope serviceScope) : base(server)

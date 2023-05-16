@@ -37,7 +37,7 @@ public class CharacterStatHistory
                 "Cannot persist character stat history without a valid player reference. Id or entity reference must be set");
         }
 
-        return new CharacterStatHistory()
+        return new CharacterStatHistory
         {
             CharacterId = stats.CharacterId,
             Character = stats.Character!,

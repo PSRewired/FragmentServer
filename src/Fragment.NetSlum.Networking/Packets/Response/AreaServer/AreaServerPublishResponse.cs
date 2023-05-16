@@ -11,7 +11,7 @@ public class AreaServerPublishResponse :BaseResponse
         {
             OpCode = OpCodes.Data,
             DataPacketType = OpCodes.Data_AreaServerPublishSuccess,
-            Data = new byte[] { 0x00, 0x00 },
+            Data = new byte[] { 0x00, 0x09 },
         };
     }
 }

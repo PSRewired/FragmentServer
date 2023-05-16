@@ -67,8 +67,8 @@ public enum OpCodes : ushort
     DataLobbyChatroomCreateOk = 0x7416,
     DataLobbyChatroomCreateError = 0x7417,
 
-    DataAreaServerLogon2Request = 0x7019,
-    DataAreaServerLogon2Response = 0x701C,
+    AreaServerShutdownRequest = 0x7019,
+    AreaServerShutdownResponse = 0x701C,
     //Doesn't work
     DataLogonAs2Response = 0x701d,
 
