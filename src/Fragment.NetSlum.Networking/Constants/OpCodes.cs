@@ -52,8 +52,8 @@ public enum OpCodes : ushort
 
     DataLobbyStatusUpdate = 0x7009,
 
-    DataLobbyChatroomGetList = 0x7406,
-    DataLobbyChatrookCategory = 0x7407,
+    DataGetLobbyChatroomListRequest = 0x7406,
+    DataLobbyChatroomCategory = 0x7407,
 
     DataLobbyChatroomListError = 0x7408,
 

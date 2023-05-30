@@ -27,7 +27,7 @@ public class AreaServerUpdateStatusRequest :BaseRequest
         session.AreaServerInfo!.ServerName = serverNameBytes.ToShiftJisString();
         session.AreaServerInfo!.Level = BinaryPrimitives.ReadUInt16BigEndian(request.Data[pos..(pos + 2)].Span);
         //pos + 2 is some sort of status flag
-        pos += 4;
+        pos += 3;
         session.AreaServerInfo!.State = request.Data.Span[pos++];
         session.AreaServerInfo!.Detail = request.Data[pos..];
 

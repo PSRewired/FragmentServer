@@ -81,13 +81,12 @@ public class LobbyServerEntryResponse : BaseResponse
         writer.Write((ushort)_serverIp.Port);
 
         writer.Write(_serverName.ToShiftJis());
-        writer.Skip(1); // String null terminator
+        //writer.Skip(1); // String null terminator
 
         writer.Write(_level);
-        writer.Write((ushort)1); // Maybe some sort of online status? The server shows up as "incapacitated" if the value is 0
+        writer.Write((ushort)_state); // Maybe some sort of online status? The server shows up as "incapacitated" if the value is 0
         writer.Write(_playerCount);
 
-        writer.Write(_state);
         writer.Write(_details);
 
         return new FragmentMessage
