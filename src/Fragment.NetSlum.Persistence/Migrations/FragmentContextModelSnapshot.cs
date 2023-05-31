@@ -297,8 +297,8 @@ namespace Fragment.NetSlum.Persistence.Migrations
 
                     b.Property<string>("SaveId")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("varchar(20)")
+                        .HasMaxLength(32)
+                        .HasColumnType("varchar(32)")
                         .HasColumnName("save_id");
 
                     b.HasKey("Id")
@@ -340,7 +340,7 @@ namespace Fragment.NetSlum.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            Content = "Welcome to Netslum-Redux!\nCurrent Status:\n- Lobby #GOnline#W!\n- BBS #GOnline#W!\n- Mail #GOnline#W!\n- Guilds #GOnline#W!\n- Ranking #GOnline#W!\n- News #GOnline#W!",
+                            Content = "Welcome to Netslum-Redux!\r\nCurrent Status:\r\n- Lobby #GOnline#W!\r\n- BBS #GOnline#W!\r\n- Mail #GOnline#W!\r\n- Guilds #GOnline#W!\r\n- Ranking #GOnline#W!\r\n- News #GOnline#W!",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });

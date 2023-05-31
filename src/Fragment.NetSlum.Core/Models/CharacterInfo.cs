@@ -37,22 +37,25 @@ public class CharacterInfo
         var saveSlot = data[0];
 
         var saveId = data[pos..].GetNullTerminatedString();
-        pos += saveId.Length + 1;
+        pos += saveId.Length;
 
-        var characterName = data[pos..].ToShiftJisString();
-        pos += characterName.Length * 2 + 1;
+        var characterName = data[pos..].ReadToNullByte();
+
+
+       // int byteCount = Encoding.UTF8.GetByteCount(characterName) /2;
+
+        pos += characterName.Length;
 
         var characterClass = (CharacterClass) data[pos];
         pos += 1;
-
         var characterLevel = BinaryPrimitives.ReadUInt16BigEndian(data[pos..(pos + 2)]);
         pos += 2;
 
-        var characterGreeting = data[pos..].ToShiftJisString();
-        pos += characterGreeting.Length * 2 + 1;
+        var characterGreeting = data[pos..].ReadToNullByte();
+        pos += characterGreeting.Length;
 
         var characterModel = BinaryPrimitives.ReadUInt32BigEndian(data[pos..(pos + 4)]);
-        pos += 4;
+        pos += 5;
 
         var currentHp = BinaryPrimitives.ReadUInt16BigEndian(data[pos..(pos + 2)]);
         pos += 2;
@@ -79,9 +82,9 @@ public class CharacterInfo
             SaveSlot = saveSlot,
             SaveId = saveId,
             BronzeCoinCount = bronzeCoinCount,
-            CharacterName = characterName,
+            CharacterName = characterName.ToShiftJisString(),
             Class = characterClass,
-            Greeting = characterGreeting,
+            Greeting = characterGreeting.ToShiftJisString(),
             Level = characterLevel,
             Model = characterModel,
             CurrentGp = currentGp,
@@ -139,5 +142,33 @@ public class CharacterInfo
     private static CharacterColor GetModelColor(uint modelNumber)
     {
         return (CharacterColor) ((modelNumber >> 8) & 0x0F);
+    }
+    static Encoding GetEncoding(string str)
+    {
+        byte[] bytes = Encoding.Default.GetBytes(str);
+
+        if (bytes.Length >= 2 && bytes[0] == 0xFE && bytes[1] == 0xFF)
+        {
+            return Encoding.BigEndianUnicode; // UTF-16BE
+        }
+        else if (bytes.Length >= 2 && bytes[0] == 0xFF && bytes[1] == 0xFE)
+        {
+            if (bytes.Length >= 4 && bytes[2] == 0 && bytes[3] == 0)
+            {
+                return Encoding.UTF32; // UTF-32LE
+            }
+            else
+            {
+                return Encoding.Unicode; // UTF-16LE
+            }
+        }
+        else if (bytes.Length >= 3 && bytes[0] == 0xEF && bytes[1] == 0xBB && bytes[2] == 0xBF)
+        {
+            return Encoding.UTF8; // UTF-8
+        }
+        else
+        {
+            return Encoding.Default; // Default encoding (System's default ANSI code page)
+        }
     }
 }

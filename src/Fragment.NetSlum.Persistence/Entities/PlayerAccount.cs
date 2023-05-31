@@ -12,7 +12,7 @@ public class PlayerAccount
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
-    [MaxLength(20)]
+    [MaxLength(32)]
     public required string SaveId { get; set; }
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
