@@ -40,10 +40,6 @@ public class CharacterInfo
         pos += saveId.Length;
 
         var characterName = data[pos..].ReadToNullByte();
-
-
-       // int byteCount = Encoding.UTF8.GetByteCount(characterName) /2;
-
         pos += characterName.Length;
 
         var characterClass = (CharacterClass) data[pos];
@@ -142,33 +138,5 @@ public class CharacterInfo
     private static CharacterColor GetModelColor(uint modelNumber)
     {
         return (CharacterColor) ((modelNumber >> 8) & 0x0F);
-    }
-    static Encoding GetEncoding(string str)
-    {
-        byte[] bytes = Encoding.Default.GetBytes(str);
-
-        if (bytes.Length >= 2 && bytes[0] == 0xFE && bytes[1] == 0xFF)
-        {
-            return Encoding.BigEndianUnicode; // UTF-16BE
-        }
-        else if (bytes.Length >= 2 && bytes[0] == 0xFF && bytes[1] == 0xFE)
-        {
-            if (bytes.Length >= 4 && bytes[2] == 0 && bytes[3] == 0)
-            {
-                return Encoding.UTF32; // UTF-32LE
-            }
-            else
-            {
-                return Encoding.Unicode; // UTF-16LE
-            }
-        }
-        else if (bytes.Length >= 3 && bytes[0] == 0xEF && bytes[1] == 0xBB && bytes[2] == 0xBF)
-        {
-            return Encoding.UTF8; // UTF-8
-        }
-        else
-        {
-            return Encoding.Default; // Default encoding (System's default ANSI code page)
-        }
     }
 }
