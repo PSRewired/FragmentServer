@@ -15,8 +15,8 @@ public class CharacterInfoProfile : Profile
             .ForMember(x => x.CurrentLevel, y => y.MapFrom(z => z.Level))
             .ForMember(x => x.GreetingMessage, y => y.MapFrom(z => z.Greeting))
             .ForMember(x => x.FullModelId, y => y.MapFrom(z => z.ModelId))
-            .AfterMap((src, dst, context) => dst.CharacterStats = context.Mapper.Map<CharacterInfo, CharacterStats>(src))
-            .AfterMap((src, dst, context) => dst.PlayerAccount = context.Mapper.Map<CharacterInfo, PlayerAccount>(src))
+            .ForMember(x => x.CharacterStats, y => y.MapFrom(z => z))
+            .ForMember(x => x.PlayerAccount, y => y.MapFrom(z => z))
         ;
 
         CreateMap<CharacterInfo, CharacterStats>()
