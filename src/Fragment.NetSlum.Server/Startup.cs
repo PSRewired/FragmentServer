@@ -5,6 +5,7 @@ using Fragment.NetSlum.Networking.Extensions;
 using Fragment.NetSlum.Networking.Stores;
 using Fragment.NetSlum.Persistence;
 using Fragment.NetSlum.Persistence.Extensions;
+using Fragment.NetSlum.Persistence.Interceptors;
 using Fragment.NetSlum.Persistence.Listeners;
 using Fragment.NetSlum.Server.Converters;
 using Fragment.NetSlum.Server.Servers;
@@ -40,7 +41,11 @@ public class Startup
         }
 
         services
-            .AddDbContext<FragmentContext>(opt => opt.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)))
+            .AddDbContext<FragmentContext>((provider, opt) =>
+            {
+                opt.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+                opt.AddInterceptors(provider.GetRequiredService<EntityChangeInterceptor>());
+            })
             .AddAutoMigrations<FragmentContext>();
 
         services.UseEntityListener()

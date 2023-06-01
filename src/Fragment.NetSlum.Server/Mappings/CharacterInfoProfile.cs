@@ -20,9 +20,9 @@ public class CharacterInfoProfile : Profile
         ;
 
         CreateMap<CharacterInfo, CharacterStats>()
-            .ForMember(x => x.CurrentHp, y => y.MapFrom(z => z.SaveSlot))
-            .ForMember(x => x.CurrentSp, y => y.MapFrom(z => z.SaveSlot))
-            .ForMember(x => x.CurrentGp, y => y.MapFrom(z => z.SaveSlot))
+            .ForMember(x => x.CurrentHp, y => y.MapFrom(z => z.CurrentHp))
+            .ForMember(x => x.CurrentSp, y => y.MapFrom(z => z.CurrentSp))
+            .ForMember(x => x.CurrentGp, y => y.MapFrom(z => z.CurrentGp))
             .ForMember(x => x.OnlineTreasures, y => y.MapFrom(z => z.OnlineStatueCounter))
             .ForMember(x => x.AverageFieldLevel, y => y.MapFrom(z => z.OfflineStatueCounter))
         ;

@@ -46,7 +46,9 @@ public class EntityChangeInterceptor : SaveChangesInterceptor
     {
         context.ChangeTracker.DetectChanges();
 
-        foreach (var entry in context.ChangeTracker.Entries())
+        var changedEntities = context.ChangeTracker.Entries().ToArray();
+
+        foreach (var entry in changedEntities)
         {
             var compatibleListeners = _listeners
                 .Where(l => (l.GetType().BaseType?.GetGenericArguments()[0]!).IsInstanceOfType(context) &&

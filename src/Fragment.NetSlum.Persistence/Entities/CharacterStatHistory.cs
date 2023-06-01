@@ -31,7 +31,7 @@ public class CharacterStatHistory
 
     public static CharacterStatHistory FromStats(CharacterStats stats)
     {
-        if (stats.Character == null || stats.CharacterId <= 0)
+        if (stats.Character == null && stats.CharacterId <= 0)
         {
             throw new DataException(
                 "Cannot persist character stat history without a valid player reference. Id or entity reference must be set");
