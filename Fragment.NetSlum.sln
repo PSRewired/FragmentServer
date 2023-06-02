@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fragment.NetSlum.Networking
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fragment.NetSlum.Persistence", "src\Fragment.NetSlum.Persistence\Fragment.NetSlum.Persistence.csproj", "{D943E01B-3DE9-4794-8FF4-E496AF847387}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fragment.NetSlum.Console", "src\Fragment.NetSlum.Console\Fragment.NetSlum.Console.csproj", "{8150B2F0-4630-49ED-A219-F4A263DD83EB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{D943E01B-3DE9-4794-8FF4-E496AF847387}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D943E01B-3DE9-4794-8FF4-E496AF847387}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D943E01B-3DE9-4794-8FF4-E496AF847387}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8150B2F0-4630-49ED-A219-F4A263DD83EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8150B2F0-4630-49ED-A219-F4A263DD83EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8150B2F0-4630-49ED-A219-F4A263DD83EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8150B2F0-4630-49ED-A219-F4A263DD83EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
