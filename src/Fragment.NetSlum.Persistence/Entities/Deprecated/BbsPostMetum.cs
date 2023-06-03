@@ -10,8 +10,8 @@ namespace Fragment.NetSlum.Persistence.Entities.Deprecated;
 [Index("ThreadId", Name = "BBS_Post_Meta_BBS_Threads_threadID_fk")]
 [Index("PostId", Name = "BBS_Post_Meta_postID_uindex", IsUnique = true)]
 [Index("Unk0", Name = "BBS_Post_Meta_unk0_uindex", IsUnique = true)]
-[MySqlCharSet("sjis")]
-[MySqlCollation("sjis_japanese_ci")]
+[MySqlCharSet("cp932")]
+[MySqlCollation("cp932_japanese_ci")]
 public class BbsPostMetum
 {
     [Column("unk0")]

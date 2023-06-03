@@ -6,8 +6,8 @@ namespace Fragment.NetSlum.Persistence.Entities.Deprecated;
 
 [Table("player_account_id")]
 [Index("Saveid", Name = "PLAYER_ACCOUNT_ID_SAVEID_uindex", IsUnique = true)]
-[MySqlCharSet("sjis")]
-[MySqlCollation("sjis_japanese_ci")]
+[MySqlCharSet("cp932")]
+[MySqlCollation("cp932_japanese_ci")]
 public class PlayerAccountId
 {
     [Key]

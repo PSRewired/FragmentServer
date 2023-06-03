@@ -12,8 +12,8 @@ public class WebNewsCategory : IConfigurableEntity<WebNewsCategory>
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public ushort Id { get; set; }
 
-    [MySqlCharSet("sjis")]
-    [MySqlCollation("sjis_japanese_ci")]
+    [MySqlCharSet("cp932")]
+    [MySqlCollation("cp932_japanese_ci")]
     [MaxLength(64)]
     public required string CategoryName { get; set; }
 

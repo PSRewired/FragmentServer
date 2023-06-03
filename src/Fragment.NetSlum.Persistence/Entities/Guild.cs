@@ -12,12 +12,12 @@ public class Guild
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public ushort Id { get; set; }
 
-    [MySqlCharSet("sjis")]
-    [MySqlCollation("sjis_japanese_ci")]
+    [MySqlCharSet("cp932")]
+    [MySqlCollation("cp932_japanese_ci")]
     public required string Name { get; set; }
 
-    [MySqlCharSet("sjis")]
-    [MySqlCollation("sjis_japanese_ci")]
+    [MySqlCharSet("cp932")]
+    [MySqlCollation("cp932_japanese_ci")]
     public string Comment { get; set; } = "";
 
     public GuildStats Stats { get; set; } = new();

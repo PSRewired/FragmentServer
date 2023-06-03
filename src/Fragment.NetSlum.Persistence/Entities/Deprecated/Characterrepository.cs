@@ -5,8 +5,8 @@ using Microsoft.EntityFrameworkCore;
 namespace Fragment.NetSlum.Persistence.Entities.Deprecated;
 
 [Table("characterrepository")]
-[MySqlCharSet("sjis")]
-[MySqlCollation("sjis_japanese_ci")]
+[MySqlCharSet("cp932")]
+[MySqlCollation("cp932_japanese_ci")]
 public class Characterrepository
 {
     [Key]

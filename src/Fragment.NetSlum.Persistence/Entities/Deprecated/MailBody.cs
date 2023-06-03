@@ -6,8 +6,8 @@ namespace Fragment.NetSlum.Persistence.Entities.Deprecated;
 
 [Table("mail_body")]
 [Index("MailId", Name = "MAIL_BODY_MAIL_ID_uindex", IsUnique = true)]
-[MySqlCharSet("sjis")]
-[MySqlCollation("sjis_japanese_ci")]
+[MySqlCharSet("cp932")]
+[MySqlCollation("cp932_japanese_ci")]
 public class MailBody
 {
     [Key]

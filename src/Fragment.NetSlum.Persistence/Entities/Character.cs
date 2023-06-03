@@ -18,12 +18,12 @@ public class Character : IConfigurableEntity<Character>
 
     public CharacterStats CharacterStats { get; set; } = new();
 
-    [MySqlCharSet("sjis")]
-    [MySqlCollation("sjis_japanese_ci")]
+    [MySqlCharSet("cp932")]
+    [MySqlCollation("cp932_japanese_ci")]
     public required string CharacterName { get; set; }
 
-    [MySqlCharSet("sjis")]
-    [MySqlCollation("sjis_japanese_ci")]
+    [MySqlCharSet("cp932")]
+    [MySqlCollation("cp932_japanese_ci")]
     public required string GreetingMessage { get; set; }
 
     public byte SaveSlotId { get; set; }

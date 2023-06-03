@@ -29,7 +29,7 @@ public class ChatLobbyEntryResponse : BaseResponse
 
 
     public override FragmentMessage Build()
-    {          
+    {
         var channelName = _chatLobbyName.ToShiftJis();
         int pos = 0;
         var bufferMemory = new Memory<byte>(new byte[channelName.Length + sizeof(int) + 4]);

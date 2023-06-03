@@ -13,8 +13,8 @@ public class ServerNews : IConfigurableEntity<ServerNews>
     public int Id { get; set; }
 
     [MaxLength(500)]
-    [MySqlCharSet("sjis")]
-    [MySqlCollation("sjis_japanese_ci")]
+    [MySqlCharSet("cp932")]
+    [MySqlCollation("cp932_japanese_ci")]
     public string Content { get; set; } = null!;
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

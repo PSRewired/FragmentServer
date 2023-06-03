@@ -4,6 +4,7 @@ namespace Fragment.NetSlum.Core.Extensions;
 
 public static class StringExtensions
 {
+    // Fragment uses CP932 encoding. In C#, Shift-JIS is actually CP/MS932
     private const int ShiftJisEncodingId = 932;
     private static Encoding ShiftJisEncoder => Encoding.GetEncoding(ShiftJisEncodingId);
 

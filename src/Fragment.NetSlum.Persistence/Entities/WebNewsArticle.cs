@@ -14,13 +14,13 @@ public class WebNewsArticle
     public ushort? WebNewsCategoryId { get; set; }
     public WebNewsCategory? WebNewsCategory { get; set; }
 
-    [MySqlCharSet("sjis")]
-    [MySqlCollation("sjis_japanese_ci")]
+    [MySqlCharSet("cp932")]
+    [MySqlCollation("cp932_japanese_ci")]
     [MaxLength(33)]
     public required string Title { get; set; }
 
-    [MySqlCharSet("sjis")]
-    [MySqlCollation("sjis_japanese_ci")]
+    [MySqlCharSet("cp932")]
+    [MySqlCollation("cp932_japanese_ci")]
     [MaxLength(412)]
     public string Content { get; set; } = "";
 

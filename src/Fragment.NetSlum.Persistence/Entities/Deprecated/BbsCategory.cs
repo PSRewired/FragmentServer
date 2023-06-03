@@ -7,8 +7,8 @@ namespace Fragment.NetSlum.Persistence.Entities.Deprecated;
 
 [Table("bbs_category")]
 [Index("CategoryId", Name = "BBS_Category_categoryID_uindex", IsUnique = true)]
-[MySqlCharSet("sjis")]
-[MySqlCollation("sjis_japanese_ci")]
+[MySqlCharSet("cp932")]
+[MySqlCollation("cp932_japanese_ci")]
 public class BbsCategory
 {
     [Key]

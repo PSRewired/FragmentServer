@@ -11,8 +11,8 @@ public class ChatLobby : IConfigurableEntity<ChatLobby>
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
-    [MySqlCharSet("sjis")]
-    [MySqlCollation("sjis_japanese_ci")]
+    [MySqlCharSet("cp932")]
+    [MySqlCollation("cp932_japanese_ci")]
     [MaxLength(30)]
     public string ChatLobbyName { get; set; }
     public bool DefaultChannel { get; set; } = false;
