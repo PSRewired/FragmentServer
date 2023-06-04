@@ -108,11 +108,12 @@ public class MigratePlayersCommand : AsyncCommand<MigratePlayersCommand.Settings
             {
                 _database.Add(mappedCharacter);
                 _database.SaveChanges();
+                _database.ChangeTracker.Clear();
             }
             catch (Exception e)
             {
                 AnsiConsole.WriteLine($"{mappedCharacter.Id} -> {mappedCharacter.CharacterName} -> {mappedCharacter.GreetingMessage}");
-                AnsiConsole.WriteLine($"{existingCharacter.Greeting.ToHexDump()}");
+                AnsiConsole.WriteLine($"{existingCharacter.Greeting!.ToHexDump()}");
                 AnsiConsole.WriteException(e);
                 continue;
             }

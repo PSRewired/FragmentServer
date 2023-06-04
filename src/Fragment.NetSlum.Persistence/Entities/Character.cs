@@ -33,6 +33,9 @@ public class Character : IConfigurableEntity<Character>
     public required uint FullModelId { get; set; }
     public required CharacterClass Class { get; set; }
 
+    public ushort? GuildId { get; set; }
+    public Guild? Guild { get; set; }
+
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? LastLoginAt { get; set; }
 

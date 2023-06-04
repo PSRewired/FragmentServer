@@ -8,7 +8,7 @@ namespace Fragment.NetSlum.Networking.Packets.Response.Guilds;
 public class GuildMenuCategoryResponse : BaseResponse
 {
     private ushort _categoryId;
-    private string _categoryName;
+    private string _categoryName = null!;
 
     public GuildMenuCategoryResponse SetCategoryId(ushort id)
     {

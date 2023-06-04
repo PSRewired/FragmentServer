@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Fragment.NetSlum.Persistence.Entities;
 
-public class Guild
+public class Guild : IConfigurableEntity<Guild>
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -30,4 +31,17 @@ public class Guild
     public ICollection<Character> Members { get; } = new List<Character>();
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    public void Configure(EntityTypeBuilder<Guild> entityBuilder)
+    {
+        entityBuilder
+            .HasMany(e => e.Members)
+            .WithOne(e => e.Guild)
+            .HasForeignKey(e => e.GuildId);
+
+        entityBuilder
+            .HasOne(e => e.Leader)
+            .WithOne()
+            .HasForeignKey<Guild>(e => e.LeaderId);
+    }
 }
