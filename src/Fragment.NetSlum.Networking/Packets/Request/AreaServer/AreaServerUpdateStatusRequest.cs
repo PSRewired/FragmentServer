@@ -23,7 +23,7 @@ public class AreaServerUpdateStatusRequest :BaseRequest
         //byte[] diskId = request.Data[0..64].ToArray();
         var pos = 0x43;
         var serverNameBytes = request.Data[pos..].Span.ReadToNullByte();
-        pos += serverNameBytes.Length;
+        pos += serverNameBytes.Length + 1;
         session.AreaServerInfo!.ServerName = serverNameBytes.ToShiftJisString();
         session.AreaServerInfo!.Level = BinaryPrimitives.ReadUInt16BigEndian(request.Data[pos..(pos + 2)].Span);
         //pos + 2 is some sort of status flag

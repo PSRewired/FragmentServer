@@ -28,13 +28,11 @@ public class MigratePlayersCommand : AsyncCommand<MigratePlayersCommand.Settings
 
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
-        /*
         AnsiConsole.Progress()
             .AutoClear(false)
             .Columns(new TaskDescriptionColumn(), new ProgressBarColumn(), new PercentageColumn(), new RemainingTimeColumn(),
                 new SpinnerColumn())
             .Start(MigratePlayerRecords);
-        */
 
         AnsiConsole.Progress()
             .AutoClear(false)
@@ -54,12 +52,9 @@ public class MigratePlayersCommand : AsyncCommand<MigratePlayersCommand.Settings
 
         foreach (var existingCharacter in existingCharacters.ToList())
         {
-            if (_database.Characters.AsNoTracking().Any(c => c.Id == existingCharacter.PlayerId))
-            {
-                AnsiConsole.MarkupLine("[orchid]Player account ID {0} already exists. Skipping...[/]", existingCharacter.PlayerId);
-                pTask.Increment(1);
-                continue;
-            }
+            var exists = _database.Characters.AsNoTracking()
+                .Include(c => c.CharacterStats)
+                .FirstOrDefault(c => c.Id == existingCharacter.PlayerId);
 
             var oldPlayerRecord = _oldDatabase.PlayerAccountIds
                 .AsNoTracking()
@@ -91,6 +86,7 @@ public class MigratePlayersCommand : AsyncCommand<MigratePlayersCommand.Settings
                 FullModelId = (uint)existingCharacter.ModelNumber!.Value,
                 CharacterStats = new()
                 {
+                    Id = exists?.CharacterStats.Id ?? 0,
                     CharacterId = existingCharacter.PlayerId,
                     CurrentHp = (int)existingCharacter.CharHp!,
                     CurrentSp = (int)existingCharacter.CharSp!,
@@ -106,7 +102,14 @@ public class MigratePlayersCommand : AsyncCommand<MigratePlayersCommand.Settings
 
             try
             {
-                _database.Add(mappedCharacter);
+                if (exists != null)
+                {
+                    _database.Update(mappedCharacter);
+                }
+                else
+                {
+                    _database.Add(mappedCharacter);
+                }
                 _database.SaveChanges();
                 _database.ChangeTracker.Clear();
             }

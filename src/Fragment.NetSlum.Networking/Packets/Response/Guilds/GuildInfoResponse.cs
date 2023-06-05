@@ -160,7 +160,6 @@ public class GuildInfoResponse : BaseResponse
 
         writer.Write(nameBytes);
         writer.Write(timestampBytes);
-        writer.Skip(1);
         writer.Write(leaderNameBytes);
         writer.Write(_memberCount);
         writer.Write(_numTwinBlades);

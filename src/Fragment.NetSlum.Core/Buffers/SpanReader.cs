@@ -126,7 +126,7 @@ public ref struct SpanReader
     public Span<byte> ReadString(out int numBytes)
     {
         var bytes = _holdingSpan[_position..].ReadToNullByte();
-        numBytes = bytes.Length;
+        numBytes = bytes.Length + 1;
         _position += numBytes;
 
         return bytes;

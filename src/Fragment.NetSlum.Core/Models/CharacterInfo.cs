@@ -37,10 +37,10 @@ public class CharacterInfo
         var saveSlot = data[0];
 
         var saveId = data[pos..].GetNullTerminatedString();
-        pos += saveId.Length;
+        pos += saveId.Length + 1;
 
         var characterName = data[pos..].ReadToNullByte();
-        pos += characterName.Length;
+        pos += characterName.Length + 1;
 
         var characterClass = (CharacterClass) data[pos];
         pos += 1;
@@ -48,7 +48,7 @@ public class CharacterInfo
         pos += 2;
 
         var characterGreeting = data[pos..].ReadToNullByte();
-        pos += characterGreeting.Length;
+        pos += characterGreeting.Length + 1;
 
         var characterModel = BinaryPrimitives.ReadUInt32BigEndian(data[pos..(pos + 4)]);
         pos += 5;

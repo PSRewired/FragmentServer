@@ -19,13 +19,25 @@ public static class StringExtensions
     }
 
     /// <summary>
-    /// Transforms a utf8 encoded string to a Shift-JIS encoded byte array
+    /// Transforms a utf8 encoded string to a Shift-JIS encoded byte array. Appends a null-terminator by default
     /// </summary>
     /// <param name="text"></param>
+    /// <param name="nullTerminated">Optionally append a null terminator to the end of the string</param>
     /// <returns></returns>
-    public static Span<byte> ToShiftJis(this string text)
+    public static Span<byte> ToShiftJis(this string text, bool nullTerminated = true)
     {
-        return new Span<byte>(ShiftJisEncoder.GetBytes(text));
+        var bytes = new Span<byte>(ShiftJisEncoder.GetBytes(text));
+
+        if (bytes[^1] == 0 || !nullTerminated)
+        {
+            return bytes;
+        }
+
+        var withTerminator = new Span<byte>(new byte[bytes.Length + 1]);
+        bytes.CopyTo(withTerminator);
+
+        return withTerminator;
+
     }
 
     /// <summary>
@@ -41,11 +53,16 @@ public static class StringExtensions
         return Encoding.UTF8.GetString(data);
     }
 
+    /// <summary>
+    /// Reads a string from binary data up until the null byte, without including it
+    /// </summary>
+    /// <param name="arr"></param>
+    /// <returns></returns>
     public static Span<byte> ReadToNullByte(this Span<byte> arr)
     {
         var nullIndex = 0;
 
-        while (nullIndex < arr.Length - 1)
+        do
         {
             if (arr[nullIndex] == 0)
             {
@@ -54,7 +71,8 @@ public static class StringExtensions
 
             nullIndex++;
         }
+        while (nullIndex < arr.Length) ;
 
-        return arr[..(nullIndex+1)];
+        return arr[..nullIndex];
     }
 }

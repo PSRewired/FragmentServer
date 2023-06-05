@@ -36,7 +36,7 @@ public class AreaServerPublishDetailsRequest:BaseRequest
                 var nameBytes = request.Data[0x41..].Span.ReadToNullByte();
                 session.AreaServerInfo!.ServerName = nameBytes.ToShiftJisString();
 
-                var pos = 0x41 + nameBytes.Length;
+                var pos = 0x41 + nameBytes.Length + 1;
 
                 session.AreaServerInfo!.Level = BinaryPrimitives.ReadUInt16BigEndian(request.Data[pos..(pos + 2)].Span);
                 pos += 3;
