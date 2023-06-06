@@ -152,10 +152,10 @@ public enum OpCodes : ushort
 
     //BBS	POSTING	STUFF
     DataBbsGetMenu = 0x7848,
-    DataBbsCategoryList = 0x7849,
+    DataBbsCategoryCountResponse = 0x7849,
     DataBbsGetMenuFailed = 0x784a,
     DataBbsEntryCategory = 0x784b,
-    DataBbsThreadlist = 0x784c,
+    DataBbsThreadCountResponse = 0x784c,
 
     DataBbsEntryThread = 0x784d,
     //7849 threadCat

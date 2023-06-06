@@ -56,4 +56,8 @@ public class FragmentContext : DbContext
     public virtual DbSet<AreaServerCategory> AreaServerCategories { get; set;}
     public virtual DbSet<Guild> Guilds { get; set;}
     public virtual DbSet<GuildStats> GuildStats { get; set;}
+    public virtual DbSet<BbsCategory> BbsCategories { get; set;}
+    public virtual DbSet<BbsPost> BbsPosts { get; set;}
+    public virtual DbSet<BbsPostContent> BbsPostContents { get; set;}
+    public virtual DbSet<BbsThread> BbsThreads { get; set;}
 }
