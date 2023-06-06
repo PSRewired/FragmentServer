@@ -38,7 +38,7 @@ public class ChatLobbyEntryResponse : BaseResponse
         BinaryPrimitives.WriteUInt16BigEndian(buffer[..2], _chatLobbyId);
         pos += 2;
         channelName.CopyTo(buffer[2..]);
-        pos += channelName.Length + 1;
+        pos += channelName.Length;
         BinaryPrimitives.WriteUInt16BigEndian(buffer[pos..], _clientCount);
         pos += 2;
         BinaryPrimitives.WriteUInt16BigEndian(buffer[pos..], (ushort)(_clientCount + 1)); // Hard Coded max client Count?

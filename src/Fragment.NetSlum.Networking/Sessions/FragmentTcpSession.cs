@@ -24,6 +24,7 @@ public class FragmentTcpSession : TcpSession, IScopeable
 
     //Fields only used for a Player
     public int PlayerAccountId { get; set; }
+    public int CharacterId { get; set; }
     public int GuildId { get; set; }
 
     public CharacterInfo? CharacterInfo { get; set; }

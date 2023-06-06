@@ -29,6 +29,8 @@ public class RegisterCharacterRequest : BaseRequest
 
         var character = await _commandBus.Execute(new RegisterCharacterCommand(session.CharacterInfo));
 
+        session.CharacterId = character.Id;
+
         return new[]
         {
             new RegisterCharacterResponse()

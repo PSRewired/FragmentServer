@@ -263,6 +263,7 @@ DATA_SELECT_CHAR2 seems to be a 1:1 clone of the normal OPCODE_DATA_SELECT_CHAR 
     LobbyTypeGuild = 0x7418,
     LobbyTypeMain = 0x7403,
     ClientLeavingLobby = 0x700a,
+    DataCreateGuildSuccessResponse = 0x7601,
     ArgumentInviteToGuild = 0x7606,
     DataInviteToGuild = 0x7603,
     DataAcceptGuildInvite = 0x7607,
@@ -290,6 +291,7 @@ DATA_SELECT_CHAR2 seems to be a 1:1 clone of the normal OPCODE_DATA_SELECT_CHAR 
 
 
     DataGuildLoggedInMembers = 0x789c,
+    DataGuildLoggedInMembersResponse = 0x789d,
     DataGuildMemberList = 0x7610,
     DataGuildGetItemsToBuy = 0x7708,
     DataGuildGetItems = 0x7728,

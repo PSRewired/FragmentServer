@@ -140,4 +140,27 @@ public ref struct SpanReader
     {
         _position += numBytes;
     }
+
+    /// <summary>
+    /// Reads a variable number of bytes until the encountered value equals the byte specified
+    /// </summary>
+    /// <param name="expectedByte"></param>
+    /// <returns></returns>
+    public Span<byte> ReadToByte(byte expectedByte)
+    {
+        var nullIndex = 0;
+
+        do
+        {
+            if (_holdingSpan[nullIndex] == 0)
+            {
+                break;
+            }
+
+            nullIndex++;
+        }
+        while (nullIndex < _holdingSpan.Length) ;
+
+        return _holdingSpan[..(nullIndex+1)];
+    }
 }

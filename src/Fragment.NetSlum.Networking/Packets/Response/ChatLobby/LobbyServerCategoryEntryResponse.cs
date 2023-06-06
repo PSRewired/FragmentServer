@@ -28,12 +28,9 @@ public class LobbyServerCategoryEntryResponse : BaseResponse
     {
 
         var nameBytes = _name.ToShiftJis();
-        var writer = new MemoryWriter(nameBytes.Length + sizeof(ushort) * 2);
+        var writer = new MemoryWriter(nameBytes.Length + sizeof(ushort));
         writer.Write(_id);
         writer.Write(nameBytes);
-
-        // Null terminator for string
-        writer.Write((byte)0);
 
         return new FragmentMessage
         {
