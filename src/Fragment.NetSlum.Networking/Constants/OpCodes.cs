@@ -292,7 +292,11 @@ DATA_SELECT_CHAR2 seems to be a 1:1 clone of the normal OPCODE_DATA_SELECT_CHAR 
 
     DataGuildLoggedInMembers = 0x789c,
     DataGuildLoggedInMembersResponse = 0x789d,
-    DataGuildMemberList = 0x7610,
+    DataGuildMemberListRequest = 0x7610,
+    DataGuildMemberListCategoryCountResponse = 0x7611,
+    DataGuildMemberListCategoryEntryResponse = 0x7613,
+    DataGuildMemberListEntryCountResponse = 0x7614,
+    DataGuildMemberListMemberEntryResponse = 0x7615,
     DataGuildGetItemsToBuy = 0x7708,
     DataGuildGetItems = 0x7728,
     DataGuildBuyItem = 0x770C,

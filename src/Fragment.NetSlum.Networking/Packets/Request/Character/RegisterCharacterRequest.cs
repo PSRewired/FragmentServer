@@ -30,17 +30,12 @@ public class RegisterCharacterRequest : BaseRequest
         _logger.LogInformation("Registering character:\n{CharInfo}", session.CharacterInfo.ToString());
 
         var character = await _commandBus.Execute(new RegisterCharacterCommand(session.CharacterInfo));
+
         GuildStatus guildStatus = GuildStatus.None;
+
         if(character.Guild != null)
         {
-            if(character.Id == character.Guild.LeaderId)
-            {
-                guildStatus = GuildStatus.GuildMaster;
-            }
-            else
-            {
-                guildStatus = GuildStatus.Member;
-            }
+            guildStatus = character.Id == character.Guild.LeaderId ? GuildStatus.GuildMaster : GuildStatus.Member;
         }
 
         session.CharacterId = character.Id;

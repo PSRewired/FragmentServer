@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Fragment.NetSlum.Persistence.Entities;
 
-public class DefaultLobbies : IConfigurableEntity<DefaultLobbies>
+public class DefaultLobby : IConfigurableEntity<DefaultLobby>
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -14,17 +14,17 @@ public class DefaultLobbies : IConfigurableEntity<DefaultLobbies>
     [MySqlCharSet("cp932")]
     [MySqlCollation("cp932_japanese_ci")]
     [MaxLength(30)]
-    public string DefaultLobbyName { get; set; }
-   
+    public required string DefaultLobbyName { get; set; }
 
-    public void Configure(EntityTypeBuilder<DefaultLobbies> entityBuilder)
+
+    public void Configure(EntityTypeBuilder<DefaultLobby> entityBuilder)
     {
-        entityBuilder.HasData(new DefaultLobbies
+        entityBuilder.HasData(new DefaultLobby
         {
             Id = 1,
             DefaultLobbyName = "Main",
         });
-        entityBuilder.HasData(new DefaultLobbies
+        entityBuilder.HasData(new DefaultLobby
         {
             Id = 2,
             DefaultLobbyName = "Main 2",

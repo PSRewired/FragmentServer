@@ -14,4 +14,15 @@ public static class CharacterExtensions
         CharacterColor.Pink => "pp",
         _ => throw new ArgumentOutOfRangeException(nameof(color), color, "Invalid color specified")
     };
+
+    public static string GetClassName(this CharacterClass cls) => cls switch
+    {
+        CharacterClass.TwinBlade => "Twin Blade",
+        CharacterClass.BladeMaster => "Blade Master",
+        CharacterClass.HeavyBlade => "Heavy Blade",
+        CharacterClass.AxeHeavy => "Heavy Axe",
+        CharacterClass.LongArm => "Long Arm",
+        CharacterClass.WaveMaster => "Wave Master",
+        _ => throw new ArgumentOutOfRangeException(nameof(cls), cls, null)
+    };
 }

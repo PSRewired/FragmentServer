@@ -26,7 +26,7 @@ public class ChatLobbyModel
         GuildId = guildId;
     }
 
-    public static ChatLobbyModel FromEntity(DefaultLobbies lobbyEntity)
+    public static ChatLobbyModel FromEntity(DefaultLobby lobbyEntity)
     {
         return new ChatLobbyModel(lobbyEntity.Id, lobbyEntity.DefaultLobbyName);
     }
