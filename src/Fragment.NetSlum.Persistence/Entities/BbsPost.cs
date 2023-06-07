@@ -20,7 +20,7 @@ public class BbsPost
     public string Subtitle { get; set; } = "";
 
     public int ContentId { get; set; }
-    public BbsPostContent Content { get; set; } = default!;
+    public BbsPostContent Content { get; set; } = new();
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }
