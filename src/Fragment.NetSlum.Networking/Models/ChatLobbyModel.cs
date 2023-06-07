@@ -10,23 +10,25 @@ public class ChatLobbyModel
 
     public int LobbyId { get; private set; }
     public string LobbyName { get; private set; }
+    public ushort PlayerChatLobbyId { get; private set; }
+    public ushort GuildId { get; private set; }
 
     private readonly ChatLobbyPlayer?[] _chatLobbyPlayers;
     private static ILogger Log => Serilog.Log.ForContext<ChatLobbyModel>();
-
     public ushort PlayerCount => (ushort)GetPlayers().Length;
     private readonly Semaphore _playerIdxLock = new(1, 1);
 
-    public ChatLobbyModel(int id, string name)
+    public ChatLobbyModel(int id, string name,ushort guildId = 0)
     {
         LobbyId = id;
         LobbyName = name;
         _chatLobbyPlayers = new ChatLobbyPlayer[MaxPlayers];
+        GuildId = guildId;
     }
 
-    public static ChatLobbyModel FromEntity(ChatLobby lobbyEntity)
+    public static ChatLobbyModel FromEntity(DefaultLobbies lobbyEntity)
     {
-        return new ChatLobbyModel(lobbyEntity.Id, lobbyEntity.ChatLobbyName);
+        return new ChatLobbyModel(lobbyEntity.Id, lobbyEntity.DefaultLobbyName);
     }
 
     public int AddPlayer(ChatLobbyPlayer player)

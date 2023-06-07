@@ -1,4 +1,6 @@
 using Fragment.NetSlum.Core.CommandBus;
+using Fragment.NetSlum.Core.Constants;
+using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Core.Models;
 using Fragment.NetSlum.Networking.Attributes;
 using Fragment.NetSlum.Networking.Commands.Characters;
@@ -28,12 +30,26 @@ public class RegisterCharacterRequest : BaseRequest
         _logger.LogInformation("Registering character:\n{CharInfo}", session.CharacterInfo.ToString());
 
         var character = await _commandBus.Execute(new RegisterCharacterCommand(session.CharacterInfo));
+        GuildStatus guildStatus = GuildStatus.None;
+        if(character.Guild != null)
+        {
+            if(character.Id == character.Guild.LeaderId)
+            {
+                guildStatus = GuildStatus.GuildMaster;
+            }
+            else
+            {
+                guildStatus = GuildStatus.Member;
+            }
+        }
 
         session.CharacterId = character.Id;
 
         return new[]
         {
             new RegisterCharacterResponse()
+            .SetGuildId(character?.GuildId ?? 0)
+            .SetGuildStatus(guildStatus)
                 .Build()
         };
     }

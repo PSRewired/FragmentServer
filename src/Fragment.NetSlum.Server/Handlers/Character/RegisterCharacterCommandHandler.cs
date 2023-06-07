@@ -25,6 +25,7 @@ public class RegisterCharacterCommandHandler : CommandHandler<RegisterCharacterC
         Persistence.Entities.Character? character = await _database.Characters
             .Include(c => c.PlayerAccount)
             .Include(c => c.CharacterStats)
+            .Include(c => c.Guild)
             .Where(c => characterInfo.CharacterName == c.CharacterName &&
                         c.PlayerAccount != null && c.PlayerAccount!.SaveId == characterInfo.SaveId)
             .FirstOrDefaultAsync(cancellationToken);

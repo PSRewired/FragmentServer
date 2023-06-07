@@ -7,6 +7,7 @@ using Fragment.NetSlum.Networking.Stores;
 using Microsoft.Extensions.Logging;
 using System.Buffers.Binary;
 using Fragment.NetSlum.Networking.Models;
+using Fragment.NetSlum.Core.Constants;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.ChatLobby;
 
@@ -24,8 +25,14 @@ public class ChatLobbyEnterRoomRequest:BaseRequest
     public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         ushort chatLobbyId = (ushort)(BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[..2]) -1);
-
+        ChatLobbyType chatType = (ChatLobbyType)(BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[2..4]));
         var chatLobby = _chatLobbyStore.GetLobby(chatLobbyId);
+
+        if(chatType == ChatLobbyType.Guild)
+        {
+            chatLobbyId++;
+            chatLobby = _chatLobbyStore.GetLobby(chatLobbyId, true);
+        }
 
         if (chatLobby == null)
         {

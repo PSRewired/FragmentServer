@@ -62,11 +62,16 @@ public class ChatLobbyStore :IDisposable
             _rwLock.ExitWriteLock();
         }
     }
-    public ChatLobbyModel? GetLobby(ushort lobbyId)
+    public ChatLobbyModel? GetLobby(ushort lobbyId,bool isGuild = false)
     {
         try
         {
             _rwLock.EnterReadLock();
+
+            if(isGuild)
+            {
+                return _chatLobbies.FirstOrDefault(c => c.Value.GuildId == lobbyId).Value;
+            }
 
             if (_chatLobbies.TryGetValue(lobbyId, out var value))
             {

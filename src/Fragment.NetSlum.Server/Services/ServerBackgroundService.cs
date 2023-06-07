@@ -35,9 +35,14 @@ public class ServerBackgroundService : BackgroundService
         var database = scope.ServiceProvider.GetRequiredService<FragmentContext>();
         var chatLobbyStore = scope.ServiceProvider.GetRequiredService<ChatLobbyStore>();
 
-        foreach(var cl in database.ChatLobbies.Where(c=> c.DefaultChannel == true))
+        foreach(var cl in database.DefaultLobbies)
         {
             chatLobbyStore.AddLobby(ChatLobbyModel.FromEntity(cl));
+        }
+
+        foreach(var g in database.Guilds)
+        {
+            chatLobbyStore.AddLobby(new ChatLobbyModel(0, "", g.Id));
         }
 
         Task.WaitAll(startTasks.ToArray(), stoppingToken);

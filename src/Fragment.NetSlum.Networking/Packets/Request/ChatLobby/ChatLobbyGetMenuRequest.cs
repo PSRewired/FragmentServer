@@ -22,7 +22,7 @@ public class ChatLobbyGetMenuRequest:BaseRequest
     public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         //var channels = _database.ChatLobbies.Where(c => c.DefaultChannel == true).ToList();
-        var chatLobbies = _chatLobbyStore.ChatLobbies;
+        var chatLobbies = _chatLobbyStore.ChatLobbies.Where(c => c.LobbyId !=0).ToList();
         var responses = new List<FragmentMessage>();
 
         //Add the ChatLobby count response to the collection list
