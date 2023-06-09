@@ -87,17 +87,23 @@ public class MigrateBbsCommand : AsyncCommand<MigrateBbsCommand.Settings>
                     Id = oldPost.PostId,
                     Thread = mappedThread,
                     Title = oldPost.Title.AsSpan().ToShiftJisString(),
-                    Subtitle = oldPost.Subtitle.AsSpan().ToShiftJisString(),
                     PostedBy = _database.Characters.First(c => c.CharacterName == charName),
                     CreatedAt = oldPost.Date,
-                    Content = new BbsPostContent
+                    PostContent = new BbsPostContent
                     {
                         Id = (ushort)(oldContentRecord?.PostBodyId ?? 0),
-                        PostId = oldPost.PostId,
                         Content = (oldContentRecord?.PostBody.AsSpan().ToShiftJisString()) ?? "",
                     },
                 };
 
+                var postContent = new BbsPostContent
+                {
+                    Id = (ushort)(oldContentRecord?.PostBodyId ?? 0),
+                    Post = mappedPost,
+                    Content = oldContentRecord?.PostBody.AsSpan().ToShiftJisString() ?? "",
+                };
+
+                _database.Add(postContent);
                 _database.Add(mappedPost);
                 tTask.Increment(1);
             }

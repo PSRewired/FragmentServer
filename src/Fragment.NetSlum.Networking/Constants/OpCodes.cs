@@ -151,6 +151,9 @@ public enum OpCodes : ushort
     DataMailGetMailBodyResponse = 0x7807,
 
     //BBS	POSTING	STUFF
+    DataBbsCheckThreadCreate = 0x780f,
+    DataBbsCheckThreadCreateResponse = 0x7810,
+    DataBbsCreatePostResponse = 0x7813,
     DataBbsGetMenu = 0x7848,
     DataBbsCategoryCountResponse = 0x7849,
     DataBbsGetMenuFailed = 0x784a,

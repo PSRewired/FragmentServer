@@ -136,9 +136,11 @@ public ref struct SpanReader
     /// Offsets the current position by the given number of bytes
     /// </summary>
     /// <param name="numBytes"></param>
-    public void Skip(int numBytes)
+    public SpanReader Skip(int numBytes)
     {
         _position += numBytes;
+
+        return this;
     }
 
     /// <summary>

@@ -1,10 +1,11 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Fragment.NetSlum.Persistence.Entities;
 
-public class BbsPost
+public class BbsPost : IConfigurableEntity<BbsPost>
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -17,10 +18,17 @@ public class BbsPost
     public Character PostedBy { get; set; } = default!;
 
     public required string Title { get; set; }
-    public string Subtitle { get; set; } = "";
 
-    public int ContentId { get; set; }
-    public BbsPostContent Content { get; set; } = new();
+    public BbsPostContent? PostContent { get; set; }
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    public void Configure(EntityTypeBuilder<BbsPost> entityBuilder)
+    {
+        entityBuilder
+            .HasOne(p => p.PostContent)
+            .WithOne(c => c.Post)
+            .HasForeignKey<BbsPostContent>(c => c.PostId)
+            .IsRequired();
+    }
 }
