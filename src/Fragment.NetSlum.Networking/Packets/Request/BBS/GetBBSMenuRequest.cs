@@ -30,7 +30,9 @@ public class GetBBSMenuRequest : BaseRequest
 
         var threads = _database.BbsThreads
             .AsNoTracking()
-            .Where(t => t.CategoryId == categoryId);
+            .Where(t => t.CategoryId == categoryId)
+            .OrderByDescending(t => t.CreatedAt);
+
 
         var responses = new List<FragmentMessage>();
 

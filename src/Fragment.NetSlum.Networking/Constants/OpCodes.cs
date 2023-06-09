@@ -154,6 +154,7 @@ public enum OpCodes : ushort
     DataBbsCheckThreadCreate = 0x780f,
     DataBbsCheckThreadCreateResponse = 0x7810,
     DataBbsCreatePostResponse = 0x7813,
+    DataBbsPostContentResponse = 0x781d,
     DataBbsGetMenu = 0x7848,
     DataBbsCategoryCountResponse = 0x7849,
     DataBbsGetMenuFailed = 0x784a,
@@ -167,11 +168,11 @@ public enum OpCodes : ushort
     //784c threadList
     //784d threadEnrty
 
-    DataBbsThreadGetMenu = 0x7818,
-    DataBbsThreadList = 0x7819,
-    DataBbsEntryPostMeta = 0x781a,
+    DataBbsGetThreadDetails = 0x7818,
+    DataBbsThreadPostCountResponse = 0x7819,
+    DataBbsThreadPostEntryInfoResponse = 0x781a,
     DataBbsThreadEntryPost = 0x781b,
-    DataBbsThreadGetContent = 0x781c,
+    DataBbsGetPostContent = 0x781c,
     //7819
     //781a
     //781b

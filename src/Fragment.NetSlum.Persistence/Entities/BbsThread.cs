@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -14,5 +15,7 @@ public class BbsThread
     public BbsCategory Category { get; set; } = default!;
 
     public required string Title { get; set; }
+
+    public ICollection<BbsPost> Posts { get; set; } = new List<BbsPost>();
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }
