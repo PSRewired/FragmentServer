@@ -69,10 +69,8 @@ public class BbsThreadPostDetailResponse : BaseResponse
         writer.Write(unk2);
         writer.Write((uint)_postedAtDate.ToEpoch());
         writer.Write(usernameBytes);
-        writer.Write(titlePreview);
-       
+        writer.Write(titlePreview);    
         writer.Write(unk3);
-        var test = writer.Buffer.ToArray().TakeWhile((v, index) => writer.Buffer.ToArray().Skip(index).Any(w => w != 0x00)).ToArray().Length;
         writer.Write(titleBytes);
 
         return new FragmentMessage
