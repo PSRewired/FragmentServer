@@ -170,7 +170,7 @@ public enum OpCodes : ushort
 
     DataBbsGetThreadDetails = 0x7818,
     DataBbsThreadPostCountResponse = 0x7819,
-    DataBbsThreadPostEntryInfoResponse = 0x781a,
+    DataBbsThreadPostEntryDetailResponse = 0x781a,
     DataBbsThreadEntryPost = 0x781b,
     DataBbsGetPostContent = 0x781c,
     //7819

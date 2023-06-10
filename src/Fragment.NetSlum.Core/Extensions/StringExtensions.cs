@@ -75,4 +75,15 @@ public static class StringExtensions
 
         return arr[..nullIndex];
     }
+
+    /// <summary>
+    /// Ensures that a string is not longer than the given number of characters.
+    /// </summary>
+    /// <param name="str"></param>
+    /// <param name="size"></param>
+    /// <returns></returns>
+    public static string MaxSubstring(this string str, int size)
+    {
+        return str.Length > size ? str[..size] : str;
+    }
 }

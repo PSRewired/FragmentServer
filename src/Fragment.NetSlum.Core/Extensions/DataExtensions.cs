@@ -16,7 +16,7 @@ public static class DataExtensions
     {
         if (arr.Length >= size)
         {
-            return arr;
+            return arr[..size];
         }
 
         var resized = new Span<byte>(new byte[size]);

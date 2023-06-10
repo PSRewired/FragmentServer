@@ -1,6 +1,5 @@
 using Fragment.NetSlum.Core.CommandBus;
 using Fragment.NetSlum.Core.Constants;
-using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Core.Models;
 using Fragment.NetSlum.Networking.Attributes;
 using Fragment.NetSlum.Networking.Commands.Characters;

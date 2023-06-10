@@ -44,7 +44,7 @@ public class GetBBSThreadDetailsRequest : BaseRequest
 
         foreach (var post in thread.Posts)
         {
-            responses.Add(new BbsThreadPostEntryResponse()
+            responses.Add(new BbsThreadPostDetailResponse()
                 .SetPostId((uint)post.Id)
                 .SetPostedAt(post.CreatedAt)
                 .SetPostTile(post.Title)
