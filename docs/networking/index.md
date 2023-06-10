@@ -4,3 +4,4 @@ ___
 
 ## Table of Contents
 1. [Message Framing](framing.md)
+1. [Message Encoding](encoding.md)

@@ -1,3 +1,5 @@
+![](docs/static/fragment.jpg)
+
 # FragmentServer.NetSlum (Redux)
 A re-implementation of the reverse-engineered server for the game .hack//Fragment that utilizes the same framework/design principles used
 by the PSRewired closed-source Medius server.
