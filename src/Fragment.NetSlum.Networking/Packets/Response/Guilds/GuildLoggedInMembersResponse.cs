@@ -175,7 +175,7 @@ public class GuildLoggedInMembersResponse : BaseResponse
         writer.Write(_gpCount);
         writer.Write(descriptionBytes);
         writer.Write(_guildEmblem);
-
+        writer.Write<short>(0x00);
         return new FragmentMessage
         {
             OpCode = OpCodes.Data,

@@ -60,4 +60,5 @@ public class FragmentContext : DbContext
     public virtual DbSet<BbsPost> BbsPosts { get; set;}
     public virtual DbSet<BbsPostContent> BbsPostContents { get; set;}
     public virtual DbSet<BbsThread> BbsThreads { get; set;}
+    public virtual DbSet<AreaServerIpMapping> AreaServerIpMappings { get; set; }
 }

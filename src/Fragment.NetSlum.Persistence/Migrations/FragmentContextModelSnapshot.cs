@@ -49,6 +49,33 @@ namespace Fragment.NetSlum.Persistence.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Fragment.NetSlum.Persistence.Entities.AreaServerIpMapping", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<ulong>("DiscordUserId")
+                        .HasColumnType("bigint unsigned")
+                        .HasColumnName("discord_user_id");
+
+                    b.Property<string>("LocalIp")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("local_ip");
+
+                    b.Property<string>("PublicIp")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("public_ip");
+
+                    b.HasKey("Id")
+                        .HasName("pk_area_server_ip_mappings");
+
+                    b.ToTable("area_server_ip_mappings", (string)null);
+                });
+
             modelBuilder.Entity("Fragment.NetSlum.Persistence.Entities.BbsCategory", b =>
                 {
                     b.Property<ushort>("Id")
@@ -541,7 +568,7 @@ namespace Fragment.NetSlum.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            Content = "Welcome to Netslum-Redux!\nCurrent Status:\n- Lobby #GOnline#W!\n- BBS #GOnline#W!\n- Mail #GOnline#W!\n- Guilds #GOnline#W!\n- Ranking #GOnline#W!\n- News #GOnline#W!",
+                            Content = "Welcome to Netslum-Redux!\r\nCurrent Status:\r\n- Lobby #GOnline#W!\r\n- BBS #GOnline#W!\r\n- Mail #GOnline#W!\r\n- Guilds #GOnline#W!\r\n- Ranking #GOnline#W!\r\n- News #GOnline#W!",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
@@ -667,7 +694,7 @@ namespace Fragment.NetSlum.Persistence.Migrations
                         .HasConstraintName("fk_bbs_posts_characters_posted_by_id");
 
                     b.HasOne("Fragment.NetSlum.Persistence.Entities.BbsThread", "Thread")
-                        .WithMany()
+                        .WithMany("Posts")
                         .HasForeignKey("ThreadId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
@@ -801,6 +828,11 @@ namespace Fragment.NetSlum.Persistence.Migrations
             modelBuilder.Entity("Fragment.NetSlum.Persistence.Entities.BbsPost", b =>
                 {
                     b.Navigation("PostContent");
+                });
+
+            modelBuilder.Entity("Fragment.NetSlum.Persistence.Entities.BbsThread", b =>
+                {
+                    b.Navigation("Posts");
                 });
 
             modelBuilder.Entity("Fragment.NetSlum.Persistence.Entities.Character", b =>
