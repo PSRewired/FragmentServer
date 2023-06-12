@@ -1,0 +1,31 @@
+# Example docker-compose setup for running Fragment.NetSlum in a containerized environment.
+#
+# *The configuration defined here is for testing purposes only and should not be used in 
+# a production environment.
+#
+# For more information, see:
+# https://docs.docker.com/compose/yml/
+version: '3.4'
+services:
+    fragment_server:
+        image: psrewired/fragment-netslum
+        build:
+            context: .
+            target: final
+        ports:
+            - '49000:49000' #Game Server
+            - '5000:5000'   #API
+        environment:
+            - ASPNETCORE_URLS=http://+:5000
+            - ConnectionStrings__Database=server=fragment_mysql;port=3306;database=fragment_redux;username=root;password=d3ve10pm3nt;
+            - Serilog__MinimumLevel__Default=Information
+        depends_on:
+            - fragment_mysql
+
+    fragment_mysql:
+        image: 'mysql:8'
+        ports:
+            - '3308:3306'
+        environment:
+            MYSQL_ROOT_PASSWORD: 'd3ve10pm3nt'
+        restart: always
