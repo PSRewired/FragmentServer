@@ -28,7 +28,7 @@ public class FragmentContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        var configurableEntityTypes = GetType().Assembly.GetTypes().Where(t => !t.IsAbstract && t.IsAssignableTo(typeof(IConfigurableEntity<>).MakeGenericType(t)));
+        var configurableEntityTypes = GetType().Assembly.GetTypes().Where(t => !t.IsAbstract && t.IsClass && t.IsAssignableTo(typeof(IConfigurableEntity<>).MakeGenericType(t)));
 
         foreach (var entityType in configurableEntityTypes)
         {
@@ -61,4 +61,5 @@ public class FragmentContext : DbContext
     public virtual DbSet<BbsPostContent> BbsPostContents { get; set;}
     public virtual DbSet<BbsThread> BbsThreads { get; set;}
     public virtual DbSet<AreaServerIpMapping> AreaServerIpMappings { get; set; }
+    public virtual DbSet<GuildActivityLog> GuildMembershipLogs { get; set; }
 }

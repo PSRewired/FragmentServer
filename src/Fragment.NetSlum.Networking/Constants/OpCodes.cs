@@ -146,9 +146,10 @@ public enum OpCodes : ushort
 
     DataMailGet = 0x7803,
     DataMailGetOk = 0x7804,
-    DataMailGetNewMailHeader = 0x788a,
     DataMailGetMailBody = 0x7806,
     DataMailGetMailBodyResponse = 0x7807,
+    DataMailGetNewMailHeader = 0x788a,
+    DataGuildReassignMasterResponse = 0x788e,
 
     //BBS	POSTING	STUFF
     DataBbsCheckThreadCreate = 0x780f,
@@ -181,6 +182,7 @@ public enum OpCodes : ushort
     RankingViewPlayer = 0x7838,
 
     //These happen upon entering ALTIMIT DESKTOP
+    DataKickPlayerFromGuildResponse = 0x7865,
     DataMailCheckRequest = 0x7867,
     DataMailCheckSuccess = 0x7868,
 
@@ -301,6 +303,9 @@ DATA_SELECT_CHAR2 seems to be a 1:1 clone of the normal OPCODE_DATA_SELECT_CHAR 
     DataGuildMemberListCategoryEntryResponse = 0x7613,
     DataGuildMemberListEntryCountResponse = 0x7614,
     DataGuildMemberListMemberEntryResponse = 0x7615,
+    DataGuildLeaveResponse = 0x7617,
+    DataDissolveGuildResponse = 0x761A,
+    DataGuildUpdateDetailsResponse = 0x761d,
     DataGuildGetItemsToBuy = 0x7708,
     DataGuildGetItems = 0x7728,
     DataGuildBuyItem = 0x770C,
@@ -308,10 +313,10 @@ DATA_SELECT_CHAR2 seems to be a 1:1 clone of the normal OPCODE_DATA_SELECT_CHAR 
     DataGuildGetDonationSettings = 0x7879,
     DataGuildUpdateItemPricingAvailability = 0x7703,
     DataGuildUpdateItemPricing = 0x7712,
-    DataGuildGmLeaving = 0x788D,
-    DataGuildPlayerLeaving = 0x7616,
-    DataGuildPlayerKicked = 0x7864,
-    DataGuildDissolved = 0x7619,
+    ReassignGuildMaster = 0x788D,
+    DataLeaveGuild = 0x7616,
+    DataGuildKickPlayer = 0x7864,
+    DataDissolveGuild = 0x7619,
     DataGuildUpdateDetails = 0x761C,
     DataGuildTakeGp = 0x770E,
     DataGuildTakeItem = 0x7710,
