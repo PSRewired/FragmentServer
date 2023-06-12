@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using Fragment.NetSlum.Core.Buffers;
 using Fragment.NetSlum.Core.Extensions;

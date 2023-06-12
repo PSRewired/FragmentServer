@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Fragment.NetSlum.Core.DependencyInjection;
 using Fragment.NetSlum.Networking.Extensions;
 using Fragment.NetSlum.Networking.Objects;

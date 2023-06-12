@@ -23,7 +23,7 @@ public class MigrateBbsCommand : AsyncCommand<MigrateBbsCommand.Settings>
         _oldDatabase = oldDatabase;
     }
 
-    public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
+    public override Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
         AnsiConsole.Progress()
             .AutoClear(false)
@@ -31,7 +31,7 @@ public class MigrateBbsCommand : AsyncCommand<MigrateBbsCommand.Settings>
                 new SpinnerColumn())
             .Start(MigrateBbs);
 
-        return 0;
+        return Task.FromResult(0);
     }
 
     private void MigrateBbs(ProgressContext ctx)

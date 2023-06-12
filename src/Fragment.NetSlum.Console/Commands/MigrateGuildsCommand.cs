@@ -23,7 +23,7 @@ public class MigrateGuildsCommand : AsyncCommand<MigrateGuildsCommand.Settings>
         _oldDatabase = oldDatabase;
     }
 
-    public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
+    public override Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
         AnsiConsole.Progress()
             .AutoClear(false)
@@ -37,7 +37,7 @@ public class MigrateGuildsCommand : AsyncCommand<MigrateGuildsCommand.Settings>
                 new SpinnerColumn())
             .Start(MigrateGuildMembers);
 
-        return 0;
+        return Task.FromResult(0);
     }
 
     private void MigrateGuilds(ProgressContext ctx)

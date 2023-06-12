@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Fragment.NetSlum.Networking.Objects;
 using Fragment.NetSlum.Networking.Sessions;
 using Serilog;

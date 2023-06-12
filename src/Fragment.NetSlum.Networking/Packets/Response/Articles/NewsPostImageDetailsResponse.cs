@@ -1,3 +1,4 @@
+using System;
 using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Objects;
 

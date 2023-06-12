@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Fragment.NetSlum.Core.Buffers;
 using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Networking.Attributes;

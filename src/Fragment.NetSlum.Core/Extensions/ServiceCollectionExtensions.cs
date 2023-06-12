@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using Fragment.NetSlum.Core.CommandBus;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;

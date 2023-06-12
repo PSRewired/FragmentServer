@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Fragment.NetSlum.Core.DependencyInjection;
 
 namespace Fragment.NetSlum.Networking.Messaging;

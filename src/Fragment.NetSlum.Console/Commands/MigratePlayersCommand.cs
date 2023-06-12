@@ -26,7 +26,7 @@ public class MigratePlayersCommand : AsyncCommand<MigratePlayersCommand.Settings
         _oldDatabase = oldDatabase;
     }
 
-    public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
+    public override Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
         AnsiConsole.Progress()
             .AutoClear(false)
@@ -41,7 +41,7 @@ public class MigratePlayersCommand : AsyncCommand<MigratePlayersCommand.Settings
             .Start(MigrateCharacterRecords);
 
 
-        return 0;
+        return Task.FromResult(0);
     }
 
     private void MigrateCharacterRecords(ProgressContext ctx)

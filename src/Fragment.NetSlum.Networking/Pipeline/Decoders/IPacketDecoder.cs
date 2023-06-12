@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Fragment.NetSlum.Networking.Objects;
 
 namespace Fragment.NetSlum.Networking.Pipeline.Decoders;

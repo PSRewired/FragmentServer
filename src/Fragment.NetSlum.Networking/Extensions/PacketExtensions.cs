@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Fragment.NetSlum.Networking.Objects;
 using Fragment.NetSlum.Networking.Packets.Request;
 using Fragment.NetSlum.Networking.Sessions;

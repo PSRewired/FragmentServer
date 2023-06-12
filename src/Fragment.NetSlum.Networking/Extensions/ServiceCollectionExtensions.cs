@@ -1,3 +1,4 @@
+using System.Linq;
 using Fragment.NetSlum.Networking.Attributes;
 using Fragment.NetSlum.Networking.Messaging;
 using Fragment.NetSlum.Networking.Objects;

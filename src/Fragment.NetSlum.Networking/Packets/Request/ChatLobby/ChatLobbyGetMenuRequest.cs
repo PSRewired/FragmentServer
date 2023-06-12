@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Fragment.NetSlum.Networking.Attributes;
 using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Objects;
@@ -9,7 +12,7 @@ using Microsoft.Extensions.Logging;
 namespace Fragment.NetSlum.Networking.Packets.Request.ChatLobby;
 
 [FragmentPacket(OpCodes.Data, OpCodes.DataLobbyGetMenuRequest)]
-public class ChatLobbyGetMenuRequest:BaseRequest
+public class ChatLobbyGetMenuRequest : BaseRequest
 {
     private readonly ILogger<ChatLobbyGetMenuRequest> _logger;
     private readonly ChatLobbyStore _chatLobbyStore;
@@ -19,14 +22,16 @@ public class ChatLobbyGetMenuRequest:BaseRequest
         _logger = logger;
         _chatLobbyStore = chatLobbyStore;
     }
+
     public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         //var channels = _database.ChatLobbies.Where(c => c.DefaultChannel == true).ToList();
-        var chatLobbies = _chatLobbyStore.ChatLobbies.Where(c => c.LobbyId !=0).ToList();
-        var responses = new List<FragmentMessage>();
-
-        //Add the ChatLobby count response to the collection list
-        responses.Add(new ChatLobbyCountResponse().SetChatLobbyCount((ushort)chatLobbies.Count).Build());
+        var chatLobbies = _chatLobbyStore.ChatLobbies.Where(c => c.LobbyId != 0).ToList();
+        var responses = new List<FragmentMessage>
+        {
+            //Add the ChatLobby count response to the collection list
+            new ChatLobbyCountResponse().SetChatLobbyCount((ushort)chatLobbies.Count).Build(),
+        };
 
         //Build the Chat Lobby List
         responses.AddRange(chatLobbies.Select(c => new ChatLobbyEntryResponse()
@@ -37,5 +42,4 @@ public class ChatLobbyGetMenuRequest:BaseRequest
 
         return Task.FromResult<ICollection<FragmentMessage>>(responses);
     }
-
 }

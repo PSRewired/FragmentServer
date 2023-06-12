@@ -1,3 +1,4 @@
+using System;
 using Fragment.NetSlum.Core.Constants;
 
 namespace Fragment.NetSlum.Core.Extensions;

@@ -1,3 +1,5 @@
+using System;
+
 namespace Fragment.NetSlum.Core.Models;
 
 public struct ImageInfo

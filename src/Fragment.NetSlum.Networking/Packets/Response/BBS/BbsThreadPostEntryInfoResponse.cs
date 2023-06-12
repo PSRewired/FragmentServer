@@ -1,3 +1,4 @@
+using System;
 using Fragment.NetSlum.Core.Buffers;
 using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Networking.Constants;
@@ -49,7 +50,6 @@ public class BbsThreadPostDetailResponse : BaseResponse
     }
     public override FragmentMessage Build()
     {
-        uint unk1 = 0;
         uint unk2 = 0;
         var unk3 = new Span<byte>(new byte[46]);
 
@@ -69,7 +69,7 @@ public class BbsThreadPostDetailResponse : BaseResponse
         writer.Write(unk2);
         writer.Write((uint)_postedAtDate.ToEpoch());
         writer.Write(usernameBytes);
-        writer.Write(titlePreview);    
+        writer.Write(titlePreview);
         writer.Write(unk3);
         writer.Write(titleBytes);
 
