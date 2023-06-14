@@ -9,6 +9,7 @@ namespace Fragment.NetSlum.Networking.Packets.Response.Guilds;
 
 public class GuildInfoResponse : BaseResponse
 {
+    private readonly OpCodes _dataPacketType;
     private string _guildName = "";
     private string _guildDescription = "";
     private string _leaderName = "";
@@ -29,6 +30,11 @@ public class GuildInfoResponse : BaseResponse
     private uint _silverCount;
     private uint _goldCount;
     private uint _gpCount;
+
+    public GuildInfoResponse(OpCodes dataPacketType = OpCodes.DataGetGuildInfoResponse)
+    {
+        _dataPacketType = dataPacketType;
+    }
 
     public GuildInfoResponse SetGuildName(string name)
     {
@@ -180,7 +186,7 @@ public class GuildInfoResponse : BaseResponse
         return new FragmentMessage
         {
             OpCode = OpCodes.Data,
-            DataPacketType = OpCodes.DataGetGuildInfoResponse,
+            DataPacketType = _dataPacketType,
             Data = writer.Buffer,
         };
     }
