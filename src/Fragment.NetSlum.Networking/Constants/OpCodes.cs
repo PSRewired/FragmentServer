@@ -307,6 +307,8 @@ DATA_SELECT_CHAR2 seems to be a 1:1 clone of the normal OPCODE_DATA_SELECT_CHAR 
     DataGuildLeaveResponse = 0x7617,
     DataDissolveGuildResponse = 0x761A,
     DataGuildUpdateDetailsResponse = 0x761d,
+    DataDonateCoinsToGuild = 0x7700,
+    DataDonateCoinsToGuildResponse = 0x7701,
     DataGuildGetItemsToBuy = 0x7708,
     DataGuildGetItems = 0x7728,
     DataPurchaseGuildShopItem = 0x770C,
@@ -322,5 +324,4 @@ DATA_SELECT_CHAR2 seems to be a 1:1 clone of the normal OPCODE_DATA_SELECT_CHAR 
     DataGuildUpdateDetails = 0x761C,
     DataGuildTakeGp = 0x770E,
     DataGuildTakeItem = 0x7710,
-    DataGuildDonateCoins = 0x7700,
 }
