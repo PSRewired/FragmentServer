@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
+using Fragment.NetSlum.TcpServer.Options;
 using Serilog;
 
 namespace Fragment.NetSlum.TcpServer;
@@ -43,11 +44,23 @@ public class TcpServer : ITcpServer, IDisposable
     /// </summary>
     public int ReceiveTimeoutMs { get; set; } = 1000 * 30;
 
+    /// <summary>
+    /// The maximum size of the buffer used to receive data from the socket
+    /// </summary>
+    public int ReceiveBufferSize { get; set; }
 
-    public TcpServer(IPAddress address, int port, bool manualMode = false)
+    /// <summary>
+    /// The maximum size of the buffer used to send data out to a client
+    /// </summary>
+    public int SendBufferSize { get; set; }
+
+    public TcpServer(TcpServerOptions options)
     {
-        EndPoint = new IPEndPoint(address, port);
-        ManualMode = manualMode;
+        EndPoint = new IPEndPoint(IPAddress.Parse(options.IpAddress), options.Port);
+        ManualMode = options.ManualMode;
+        ReceiveTimeoutMs = options.SessionTimeout * 1000;
+        SendBufferSize = options.SendBufferSize;
+        ReceiveBufferSize = options.ReceiveBufferSize;
     }
 
     protected virtual TcpSession CreateSession()

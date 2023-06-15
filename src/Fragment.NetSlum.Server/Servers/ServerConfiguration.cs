@@ -1,7 +1,9 @@
+using Fragment.NetSlum.TcpServer.Options;
+
 namespace Fragment.NetSlum.Server.Servers;
 
-public class ServerConfiguration
+public class ServerConfiguration : TcpServerOptions
 {
-    public required string IpAddress { get; set; }
-    public required int Port { get; set; }
+    public new bool ManualMode { get; set; } = true;
+    public int TickRate { get; set; } = 30;
 }

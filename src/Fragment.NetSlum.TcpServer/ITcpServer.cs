@@ -5,6 +5,9 @@ namespace Fragment.NetSlum.TcpServer;
 
 public interface ITcpServer
 {
+    public int ReceiveTimeoutMs { get; }
+    public int ReceiveBufferSize { get; set; }
+    public int SendBufferSize { get; set; }
     public bool ManualMode { get; }
     protected internal ArrayPool<byte> BufferPool { get; }
     public TcpSession[] Sessions { get; }

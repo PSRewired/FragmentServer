@@ -1,10 +1,7 @@
-using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Persistence;
 using Fragment.NetSlum.Persistence.Entities;
-using Microsoft.EntityFrameworkCore;
 using Spectre.Console;
 using Spectre.Console.Cli;
 

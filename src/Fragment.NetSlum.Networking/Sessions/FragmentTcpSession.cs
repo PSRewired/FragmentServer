@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,6 +21,8 @@ public class FragmentTcpSession : TcpSession, IScopeable
     public IServiceScope ServiceScope { get; }
     private readonly ILogger<FragmentTcpSession> _logger;
     private readonly FragmentPacketPipeline<FragmentTcpSession> _packetPipeline;
+    private Stopwatch _lastFlushTimer { get; } = Stopwatch.StartNew();
+    public long ElapsedMillisecondsSinceLastFlush => _lastFlushTimer.ElapsedMilliseconds;
 
     public bool IsAreaServer => AreaServerInfo != null;
     public AreaServerInformation? AreaServerInfo { get; set; }
@@ -89,6 +92,15 @@ public class FragmentTcpSession : TcpSession, IScopeable
     protected internal void Send(List<FragmentMessage> data)
     {
        Send(_packetPipeline.Encode(data, CancellationToken.None).Span);
+    }
+
+    /// <summary>
+    /// Flush all available outgoing messages to the client and reset the elapsed milliseconds to zero
+    /// </summary>
+    public override void Flush()
+    {
+        base.Flush();
+        _lastFlushTimer.Restart();
     }
 
     protected override void OnDisconnected()

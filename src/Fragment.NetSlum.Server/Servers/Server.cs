@@ -1,4 +1,3 @@
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Fragment.NetSlum.Networking.Sessions;
@@ -15,8 +14,7 @@ public class Server : TcpServer.TcpServer, IServer
     private readonly IServiceScopeFactory _serviceScopeFactory;
     public IFeatureCollection Features { get; } = new FeatureCollection();
 
-    public Server(IOptions<ServerConfiguration> serverOptions, IServiceScopeFactory serviceScopeFactory) : base(IPAddress.Parse(serverOptions.Value.IpAddress),
-        serverOptions.Value.Port)
+    public Server(IOptions<ServerConfiguration> serverOptions, IServiceScopeFactory serviceScopeFactory) : base(serverOptions.Value)
     {
         _serviceScopeFactory = serviceScopeFactory;
     }
@@ -31,7 +29,7 @@ public class Server : TcpServer.TcpServer, IServer
     public Task StartAsync<TContext>(IHttpApplication<TContext> application, CancellationToken cancellationToken) where TContext : notnull
     {
         Start();
-        
+
         return Task.CompletedTask;
     }
 
@@ -41,5 +39,4 @@ public class Server : TcpServer.TcpServer, IServer
 
         return Task.CompletedTask;
     }
-
 }
