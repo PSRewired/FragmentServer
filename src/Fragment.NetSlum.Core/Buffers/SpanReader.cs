@@ -166,4 +166,20 @@ public ref struct SpanReader
 
         return _holdingSpan[..(nullIndex+1)];
     }
+
+    /// <summary>
+    /// Reads a single byte and returns a boolean representation of its value
+    /// </summary>
+    /// <returns></returns>
+    public bool ReadBool()
+    {
+        try
+        {
+            return Convert.ToBoolean(_holdingSpan[_position]);
+        }
+        finally
+        {
+            _position += 1;
+        }
+    }
 }

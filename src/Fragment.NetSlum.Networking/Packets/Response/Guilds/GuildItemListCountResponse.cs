@@ -1,0 +1,29 @@
+using System;
+using System.Buffers.Binary;
+using Fragment.NetSlum.Networking.Constants;
+using Fragment.NetSlum.Networking.Objects;
+
+namespace Fragment.NetSlum.Networking.Packets.Response.Guilds;
+
+public class GuildItemListCountResponse : BaseResponse
+{
+    private readonly ushort _numItems;
+
+    public GuildItemListCountResponse(ushort numItems)
+    {
+        _numItems = numItems;
+    }
+
+    public override FragmentMessage Build()
+    {
+        var buffer = new Memory<byte>(new byte[2]);
+        BinaryPrimitives.WriteUInt16BigEndian(buffer.Span, _numItems);
+
+        return new FragmentMessage
+        {
+            OpCode = OpCodes.Data,
+            DataPacketType = OpCodes.DataGuildItemListCountResponse,
+            Data = buffer,
+        };
+    }
+}
