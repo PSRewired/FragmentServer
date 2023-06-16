@@ -152,7 +152,7 @@ public class TcpSession : IDisposable
         }
 
         Log.Verbose("Disconnecting socket");
-        Socket?.Disconnect(false);
+        Socket?.Shutdown(SocketShutdown.Both);
         Log.Verbose("Invoking server session disconnect method");
         Server.OnSessionDisconnect(this);
         Log.Verbose("Closing socket");
