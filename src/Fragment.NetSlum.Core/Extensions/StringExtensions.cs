@@ -29,7 +29,7 @@ public static class StringExtensions
     {
         var bytes = new Span<byte>(ShiftJisEncoder.GetBytes(text));
 
-        if (bytes[^1] == 0 || !nullTerminated)
+        if ((bytes.Length > 1 && bytes[^1] == 0) || !nullTerminated)
         {
             return bytes;
         }
