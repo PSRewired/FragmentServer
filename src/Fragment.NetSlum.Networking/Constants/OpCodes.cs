@@ -178,8 +178,13 @@ public enum OpCodes : ushort
     //781a
     //781b
 
-    RankingViewAll = 0x7832,
-    RankingViewPlayer = 0x7838,
+    RankingLeaderboard = 0x7832,
+    RankingLeaderboardCategoryCountResponse = 0x7833,
+    RankingLeaderboardCategoryEntryResponse = 0x7835,
+    RankingLeaderboardPlayerCountResponse = 0x7836,
+    RankingLeaderboardPlayerEntryResponse = 0x7837,
+    RankPlayerInfo = 0x7838,
+    RankPlayerInfoResponse = 0x7839,
 
     //These happen upon entering ALTIMIT DESKTOP
     DataKickPlayerFromGuildResponse = 0x7865,
@@ -328,4 +333,8 @@ DATA_SELECT_CHAR2 seems to be a 1:1 clone of the normal OPCODE_DATA_SELECT_CHAR 
     DataGuildTakeGp = 0x770E,
     DataTakeGuildShopItem = 0x7710,
     DataTakeGuildShopItemResponse = 0x7711,
+
+    //Unknown Packets
+    DataUnknown787e = 0x787e,
+    DataUnknown787fResponse = 0x787f,
 }
