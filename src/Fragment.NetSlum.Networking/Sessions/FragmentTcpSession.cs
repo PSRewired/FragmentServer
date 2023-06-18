@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Threading;
-using System.Threading.Tasks;
 using Fragment.NetSlum.Core.DependencyInjection;
 using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Core.Models;
@@ -35,7 +33,8 @@ public class FragmentTcpSession : TcpSession, IScopeable
 
     public CharacterInfo? CharacterInfo { get; set; }
     public byte[] LastStatus { get; set; } = Array.Empty<byte>();
-
+    public ChatLobbyType CurrentChatLobbyType { get; set; }
+    public ushort CurrentChatLobbyId { get; set; }
 
     public FragmentTcpSession(ITcpServer server, IServiceScope serviceScope) : base(server)
     {

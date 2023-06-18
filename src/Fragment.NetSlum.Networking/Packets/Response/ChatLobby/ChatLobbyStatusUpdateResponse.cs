@@ -17,41 +17,45 @@ public class ChatLobbyStatusUpdateResponse:BaseResponse
         return this;
     }
 
+    //public ChatLobbyStatusUpdateResponse SetLastStatus(Memory<byte> status)
+    //{
+    //    _lastStatus = status;
+    //    return this;
+    //}
     public ChatLobbyStatusUpdateResponse SetLastStatus(Memory<byte> status)
     {
         _lastStatus = status;
         return this;
     }
 
-
     public override FragmentMessage Build()
     {
-        var size = _lastStatus.Length;
+        //var size = _lastStatus.Length;
 
-        if (_playerIndex != null)
-        {
-            size += sizeof(ushort) * 2;
-        }
+        //if (_playerIndex != null)
+        //{
+        //    size += sizeof(ushort) * 2;
+        //}
 
-        var buffer = new Memory<byte>(new byte[size]);
-        var bufferSpan = buffer.Span;
+        //var buffer = new Memory<byte>(new byte[size]);
+        //var bufferSpan = buffer.Span;
 
-        var pos = 0;
+        //var pos = 0;
 
-        if (_playerIndex != null)
-        {
-            BinaryPrimitives.WriteUInt16BigEndian(bufferSpan, (ushort)(_playerIndex + 1));
-            BinaryPrimitives.WriteUInt16BigEndian(bufferSpan[2..], (ushort)_lastStatus.Length);
-            pos += 4;
-        }
+        //if (_playerIndex != null)
+        //{
+        //    BinaryPrimitives.WriteUInt16BigEndian(bufferSpan, (ushort)(_playerIndex + 1));
+        //    BinaryPrimitives.WriteUInt16BigEndian(bufferSpan[2..], (ushort)_lastStatus.Length);
+        //    pos += 4;
+        //}
 
-        _lastStatus.CopyTo(buffer[pos..]);
+        //_lastStatus.CopyTo(buffer[pos..]);
 
         return new FragmentMessage
         {
             OpCode = OpCodes.Data,
             DataPacketType = OpCodes.DataLobbyStatusUpdate,
-            Data = buffer,
+            Data = _lastStatus,
         };
     }
 }

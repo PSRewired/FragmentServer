@@ -37,7 +37,7 @@ public class LobbyEventRequest : BaseRequest
             .SetSenderIndex(chatLobbyPlayer.PlayerIndex);
 
         //We have to send out a status update to all clients in this chat room but I don't understand where that comes from?
-        chatLobbyPlayer.ChatLobby.NotifyAllExcept(chatLobbyPlayer, response.Build());
+        chatLobbyPlayer.ChatLobby.NotifyAll(chatLobbyPlayer, response.Build());
 
         return Task.FromResult<ICollection<FragmentMessage>>(new[] { response
             .SetIsSender(true)

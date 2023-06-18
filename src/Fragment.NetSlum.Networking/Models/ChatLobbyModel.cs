@@ -125,6 +125,19 @@ public class ChatLobbyModel
         NotifyAllExcept(sender, new List<FragmentMessage> { message });
     }
 
+    public void NotifyAll(ChatLobbyPlayer sender, FragmentMessage message)
+    {
+        foreach (var player in _chatLobbyPlayers)
+        {
+            if (player == null)
+            {
+                continue;
+            }
+
+            player.Send(new List<FragmentMessage> { message });
+        }
+    }
+
     /// <summary>
     /// Sends message data to the given player index
     /// </summary>
