@@ -10,7 +10,7 @@ public class DissolveGuildResponse : BaseResponse
     {
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataDissolveGuildResponse,
             Data = new Memory<byte>(new byte[2]),
         };

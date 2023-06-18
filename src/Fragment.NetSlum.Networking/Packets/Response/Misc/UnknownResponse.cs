@@ -25,7 +25,7 @@ public class UnknownResponse : BaseResponse
     {
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = _packetType,
             Data = _data,
         };

@@ -35,7 +35,7 @@ public class GuildShopEntryResponse : BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataGuildShopEntryResponse,
             Data = writer.Buffer,
         };

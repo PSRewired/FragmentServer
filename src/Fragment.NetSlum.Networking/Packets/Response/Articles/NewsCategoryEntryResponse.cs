@@ -38,7 +38,7 @@ public class NewsCategoryEntryResponse : BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataNewsEntryCategory,
             Data = buffer,
         };

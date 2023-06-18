@@ -9,7 +9,7 @@ public class AreaServerPublishResponse :BaseResponse
     {
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.Data_AreaServerPublishSuccess,
             Data = new byte[] { 0x00, 0x09 },
         };

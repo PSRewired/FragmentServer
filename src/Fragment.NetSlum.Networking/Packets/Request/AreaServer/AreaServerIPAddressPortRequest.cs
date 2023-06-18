@@ -13,7 +13,7 @@ using Fragment.NetSlum.Networking.Packets.Response.AreaServer;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.AreaServer;
 
-[FragmentPacket(OpCodes.Data, OpCodes.Data_AreaServerIpPortRequest)]
+[FragmentPacket(MessageType.Data, OpCodes.Data_AreaServerIpPortRequest)]
 public class AreaServerIPAddressPortRequest : BaseRequest
 {
     private readonly ILogger<AreaServerIPAddressPortRequest> _logger;

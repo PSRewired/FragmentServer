@@ -73,7 +73,7 @@ public class NewsArticleEntryResponse : BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataNewsEntryArticle,
             Data = buffer,
         };

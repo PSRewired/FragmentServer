@@ -11,7 +11,7 @@ using Fragment.NetSlum.Persistence;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.Guilds;
 
-[FragmentPacket(OpCodes.Data, OpCodes.ReassignGuildMaster)]
+[FragmentPacket(MessageType.Data, OpCodes.ReassignGuildMaster)]
 public class ReassignGuildMasterRequest : BaseRequest
 {
     private readonly FragmentContext _database;

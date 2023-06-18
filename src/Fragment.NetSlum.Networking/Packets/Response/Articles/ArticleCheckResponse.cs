@@ -23,7 +23,7 @@ public class ArticleCheckResponse : BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataNewCheckSuccess,
             Data = buffer,
         };

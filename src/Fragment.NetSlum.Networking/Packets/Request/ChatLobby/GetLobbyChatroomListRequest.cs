@@ -12,8 +12,8 @@ using Microsoft.Extensions.Logging;
 namespace Fragment.NetSlum.Networking.Packets.Request.ChatLobby
 {
 
-    
-    [FragmentPacket(OpCodes.Data, OpCodes.DataGetLobbyChatroomListRequest)]
+
+    [FragmentPacket(MessageType.Data, OpCodes.DataGetLobbyChatroomListRequest)]
     public class GetLobbyChatroomListRequest:BaseRequest
     {
         private readonly ILogger<GetLobbyChatroomListRequest> _logger;

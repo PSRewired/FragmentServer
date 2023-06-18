@@ -35,7 +35,7 @@ public class BbsThreadEntryResponse : BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataBbsEntryThread,
             Data = writer.Buffer,
         };

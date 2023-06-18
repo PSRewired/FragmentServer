@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.Guilds;
 
-[FragmentPacket(OpCodes.Data, OpCodes.DataGuildGetAllGuilds)]
+[FragmentPacket(MessageType.Data, OpCodes.DataGuildGetAllGuilds)]
 public class GetShoppableGuildListRequest : BaseRequest
 {
     private readonly FragmentContext _database;

@@ -10,7 +10,7 @@ public class UpdateGuildDetailsResponse : BaseResponse
     {
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataGuildUpdateDetailsResponse,
             Data = new Memory<byte>(new byte[2]),
         };

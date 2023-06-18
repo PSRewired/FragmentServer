@@ -21,7 +21,7 @@ public class PurchaseGuildShopItemResponse : BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataPurchaseGuildShopItemResponse,
             Data = buffer,
         };

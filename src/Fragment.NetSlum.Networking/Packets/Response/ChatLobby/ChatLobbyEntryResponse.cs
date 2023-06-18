@@ -45,7 +45,7 @@ public class ChatLobbyEntryResponse : BaseResponse
         BinaryPrimitives.WriteUInt16BigEndian(buffer[pos..], (ushort)(_clientCount + 1)); // Hard Coded max client Count?
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataLobbyEntryLobby,
             Data = bufferMemory,
         };

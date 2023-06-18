@@ -9,7 +9,7 @@ public class LobbyGetServersResponse : BaseResponse
     {
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataLobbyGetServersOk,
             Data = new byte[2]
         };

@@ -11,25 +11,25 @@ namespace Fragment.NetSlum.Networking.Messaging;
 
 public class PacketCache
 {
-    private readonly Dictionary<OpCodes, Dictionary<OpCodes, Type>> _packetReferences = new();
+    private readonly Dictionary<MessageType, Dictionary<OpCodes, Type>> _packetReferences = new();
 
     public void AddRequest(FragmentPacket msg, Type t)
     {
         EnsureCreated(msg);
 
-        if (_packetReferences[msg.OpCode].TryGetValue(msg.DataPacketType, out var existingType))
+        if (_packetReferences[msg.MessageType].TryGetValue(msg.DataPacketType, out var existingType))
         {
             throw new InvalidConstraintException(
                 $"Attempted to add packet {t.Name} when existing reference already exists. ({existingType.Name})");
         }
 
-        _packetReferences[msg.OpCode][msg.DataPacketType] = t;
+        _packetReferences[msg.MessageType][msg.DataPacketType] = t;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveOptimization | MethodImplOptions.AggressiveInlining)]
     public Type? GetRequest(FragmentMessage o)
     {
-        var opCode = o.OpCode;
+        var opCode = o.MessageType;
         var dataPacketType = o.DataPacketType;
 
         if (!_packetReferences.ContainsKey(opCode))
@@ -42,9 +42,9 @@ public class PacketCache
 
     private void EnsureCreated(FragmentPacket msg)
     {
-        if (!_packetReferences.ContainsKey(msg.OpCode))
+        if (!_packetReferences.ContainsKey(msg.MessageType))
         {
-            _packetReferences[msg.OpCode] = new Dictionary<OpCodes, Type>();
+            _packetReferences[msg.MessageType] = new Dictionary<OpCodes, Type>();
         }
     }
 

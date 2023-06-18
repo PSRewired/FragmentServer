@@ -11,7 +11,7 @@ using Fragment.NetSlum.Persistence;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.Guilds;
 
-[FragmentPacket(OpCodes.Data, OpCodes.DataDonateCoinsToGuild)]
+[FragmentPacket(MessageType.Data, OpCodes.DataDonateCoinsToGuild)]
 public class DonateCoinsToGuildRequest : BaseRequest
 {
     private readonly FragmentContext _database;

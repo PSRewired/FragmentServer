@@ -21,7 +21,7 @@ public class BbsThreadPostCountResponse : BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataBbsThreadPostCountResponse,
             Data = buffer,
         };

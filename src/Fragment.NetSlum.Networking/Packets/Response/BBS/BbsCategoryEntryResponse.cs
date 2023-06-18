@@ -35,7 +35,7 @@ public class BbsCategoryEntryResponse : BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataBbsEntryCategory,
             Data = writer.Buffer,
         };

@@ -11,7 +11,7 @@ using Fragment.NetSlum.Persistence;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.ChatLobby;
 
-[FragmentPacket(OpCodes.Data, OpCodes.DataLobbyGetServersGetList)]
+[FragmentPacket(MessageType.Data, OpCodes.DataLobbyGetServersGetList)]
 public class GetLobbyServerListRequest : BaseRequest
 {
     private readonly FragmentContext _database;

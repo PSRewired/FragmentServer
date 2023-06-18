@@ -12,12 +12,12 @@ public abstract class BaseResponse
     public abstract FragmentMessage Build();
 
     [MethodImpl(MethodImplOptions.AggressiveOptimization)]
-    public FragmentMessage Build(OpCodes type, byte[] payload)
+    public FragmentMessage Build(MessageType type, byte[] payload)
     {
         return new FragmentMessage
         {
             Data = payload,
-            OpCode = type,
+            MessageType = type,
         };
     }
 }

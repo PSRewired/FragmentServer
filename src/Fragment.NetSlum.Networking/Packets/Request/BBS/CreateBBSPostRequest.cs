@@ -13,7 +13,7 @@ using Fragment.NetSlum.Persistence.Entities;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.BBS;
 
-[FragmentPacket(OpCodes.Data, OpCodes.DataBbsPost)]
+[FragmentPacket(MessageType.Data, OpCodes.DataBbsPost)]
 public class CreateBBSPostRequest : BaseRequest
 {
     private readonly FragmentContext _database;

@@ -14,7 +14,7 @@ public class CheckCreateBBSThreadResponse : BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataBbsCheckThreadCreateResponse,
             Data = buffer,
         };

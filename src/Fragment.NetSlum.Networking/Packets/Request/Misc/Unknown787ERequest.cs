@@ -8,7 +8,7 @@ using Fragment.NetSlum.Networking.Sessions;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.Misc;
 
-[FragmentPacket(OpCodes.Data, OpCodes.DataUnknown787e)]
+[FragmentPacket(MessageType.Data, OpCodes.DataUnknown787e)]
 public class Unknown787ERequest : BaseRequest
 {
     public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)

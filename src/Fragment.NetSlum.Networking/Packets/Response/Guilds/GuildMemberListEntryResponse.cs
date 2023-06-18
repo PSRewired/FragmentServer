@@ -100,7 +100,7 @@ public class GuildMemberListEntryResponse : BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataGuildMemberListMemberEntryResponse,
             Data = writer.Buffer,
         };

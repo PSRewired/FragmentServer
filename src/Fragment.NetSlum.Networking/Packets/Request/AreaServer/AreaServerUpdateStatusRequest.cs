@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.AreaServer;
 
-[FragmentPacket(OpCodes.Data, OpCodes.Data_AreaServerUpdateStatusRequest)]
+[FragmentPacket(MessageType.Data, OpCodes.Data_AreaServerUpdateStatusRequest)]
 public class AreaServerUpdateStatusRequest :BaseRequest
 {
     private readonly ILogger<AreaServerUpdateStatusRequest> _logger;

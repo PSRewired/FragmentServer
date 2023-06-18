@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Fragment.NetSlum.Networking.Attributes;
 using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Objects;
@@ -9,13 +11,13 @@ using Fragment.NetSlum.Networking.Packets.Response.ChatLobby;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.ChatLobby
 {
-    [FragmentPacket(OpCodes.Data, OpCodes.DataLobbyExitRoom)]
+    [FragmentPacket(MessageType.Data, OpCodes.DataLobbyExitRoom)]
     public class LobbyExitRoomRequest :BaseRequest
     {
-        private readonly ILogger<LobbyEventRequest> _logger;
+        private readonly ILogger<LobbyExitRoomRequest> _logger;
         private readonly ChatLobbyStore _chatLobbyStore;
 
-        public LobbyExitRoomRequest(ILogger<LobbyEventRequest> logger, ChatLobbyStore chatLobbyStore)
+        public LobbyExitRoomRequest(ILogger<LobbyExitRoomRequest> logger, ChatLobbyStore chatLobbyStore)
         {
             _logger = logger;
             _chatLobbyStore = chatLobbyStore;
@@ -32,7 +34,7 @@ namespace Fragment.NetSlum.Networking.Packets.Request.ChatLobby
             }
 
 
-            
+
             //var chatLobby = _chatLobbyStore.GetLobby()
             BaseResponse response = new LobbyExitResponse();
             return Task.FromResult<ICollection<FragmentMessage>>(new[] { response.Build() });

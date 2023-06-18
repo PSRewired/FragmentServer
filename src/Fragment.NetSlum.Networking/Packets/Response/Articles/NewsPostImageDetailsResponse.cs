@@ -31,7 +31,7 @@ public class NewsPostImageDetailsResponse : BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataNewsPostDetailsResponse,
             Data = _imageData,
         };

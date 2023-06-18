@@ -1,3 +1,4 @@
+using System;
 using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Objects;
 
@@ -9,9 +10,9 @@ namespace Fragment.NetSlum.Networking.Packets.Response.ChatLobby
         {
             return new FragmentMessage
             {
-                OpCode = OpCodes.Data,
+                MessageType = MessageType.Data,
                 DataPacketType = OpCodes.DataLobbyExitRoomOk,
-                Data = new byte[] { 0x00,0x00 }
+                Data = new Memory<byte>(new byte[2]),
             };
         }
     }

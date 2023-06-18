@@ -10,7 +10,7 @@ public class ReassignGuildMasterResponse : BaseResponse
     {
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataGuildReassignMasterResponse,
             Data = new Memory<byte>(new byte[2]),
         };

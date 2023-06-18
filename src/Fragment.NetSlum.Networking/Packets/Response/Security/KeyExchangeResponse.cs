@@ -37,6 +37,6 @@ public class KeyExchangeResponse : BaseResponse
         buffer.Write(_serverKey.Span);
         buffer.Write(new byte[] { 0, 0, 0, 0xe, 0, 0, 0, 0, 0, 0 });
 
-        return base.Build(OpCodes.KeyExchangeResponse, buffer.ToArray());
+        return base.Build(MessageType.KeyExchangeResponse, buffer.ToArray());
     }
 }

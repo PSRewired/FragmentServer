@@ -10,9 +10,9 @@ public class GetBBSUpdatesResponse:BaseResponse
     {
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataBBSGetUpdatesSuccess,
-            Data = new Memory<byte>(new byte[] { 0x00, 0x00 }), 
+            Data = new Memory<byte>(new byte[] { 0x00, 0x00 }),
         };
     }
 }

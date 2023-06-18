@@ -21,7 +21,7 @@ public class GuildMemberListEntryCountResponse : BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataGuildMemberListEntryCountResponse,
             Data = buffer,
         };

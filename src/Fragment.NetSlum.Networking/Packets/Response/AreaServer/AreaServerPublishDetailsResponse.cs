@@ -14,7 +14,7 @@ public class AreaServerPublishDetailsResponse :BaseResponse
     {
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = PacketType,
             Data = Data,
         };

@@ -9,7 +9,7 @@ public class LogonRepeatResponse : BaseResponse
     {
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataLogonResponse,
             Data = new byte[] { 0x02, 0x10 }
         };

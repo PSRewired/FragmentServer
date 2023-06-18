@@ -24,7 +24,7 @@ public class ChatLobbyEnterRoomResponse:BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataLobbyEnterRoomSuccess,
             Data = bufferMemory,
         };

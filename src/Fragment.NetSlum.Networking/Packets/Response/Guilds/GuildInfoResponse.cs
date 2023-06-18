@@ -185,7 +185,7 @@ public class GuildInfoResponse : BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = _dataPacketType,
             Data = writer.Buffer,
         };

@@ -8,7 +8,7 @@ public class CreateBBSPostResponse : BaseResponse
 {
     public override FragmentMessage Build() => new FragmentMessage
     {
-        OpCode = OpCodes.Data,
+        MessageType = MessageType.Data,
         DataPacketType = OpCodes.DataBbsCreatePostResponse,
         Data = new Memory<byte>(new byte[2]),
     };

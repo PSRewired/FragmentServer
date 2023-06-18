@@ -35,7 +35,7 @@ public class ShoppableGuildEntryResponse : BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataShoppableGuildEntryResponse,
             Data = writer.Buffer,
         };

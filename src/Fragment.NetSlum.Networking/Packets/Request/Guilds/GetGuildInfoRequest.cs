@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.Guilds;
 
-[FragmentPacket(OpCodes.Data, OpCodes.DataGuildGetInfo)]
+[FragmentPacket(MessageType.Data, OpCodes.DataGuildGetInfo)]
 public class GetGuildInfoRequest : BaseRequest
 {
     private readonly FragmentContext _database;

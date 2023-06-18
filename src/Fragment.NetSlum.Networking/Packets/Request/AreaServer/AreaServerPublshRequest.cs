@@ -10,7 +10,7 @@ using Fragment.NetSlum.Networking.Packets.Response.AreaServer;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.AreaServer;
 
-[FragmentPacket(OpCodes.Data, OpCodes.Data_AreaServerPublishRequest)]
+[FragmentPacket(MessageType.Data, OpCodes.Data_AreaServerPublishRequest)]
 public class AreaServerPublshRequest :BaseRequest
 {
     private readonly ILogger<AreaServerPublshRequest> _logger;

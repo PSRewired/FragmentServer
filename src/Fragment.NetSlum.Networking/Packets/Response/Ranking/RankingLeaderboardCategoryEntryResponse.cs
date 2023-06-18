@@ -34,7 +34,7 @@ public class RankingLeaderboardCategoryEntryResponse : BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.RankingLeaderboardCategoryEntryResponse,
             Data = writer.Buffer,
         };

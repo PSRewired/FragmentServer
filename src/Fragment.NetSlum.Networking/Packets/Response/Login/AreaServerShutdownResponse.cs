@@ -9,7 +9,7 @@ public class AreaServerShutdownResponse : BaseResponse
     {
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.AreaServerShutdownResponse,
             Data = new byte[] { 0x02, 0x11 },
         };

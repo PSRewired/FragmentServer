@@ -11,7 +11,7 @@ using Fragment.NetSlum.Persistence;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.Guilds;
 
-[FragmentPacket(OpCodes.Data, OpCodes.DataGetGuildShopItems)]
+[FragmentPacket(MessageType.Data, OpCodes.DataGetGuildShopItems)]
 public class GetGuildShopItemsRequest : BaseRequest
 {
     private readonly FragmentContext _database;

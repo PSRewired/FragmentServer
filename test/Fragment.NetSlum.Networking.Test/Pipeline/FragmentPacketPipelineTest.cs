@@ -35,7 +35,7 @@ public class FragmentPacketPipelineTest
 
         var decryptedMessage = new FragmentMessage
         {
-            OpCode = messagesDecoded[0].OpCode,
+            MessageType = messagesDecoded[0].MessageType,
             Data = messagesDecoded[0].Data.ToArray(),
         };
         var encoder = new EncryptionEncoder(cryptoProvider, mockLogger.Object);

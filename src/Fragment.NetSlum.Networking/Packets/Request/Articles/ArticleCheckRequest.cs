@@ -10,7 +10,7 @@ using Fragment.NetSlum.Persistence;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.Articles;
 
-[FragmentPacket(OpCodes.Data, OpCodes.DataNewCheckRequest)]
+[FragmentPacket(MessageType.Data, OpCodes.DataNewCheckRequest)]
 public class ArticleCheckRequest : BaseRequest
 {
     private readonly FragmentContext _database;

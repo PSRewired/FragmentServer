@@ -14,7 +14,7 @@ public class DataTypeEnvelopeEncoder : IMessageEncoder
     {
         foreach (var response in responseObjects)
         {
-            if (response.OpCode != OpCodes.Data)
+            if (response.MessageType != MessageType.Data)
             {
                 continue;
             }
@@ -23,7 +23,7 @@ public class DataTypeEnvelopeEncoder : IMessageEncoder
 
             BinaryPrimitives.WriteUInt32BigEndian(bufferSpan[..4], sequenceNumber++);
             BinaryPrimitives.WriteUInt16BigEndian(bufferSpan[4..6], (ushort) (response.Data.Length + 2));
-            BinaryPrimitives.WriteUInt16BigEndian(bufferSpan[6..8], (ushort) response.DataPacketType);  
+            BinaryPrimitives.WriteUInt16BigEndian(bufferSpan[6..8], (ushort) response.DataPacketType);
             response.Data.CopyTo(bufferMemory[8..]);
             response.Data = bufferMemory;
         }

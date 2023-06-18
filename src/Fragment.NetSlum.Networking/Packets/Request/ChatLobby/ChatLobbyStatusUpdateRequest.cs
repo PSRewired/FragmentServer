@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.ChatLobby;
 
-[FragmentPacket(OpCodes.Data, OpCodes.DataLobbyStatusUpdate)]
+[FragmentPacket(MessageType.Data, OpCodes.DataLobbyStatusUpdate)]
 public class ChatLobbyStatusUpdateRequest:BaseRequest
 {
     private readonly ILogger<ChatLobbyStatusUpdateRequest> _logger;

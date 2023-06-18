@@ -10,7 +10,7 @@ using Fragment.NetSlum.Networking.Constants;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.AreaServer;
 
-[FragmentPacket(OpCodes.Data, OpCodes.Data_AreaServerUpdateUserCountRequest)]
+[FragmentPacket(MessageType.Data, OpCodes.Data_AreaServerUpdateUserCountRequest)]
 public class AreaServerUpdateUserCountRequest :BaseRequest
 {
     private readonly ILogger<AreaServerUpdateUserCountRequest> _logger;

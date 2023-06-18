@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.Ranking;
 
-[FragmentPacket(OpCodes.Data, OpCodes.RankPlayerInfo)]
+[FragmentPacket(MessageType.Data, OpCodes.RankPlayerInfo)]
 public class RankingPlayerInfoRequest : BaseRequest
 {
     private readonly FragmentContext _database;

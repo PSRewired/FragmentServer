@@ -35,7 +35,7 @@ public class GuildMemberListCategoryEntryResponse : BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataGuildMemberListCategoryEntryResponse,
             Data = writer.Buffer,
         };

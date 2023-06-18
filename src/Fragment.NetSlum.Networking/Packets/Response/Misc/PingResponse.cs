@@ -9,7 +9,7 @@ public class PingResponse : BaseResponse
     {
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataPing,
             Data = new byte[] {0x00}
         };

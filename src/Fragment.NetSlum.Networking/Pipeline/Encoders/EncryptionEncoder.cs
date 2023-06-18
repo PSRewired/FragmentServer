@@ -27,7 +27,7 @@ public class EncryptionEncoder : IMessageEncoder
         {
             var checksum = response.Checksum;
 
-            if (response.OpCode == OpCodes.Data)
+            if (response.MessageType == MessageType.Data)
             {
                 var paddedBuff = new Memory<byte>(new byte[GetPaddedBufferLength(response.Data.Length)]);
                 response.Data.CopyTo(paddedBuff);

@@ -9,7 +9,7 @@ namespace Fragment.NetSlum.Networking.Objects;
 
 public class FragmentMessage
 {
-    public required OpCodes OpCode { get; set; }
+    public required MessageType MessageType { get; set; }
     public OpCodes DataPacketType { get; set; } = OpCodes.None;
     public Memory<byte> Data { get; set; } = Array.Empty<byte>();
     public ushort Checksum => BlowfishProvider.Checksum(Data.ToArray());
@@ -24,13 +24,13 @@ public class FragmentMessage
 
     public byte[] ToArray()
     {
-        
+
         var buffer = new byte[sizeof(ushort) + Length];
         var span = new Span<byte>(buffer);
         var dataOffset = 4;
 
         BinaryPrimitives.WriteUInt16BigEndian(span[..2], Length);
-        BinaryPrimitives.WriteUInt16BigEndian(span[2..4], (ushort)OpCode);
+        BinaryPrimitives.WriteUInt16BigEndian(span[2..4], (ushort)MessageType);
 
         // If the data of this message is already encrypted, it is assumed that the checksum was already appended since it needs to be
         // included in the encrypted payload
@@ -49,8 +49,8 @@ public class FragmentMessage
     {
         var sb = new StringBuilder();
 
-        sb.Append($"[OP: {OpCode}({(ushort)OpCode:X4})");
-        if (OpCode == OpCodes.Data)
+        sb.Append($"[OP: {MessageType}({(ushort)MessageType:X4})");
+        if (MessageType == MessageType.Data)
         {
             sb.Append($", DTYPE: {DataPacketType}({(ushort)DataPacketType:X4})");
         }

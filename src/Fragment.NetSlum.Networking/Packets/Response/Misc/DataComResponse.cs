@@ -9,7 +9,7 @@ public class DataComResponse : BaseResponse
     {
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataComSuccess,
             Data = new byte[] {0xde, 0xad}
         };

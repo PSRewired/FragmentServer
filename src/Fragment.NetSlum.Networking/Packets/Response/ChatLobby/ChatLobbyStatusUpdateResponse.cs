@@ -53,7 +53,7 @@ public class ChatLobbyStatusUpdateResponse:BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataLobbyStatusUpdate,
             Data = _lastStatus,
         };

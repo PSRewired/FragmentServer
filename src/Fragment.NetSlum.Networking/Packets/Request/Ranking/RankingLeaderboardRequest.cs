@@ -16,7 +16,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.Ranking;
 
-[FragmentPacket(OpCodes.Data, OpCodes.RankingLeaderboard)]
+[FragmentPacket(MessageType.Data, OpCodes.RankingLeaderboard)]
 public class RankingLeaderboardRequest : BaseRequest
 {
     private readonly FragmentContext _database;

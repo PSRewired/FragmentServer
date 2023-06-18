@@ -12,7 +12,7 @@ using Fragment.NetSlum.Networking.Sessions;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.Security;
 
-[FragmentPacket(OpCodes.KeyExchangeRequest)]
+[FragmentPacket(MessageType.KeyExchangeRequest)]
 public class KeyExchangeRequest : BaseRequest
 {
     private readonly CryptoHandler _cryptoHandler;

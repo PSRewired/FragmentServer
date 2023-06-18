@@ -35,7 +35,7 @@ public class BbsPostContentResponse : BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataBbsPostContentResponse,
             Data = writer.Buffer,
         };

@@ -35,7 +35,7 @@ public class GuildMenuListEntryResponse : BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.Data_GuildListItemResponse,
             Data = writer.Buffer,
         };

@@ -21,7 +21,7 @@ public class LobbyServerEntryCountResponse : BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataLobbyGetServersServerList,
             Data = buffer,
         };

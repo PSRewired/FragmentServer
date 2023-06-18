@@ -9,7 +9,7 @@ public class DiskAuthorizationResponse :BaseResponse
     {
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataDiskAuthorizationSuccess,
             Data = new byte[] { 0x78, 0x94 },
         };

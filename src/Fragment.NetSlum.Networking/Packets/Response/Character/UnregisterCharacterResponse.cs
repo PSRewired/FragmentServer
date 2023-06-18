@@ -10,7 +10,7 @@ public class UnregisterCharacterResponse : BaseResponse
     {
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.Data_AreaServerPublishSuccess,
             Data = new Memory<byte>(new byte[2]),
         };

@@ -34,7 +34,7 @@ public class LobbyServerCategoryEntryResponse : BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataLobbyGetServersEntryCategory,
             Data = writer.Buffer,
         };

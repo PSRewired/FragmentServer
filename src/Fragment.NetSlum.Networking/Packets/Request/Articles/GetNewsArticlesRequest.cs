@@ -13,7 +13,7 @@ using Fragment.NetSlum.Persistence.Entities;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.Articles;
 
-[FragmentPacket(OpCodes.Data, OpCodes.DataNewsGetMenuRequest)]
+[FragmentPacket(MessageType.Data, OpCodes.DataNewsGetMenuRequest)]
 public class GetNewsArticlesRequest : BaseRequest
 {
     private readonly FragmentContext _database;

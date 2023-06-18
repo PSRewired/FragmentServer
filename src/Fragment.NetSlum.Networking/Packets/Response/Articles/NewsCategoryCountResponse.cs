@@ -21,7 +21,7 @@ public class NewsCategoryCountResponse : BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataNewsCategoryList,
             Data = buffer,
         };

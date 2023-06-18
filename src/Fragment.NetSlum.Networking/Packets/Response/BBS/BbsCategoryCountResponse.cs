@@ -21,7 +21,7 @@ public class BbsCategoryCountResponse : BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataBbsCategoryCountResponse,
             Data = buffer,
         };

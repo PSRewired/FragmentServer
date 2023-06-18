@@ -21,7 +21,7 @@ public class GuildMenuCategoryCountResponse : BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.Data_GuildCategoryEntryCountResponse,
             Data = buffer,
         };

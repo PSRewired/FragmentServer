@@ -40,7 +40,7 @@ public class GuildShopItemEntryResponse : BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataGuildShopItemEntryResponse,
             Data = writer.Buffer,
         };

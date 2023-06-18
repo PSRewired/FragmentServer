@@ -102,7 +102,7 @@ public class RankingPlayerInfoResponse : BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.RankPlayerInfoResponse,
             Data = writer.Buffer,
         };

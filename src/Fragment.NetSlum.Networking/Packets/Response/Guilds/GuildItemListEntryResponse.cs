@@ -70,7 +70,7 @@ public class GuildItemListEntryResponse : BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataGuildItemListEntryResponse,
             Data = writer.Buffer,
         };

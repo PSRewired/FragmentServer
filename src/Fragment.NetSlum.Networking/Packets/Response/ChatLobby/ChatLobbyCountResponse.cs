@@ -24,7 +24,7 @@ public class ChatLobbyCountResponse:BaseResponse
         BinaryPrimitives.WriteUInt16BigEndian(bufferSpan[0..], _chatLobbyCount);
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataLobbyLobbyList,
             Data =buffer,
         };

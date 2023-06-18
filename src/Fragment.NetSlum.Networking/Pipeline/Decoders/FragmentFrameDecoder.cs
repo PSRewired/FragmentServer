@@ -2,6 +2,7 @@ using System;
 using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.IO;
+using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Crypto;
 using Fragment.NetSlum.Networking.Objects;
 using Serilog;
@@ -49,7 +50,7 @@ public class FragmentFrameDecoder : IPacketDecoder
         var messageContent = data.Span[pos..(pos+datalen)];
         pos += messageContent.Length;
 
-        var code = (OpCodes)BinaryPrimitives.ReadUInt16BigEndian(messageContent[..2]);
+        var messageType = (MessageType)BinaryPrimitives.ReadUInt16BigEndian(messageContent[..2]);
 
         messageContent = messageContent[2..];
 
@@ -57,7 +58,7 @@ public class FragmentFrameDecoder : IPacketDecoder
         {
             messages.Add(new FragmentMessage
             {
-                OpCode = code,
+                MessageType = messageType,
                 //Data = decrypted,
             });
             return pos;
@@ -71,7 +72,7 @@ public class FragmentFrameDecoder : IPacketDecoder
 
         // For data packets, the payload contains a envelope in the following format
         // [??:ushort][sequenceNum:ushort][envelopeContentLength:ushort][dataPacketType:ushort][...Data...]
-        if (code == OpCodes.Data)
+        if (messageType == MessageType.Data)
         {
             var decryptedAsSpan = decrypted.AsSpan();
             var clientSequenceNumber = BinaryPrimitives.ReadUInt16BigEndian(decryptedAsSpan[2..4]);
@@ -83,7 +84,7 @@ public class FragmentFrameDecoder : IPacketDecoder
 
         messages.Add(new FragmentMessage
         {
-            OpCode = code,
+            MessageType = messageType,
             DataPacketType = dataPacketType,
             Data = decrypted,
         });

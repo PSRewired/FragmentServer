@@ -21,7 +21,7 @@ public class CreateGuildResponse : BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataCreateGuildSuccessResponse,
             Data = buffer,
         };

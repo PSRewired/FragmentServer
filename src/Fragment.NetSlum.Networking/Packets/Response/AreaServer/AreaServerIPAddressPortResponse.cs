@@ -9,7 +9,7 @@ public class AreaServerIPAddressPortResponse : BaseResponse
     {
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.Data_AreaServerIpPortSuccess,
             Data = new byte[] { 0x00, 0x00 },
         };

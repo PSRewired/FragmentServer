@@ -179,7 +179,7 @@ public class GuildLoggedInMembersResponse : BaseResponse
         writer.Write<short>(0x00);
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataGuildLoggedInMembersResponse,
             Data = writer.Buffer,
         };

@@ -9,7 +9,7 @@ public class AreaServerLogonResponse : BaseResponse
     {
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataAreaServerSuccess,
             Data = new byte[] { 0xde, 0xad },
         };

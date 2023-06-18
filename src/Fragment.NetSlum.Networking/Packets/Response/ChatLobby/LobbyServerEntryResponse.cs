@@ -92,7 +92,7 @@ public class LobbyServerEntryResponse : BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataLobbyGetServersEntryServer,
             Data = writer.Buffer,
         };

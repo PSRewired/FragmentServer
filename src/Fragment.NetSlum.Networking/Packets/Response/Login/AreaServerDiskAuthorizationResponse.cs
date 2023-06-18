@@ -9,7 +9,7 @@ public class AreaServerDiskAuthorizationResponse : BaseResponse
     {
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.Data_AreaServerDiskAuthorizationSuccess,
             Data = new byte[] { 0x00, 0x00 },
         };

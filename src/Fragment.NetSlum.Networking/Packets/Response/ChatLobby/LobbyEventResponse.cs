@@ -39,7 +39,7 @@ public class LobbyEventResponse:BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataLobbyEvent,
             Data = bufferMemory,
         };

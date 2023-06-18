@@ -75,7 +75,7 @@ public class BbsThreadPostDetailResponse : BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataBbsThreadPostEntryDetailResponse,
             Data = writer.Buffer,
         };

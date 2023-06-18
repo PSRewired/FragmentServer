@@ -21,7 +21,7 @@ public class GuildItemListCountResponse : BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataGuildItemListCountResponse,
             Data = buffer,
         };

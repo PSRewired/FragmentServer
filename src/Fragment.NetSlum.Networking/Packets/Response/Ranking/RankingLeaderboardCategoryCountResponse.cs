@@ -21,7 +21,7 @@ public class RankingLeaderboardCategoryCountResponse : BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.RankingLeaderboardCategoryCountResponse,
             Data = buffer,
         };

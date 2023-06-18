@@ -26,7 +26,7 @@ public class NewsPostImageSizeResponse : BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataNewsPostSizeInfoResponse,
             Data = buffer
         };

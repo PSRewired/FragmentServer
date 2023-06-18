@@ -30,7 +30,7 @@ public class MailCheckResponse : BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataMailCheckSuccess,
             Data = buffer,
         };

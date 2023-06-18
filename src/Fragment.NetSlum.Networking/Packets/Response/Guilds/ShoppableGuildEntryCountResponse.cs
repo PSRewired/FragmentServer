@@ -21,7 +21,7 @@ public class ShoppableGuildEntryCountResponse : BaseResponse
 
         return new FragmentMessage
         {
-            OpCode = OpCodes.Data,
+            MessageType = MessageType.Data,
             DataPacketType = OpCodes.ShoppableGuildEntryCountResponse,
             Data = buffer,
         };
