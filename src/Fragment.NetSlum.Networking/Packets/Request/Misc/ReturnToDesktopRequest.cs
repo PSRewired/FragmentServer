@@ -13,9 +13,6 @@ public class ReturnToDesktopRequest : BaseRequest
 {
     public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
-        return Task.FromResult<ICollection<FragmentMessage>>(new[]
-        {
-            new ReturnToDesktopResponse().Build(),
-        });
+        return ReturnSingle(new ReturnToDesktopResponse().Build());
     }
 }
