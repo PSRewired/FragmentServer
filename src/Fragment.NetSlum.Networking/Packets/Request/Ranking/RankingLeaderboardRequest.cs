@@ -13,6 +13,7 @@ using Fragment.NetSlum.Networking.Packets.Response.Ranking;
 using Fragment.NetSlum.Networking.Sessions;
 using Fragment.NetSlum.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.Ranking;
 
@@ -20,34 +21,39 @@ namespace Fragment.NetSlum.Networking.Packets.Request.Ranking;
 public class RankingLeaderboardRequest : BaseRequest
 {
     private readonly FragmentContext _database;
+    private readonly ILogger<RankingLeaderboardRequest> _logger;
 
-    public RankingLeaderboardRequest(FragmentContext database)
+    public RankingLeaderboardRequest(FragmentContext database, ILogger<RankingLeaderboardRequest> logger)
     {
         _database = database;
+        _logger = logger;
     }
 
     public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         var categoryId = BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[..2]);
 
-        if (categoryId == 0)
-        {
-            return HandleRankCategories();
-        }
-
         // This is intentionally the high-order bytes since class types start at a value of 1. This lets us know if the menu is on the
         // first or second page
-        var classType = categoryId & 0x00FF;
-        var categoryType = (categoryId & 0xFF00) >> 8;
+        var classType = (byte) categoryId & 0x00FF;
+        var categoryType = (byte) ((categoryId & 0xFF00) >> 8);
 
         IQueryable<Persistence.Entities.CharacterStats> rankingQuery = _database.CharacterStats
                 .Include(cs => cs.Character)
                 .Where(cs => cs.Character != null)
             ;
 
-        if (classType == 0)
+        _logger.LogDebug("Leaderboard request classType: {ClassType:X2} -- categoryType: {CategoryType:X2} ({FullId:X4})", classType, categoryType, categoryId);
+
+        if (categoryType == 0)
         {
-            return HandleClassCategories((byte)categoryType);
+            return HandleRankCategories();
+        }
+
+
+        if (classType == 0xFF)
+        {
+            return HandleClassCategories(categoryType);
         }
 
         switch ((CharacterRanks.RankCategory) categoryType)
@@ -85,7 +91,7 @@ public class RankingLeaderboardRequest : BaseRequest
 
         rankingQuery = rankingQuery
             .Where(cs => cs.Character!.Class == (CharacterClass) classType)
-            .Take(36);
+            .Take(100);
 
         var responses = new List<FragmentMessage>
         {
@@ -114,8 +120,8 @@ public class RankingLeaderboardRequest : BaseRequest
         foreach (CharacterRanks.RankCategory category in categoryTypes)
         {
             responses.Add(new RankingLeaderboardCategoryEntryResponse()
-                .SetCategoryId((ushort)category)
-                .SetCategoryId((ushort)((ushort)category << 8))
+                // Shift the category ID to the upper bytes and set the "class category" to the max value to signal that no class has been selected
+                .SetCategoryId((ushort)((ushort)((ushort)category << 8) | 0x00FF))
                 .SetCategoryName(category.GetCategoryName())
                 .Build());
         }

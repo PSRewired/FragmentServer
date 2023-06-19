@@ -91,8 +91,8 @@ public enum OpCodes : ushort
     DataUnregisterCharRequest = 0x7432,
     DataUnregisterCharSuccess = 0x7433,
 
-    DataReturnDesktop = 0x744a,
-    DataReturnDesktopOk = 0x744b,
+    DataReturnToDesktop = 0x744a,
+    DataReturnToDesktopResponse = 0x744b,
 
     //main lobby...
     DataLobbyGetMenuRequest = 0x7500,
