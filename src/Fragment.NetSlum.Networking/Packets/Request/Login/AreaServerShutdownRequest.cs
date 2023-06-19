@@ -24,6 +24,6 @@ public class AreaServerShutdownRequest : BaseRequest
     {
         BaseResponse response = new AreaServerShutdownResponse();
 
-        return Task.FromResult<ICollection<FragmentMessage>>(new[] { response.Build() });
+        return ReturnSingle(response.Build());
     }
 }

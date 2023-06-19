@@ -23,6 +23,6 @@ public class AreaServerDiskAuthorizationRequset : BaseRequest
     public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         BaseResponse response = new AreaServerDiskAuthorizationResponse();
-        return Task.FromResult<ICollection<FragmentMessage>>(new[] { response.Build() });
+        return ReturnSingle(response.Build());
     }
 }

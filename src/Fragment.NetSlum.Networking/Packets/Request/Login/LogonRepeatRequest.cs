@@ -24,6 +24,6 @@ public class LogonRepeatRequest :BaseRequest
     {
         BaseResponse response = new LogonRepeatResponse();
 
-        return Task.FromResult<ICollection<FragmentMessage>>(new[] { response.Build() });
+        return ReturnSingle(response.Build());
     }
 }

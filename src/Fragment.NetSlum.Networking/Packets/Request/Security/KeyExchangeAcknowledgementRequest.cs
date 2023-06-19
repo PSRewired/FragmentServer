@@ -24,6 +24,6 @@ public class KeyExchangeAcknowledgementRequest : BaseRequest
         _cryptoHandler.ClientCipher.Initialize();
         _cryptoHandler.ServerCipher.Initialize();
 
-        return Task.FromResult<ICollection<FragmentMessage>>(Array.Empty<FragmentMessage>());
+        return NoResult();
     }
 }

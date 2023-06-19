@@ -44,6 +44,6 @@ public class ChatLobbyStatusUpdateRequest:BaseRequest
             .SetLastStatus(session.LastStatus)
             .Build());
 
-        return Task.FromResult<ICollection<FragmentMessage>>(Array.Empty<FragmentMessage>());
+        return NoResult();
     }
 }

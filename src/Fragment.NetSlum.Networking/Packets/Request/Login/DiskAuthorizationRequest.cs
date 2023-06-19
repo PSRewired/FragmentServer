@@ -24,6 +24,6 @@ public class DiskAuthorizationRequest : BaseRequest
     {
         BaseResponse response = new DiskAuthorizationResponse();
 
-        return Task.FromResult<ICollection<FragmentMessage>>(new[] { response.Build() });
+        return ReturnSingle(response.Build());
     }
 }

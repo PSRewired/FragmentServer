@@ -20,7 +20,7 @@ public class PingRequest : BaseRequest
 
         BaseResponse response = new PingResponse();
 
-        return Task.FromResult<ICollection<FragmentMessage>>(new[] { response.Build() });
+        return ReturnSingle(response.Build());
 
     }
 }

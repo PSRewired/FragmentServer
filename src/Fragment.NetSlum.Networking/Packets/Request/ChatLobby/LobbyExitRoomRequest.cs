@@ -37,7 +37,7 @@ namespace Fragment.NetSlum.Networking.Packets.Request.ChatLobby
 
             //var chatLobby = _chatLobbyStore.GetLobby()
             BaseResponse response = new LobbyExitResponse();
-            return Task.FromResult<ICollection<FragmentMessage>>(new[] { response.Build() });
+            return ReturnSingle(response.Build());
         }
 
     }

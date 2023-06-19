@@ -63,9 +63,9 @@ public class AreaServerPublishDetailsRequest:BaseRequest
             case OpCodes.Data_AreaServerPublishDetails6Request:
                 //response = new AreaServerPublishDetailsResponse() { PacketType = OpCodes.Data_AreaServerPublishDetails6Success, Data = new byte[] { 0x00, 0x09 } };
             default:
-                return Task.FromResult<ICollection<FragmentMessage>>(Array.Empty<FragmentMessage>());
+                return NoResult();
         }
 
-        return Task.FromResult<ICollection<FragmentMessage>>(new[] { response.Build() });
+        return ReturnSingle(response.Build());
     }
 }

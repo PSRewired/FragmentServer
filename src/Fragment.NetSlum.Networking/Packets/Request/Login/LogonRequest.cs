@@ -38,6 +38,6 @@ public class LogonRequest : BaseRequest
                 break;
         }
 
-        return Task.FromResult<ICollection<FragmentMessage>>(new[] { response.Build() });
+        return ReturnSingle(response.Build());
     }
 }

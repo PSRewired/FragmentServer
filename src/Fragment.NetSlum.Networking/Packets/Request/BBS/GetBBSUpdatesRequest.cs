@@ -24,6 +24,6 @@ public class GetBBSUpdatesRequest:BaseRequest
     {
         BaseResponse response = new GetBBSUpdatesResponse();
 
-        return Task.FromResult<ICollection<FragmentMessage>>(new[] { response.Build() });
+        return ReturnSingle(response.Build());
     }
 }

@@ -13,6 +13,6 @@ public class DataComRequest : BaseRequest
 {
     public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
-        return Task.FromResult<ICollection<FragmentMessage>>(new[] { new DataComResponse().Build() });
+        return ReturnSingle(new DataComResponse().Build());
     }
 }
