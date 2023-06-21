@@ -69,6 +69,7 @@ public class Startup
         services.AddSingleton(typeof(ChatLobbyStore));
         services.AddHostedService<ServerBackgroundService>();
         services.AddHostedService<ClientTickService>();
+        services.AddHostedService<ChatLobbyBackgroundService>();
     }
 
     public void Configure(IApplicationBuilder app, IHostEnvironment env)

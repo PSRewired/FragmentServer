@@ -4,15 +4,22 @@ using System.Linq;
 using Fragment.NetSlum.Networking.Models;
 using System.Text;
 using System.Threading;
+using Fragment.NetSlum.Core.Constants;
 using Fragment.NetSlum.Networking.Sessions;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Fragment.NetSlum.Networking.Stores;
 
-public class ChatLobbyStore :IDisposable
+public class ChatLobbyStore : IDisposable
 {
     private readonly Dictionary<ushort, ChatLobbyModel> _chatLobbies = new();
     private readonly ReaderWriterLockSlim _rwLock = new();
-    private ushort _gameCount;
+    private readonly IServiceScopeFactory _serviceScopeFactory;
+
+    public ChatLobbyStore(IServiceScopeFactory serviceScopeFactory)
+    {
+        _serviceScopeFactory = serviceScopeFactory;
+    }
 
     public IReadOnlyCollection<ChatLobbyModel> ChatLobbies
     {
@@ -36,8 +43,8 @@ public class ChatLobbyStore :IDisposable
         try
         {
             _rwLock.EnterWriteLock();
-            _chatLobbies.TryAdd(_gameCount, lobby);
-            _gameCount++;
+            _chatLobbies.TryAdd(lobby.LobbyId, lobby);
+            lobby.ServiceScope = _serviceScopeFactory.CreateScope();
         }
         finally
         {
@@ -47,7 +54,7 @@ public class ChatLobbyStore :IDisposable
 
     public bool TryUpdateLobby(ChatLobbyModel lobby, Action<ChatLobbyModel> updateAction)
     {
-        var chatLobbyToUpdate = GetLobby((ushort)lobby.LobbyId);
+        var chatLobbyToUpdate = GetLobby(lobby.LobbyId);
 
         if (chatLobbyToUpdate == null)
         {
@@ -66,24 +73,16 @@ public class ChatLobbyStore :IDisposable
             _rwLock.ExitWriteLock();
         }
     }
-    public ChatLobbyModel? GetLobby(ushort lobbyId,bool isGuild = false)
+
+    public ChatLobbyModel? GetLobby(ushort lobbyId, ChatLobbyType lobbyType = ChatLobbyType.Default)
     {
         try
         {
             _rwLock.EnterReadLock();
 
-            if(isGuild)
-            {
-                return _chatLobbies.FirstOrDefault(c => c.Value.GuildId == lobbyId).Value;
-            }
+            _chatLobbies.TryGetValue(lobbyId, out var value);
 
-            if (_chatLobbies.TryGetValue(lobbyId, out var value))
-            {
-                return value;
-            }
-
-            return _chatLobbies.FirstOrDefault(c => c.Key == lobbyId).Value;
-
+            return value?.LobbyType != lobbyType ? null : value;
         }
         finally
         {
@@ -99,7 +98,7 @@ public class ChatLobbyStore :IDisposable
 
             foreach (var lobby in _chatLobbies.Values)
             {
-                var player = lobby.GetPlayerByAccountId(session.PlayerAccountId);
+                var player = lobby.GetPlayerByCharacterId(session.CharacterId);
 
                 if (player != null)
                 {
@@ -120,7 +119,8 @@ public class ChatLobbyStore :IDisposable
         try
         {
             _rwLock.EnterWriteLock();
-            _chatLobbies.Remove(id, out _);
+            _chatLobbies.Remove(id, out var lobby);
+            lobby?.ServiceScope.Dispose();
         }
         finally
         {
@@ -142,9 +142,10 @@ public class ChatLobbyStore :IDisposable
 
         return sb.ToString();
     }
+
     public void Dispose()
     {
         GC.SuppressFinalize(this);
-        _rwLock?.Dispose();
+        _rwLock.Dispose();
     }
 }

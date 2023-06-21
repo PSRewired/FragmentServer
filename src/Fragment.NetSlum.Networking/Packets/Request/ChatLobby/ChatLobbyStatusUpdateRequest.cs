@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
+using Fragment.NetSlum.Core.Buffers;
 using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Networking.Attributes;
 using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Objects;
-using Fragment.NetSlum.Networking.Packets.Response.ChatLobby;
 using Fragment.NetSlum.Networking.Sessions;
 using Fragment.NetSlum.Networking.Stores;
 using Microsoft.Extensions.Logging;
@@ -28,7 +28,7 @@ public class ChatLobbyStatusUpdateRequest:BaseRequest
     {
         var cl = _chatLobbyStore.GetLobbyBySession(session);
 
-        var myChatLobbyPlayer = cl?.GetPlayerByAccountId(session.PlayerAccountId);
+        var myChatLobbyPlayer = cl?.GetPlayerByCharacterId(session.CharacterId);
 
         if (cl == null || myChatLobbyPlayer == null)
         {
@@ -36,13 +36,14 @@ public class ChatLobbyStatusUpdateRequest:BaseRequest
         }
 
         _logger.LogInformation("Player {PlayerName} sent chat lobby status update of:\n{HexDump}", session.CharacterInfo?.CharacterName, request.Data.ToHexDump());
-        session.LastStatus = request.Data.ToArray();
 
-        //We have to send out a status update to all clients in this chat room but I don't understand where that comes from?
-        cl.NotifyAllExcept(myChatLobbyPlayer, new ChatLobbyStatusUpdateResponse()
-            .SetPlayerIndex(myChatLobbyPlayer.PlayerIndex)
-            .SetLastStatus(session.LastStatus)
-            .Build());
+        var dataWithChecksum = new MemoryWriter(request.Data.Length + 2);
+        dataWithChecksum.Write(request.Checksum);
+        dataWithChecksum.Write(request.Data);
+
+        myChatLobbyPlayer.UpdateStatus(dataWithChecksum.Buffer);
+
+        _logger.LogInformation("Current Lobby status:\n{LobbyInfo}", myChatLobbyPlayer.ChatLobby.ToString());
 
         return NoResult();
     }

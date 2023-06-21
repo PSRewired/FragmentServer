@@ -1,38 +1,48 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
+using Fragment.NetSlum.Core.CommandBus;
+using Fragment.NetSlum.Core.Constants;
+using Fragment.NetSlum.Core.DependencyInjection;
+using Fragment.NetSlum.Core.Extensions;
+using Fragment.NetSlum.Networking.Events;
 using Fragment.NetSlum.Persistence.Entities;
 using Fragment.NetSlum.Networking.Objects;
+using Microsoft.Extensions.DependencyInjection;
 using ILogger = Serilog.ILogger;
 
 namespace Fragment.NetSlum.Networking.Models;
 
-public class ChatLobbyModel
+public class ChatLobbyModel : IScopeable
 {
+    public IServiceScope ServiceScope { get; set; }
+
     private const ushort MaxPlayers = 255;
 
-    public int LobbyId { get; private set; }
+    public ushort LobbyId { get; private set; }
     public string LobbyName { get; private set; }
     public ushort PlayerChatLobbyId { get; private set; }
-    public ushort GuildId { get; private set; }
+    public ChatLobbyType LobbyType { get; set; }
 
     private readonly ChatLobbyPlayer?[] _chatLobbyPlayers;
     private static ILogger Log => Serilog.Log.ForContext<ChatLobbyModel>();
     public ushort PlayerCount => (ushort)GetPlayers().Length;
     private readonly Semaphore _playerIdxLock = new(1, 1);
 
-    public ChatLobbyModel(int id, string name,ushort guildId = 0)
+    public ChatLobbyModel(ushort id, string name, ChatLobbyType lobbyType = ChatLobbyType.Default)
     {
         LobbyId = id;
         LobbyName = name;
-        _chatLobbyPlayers = new ChatLobbyPlayer[MaxPlayers];
-        GuildId = guildId;
+        _chatLobbyPlayers = new ChatLobbyPlayer[MaxPlayers + 1];
+        LobbyType = lobbyType;
     }
+
 
     public static ChatLobbyModel FromEntity(DefaultLobby lobbyEntity)
     {
-        return new ChatLobbyModel(lobbyEntity.Id, lobbyEntity.DefaultLobbyName);
+        return new ChatLobbyModel((ushort)lobbyEntity.Id, lobbyEntity.DefaultLobbyName);
     }
 
     public int AddPlayer(ChatLobbyPlayer player)
@@ -45,6 +55,7 @@ public class ChatLobbyModel
             player.ChatLobby = this;
 
             _chatLobbyPlayers[idx] = player;
+            ServiceScope.ServiceProvider.GetRequiredService<ICommandBus>().Notify(new PlayerEnteredChatLobbyEvent(player));
             return idx;
         }
         finally
@@ -69,12 +80,16 @@ public class ChatLobbyModel
             {
                 var chatPlayer = _chatLobbyPlayers[pIdx];
 
-                if (chatPlayer?.PlayerAccountId != player.PlayerAccountId)
+                if (chatPlayer?.PlayerCharacterId != player.PlayerCharacterId)
                 {
                     continue;
                 }
 
                 _chatLobbyPlayers[pIdx] = null;
+
+                ServiceScope.ServiceProvider.GetRequiredService<ICommandBus>()
+                    .Notify(new PlayerLeftChatLobbyEvent(chatPlayer))
+                    .Wait();
             }
         }
         finally
@@ -84,11 +99,11 @@ public class ChatLobbyModel
         }
     }
 
-    public ChatLobbyPlayer? GetPlayerByAccountId(int accountId)
+    public ChatLobbyPlayer? GetPlayerByCharacterId(int accountId)
     {
         foreach (var player in _chatLobbyPlayers)
         {
-            if(player?.PlayerAccountId == accountId)
+            if(player?.PlayerCharacterId == accountId)
             {
                 return player;
             }
@@ -102,11 +117,11 @@ public class ChatLobbyModel
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="messages"></param>
-    public void NotifyAllExcept(ChatLobbyPlayer sender, List<FragmentMessage> messages)
+    public void NotifyAllExcept(ChatLobbyPlayer? sender, List<FragmentMessage> messages)
     {
         foreach (var player in _chatLobbyPlayers)
         {
-            if (player == null || player.PlayerIndex == sender.PlayerIndex)
+            if (player == null || player.PlayerIndex == sender?.PlayerIndex)
             {
                 continue;
             }
@@ -116,26 +131,15 @@ public class ChatLobbyModel
     }
 
     /// <summary>
-    /// Sends message data to all players in the room except for the sender
+    /// Sends message data to all players in the room except for the player specified.
+    /// If <paramref name="sender"/> is null, the message is broadcast to everyone
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="message"></param>
-    public void NotifyAllExcept(ChatLobbyPlayer sender, FragmentMessage message)
+    public void NotifyAllExcept(ChatLobbyPlayer? sender, FragmentMessage message)
     {
+        Log.ForContext<ChatLobbyModel>().Debug("Notifying lobby {LobbyName} ({LobbyId}) with data:\n{HexDump}", LobbyName, LobbyId, message.Data.ToHexDump());
         NotifyAllExcept(sender, new List<FragmentMessage> { message });
-    }
-
-    public void NotifyAll(ChatLobbyPlayer sender, FragmentMessage message)
-    {
-        foreach (var player in _chatLobbyPlayers)
-        {
-            if (player == null)
-            {
-                continue;
-            }
-
-            player.Send(new List<FragmentMessage> { message });
-        }
     }
 
     /// <summary>
@@ -170,7 +174,7 @@ public class ChatLobbyModel
 
     private ushort GetAvailablePlayerIndex()
     {
-        for (ushort i = 0; i < _chatLobbyPlayers.Length; i++)
+        for (ushort i = 1; i < _chatLobbyPlayers.Length; i++)
         {
             if (_chatLobbyPlayers[i] == null)
             {
@@ -178,5 +182,22 @@ public class ChatLobbyModel
             }
         }
         throw new Exception("Chat lobby is full!");
+    }
+
+    public override string ToString()
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine($"===== Chat Lobby: {LobbyName} ({LobbyId} =====");
+        sb.AppendLine($"Player ChatRoom Id: {PlayerChatLobbyId}");
+        sb.AppendLine($"Lobby Type: {LobbyType}");
+        sb.AppendLine($"Player Count: {PlayerCount}");
+        sb.AppendLine("Player List:");
+
+        foreach (var player in _chatLobbyPlayers.Where(p => p != null))
+        {
+            sb.AppendLine($"\t{player!.ToString()}");
+        }
+
+        return sb.ToString();
     }
 }

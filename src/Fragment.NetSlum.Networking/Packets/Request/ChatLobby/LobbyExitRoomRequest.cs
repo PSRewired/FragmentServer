@@ -25,19 +25,20 @@ namespace Fragment.NetSlum.Networking.Packets.Request.ChatLobby
         public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
         {
             var chatLobby = _chatLobbyStore.GetLobbyBySession(session);
+            var player = chatLobby?.GetPlayerByCharacterId(session.CharacterId);
 
-            if (chatLobby != null)
+            if (player != null)
             {
-                var player = chatLobby.GetPlayerByAccountId(session.PlayerAccountId);
-                chatLobby.RemovePlayer(player);
-
+                chatLobby?.RemovePlayer(player);
             }
 
+            if (chatLobby?.PlayerCount < 1)
+            {
+                _logger.LogInformation("Removing {LobbyName} since the last player in it has left", chatLobby.LobbyName);
+                _chatLobbyStore.RemoveChatLobbyById(chatLobby.LobbyId);
+            }
 
-
-            //var chatLobby = _chatLobbyStore.GetLobby()
-            BaseResponse response = new LobbyExitResponse();
-            return ReturnSingle(response.Build());
+            return ReturnSingle(new LobbyExitResponse().Build());
         }
 
     }

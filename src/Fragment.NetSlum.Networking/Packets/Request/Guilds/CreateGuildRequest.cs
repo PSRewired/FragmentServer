@@ -19,12 +19,10 @@ namespace Fragment.NetSlum.Networking.Packets.Request.Guilds;
 public class CreateGuildRequest : BaseRequest
 {
     private readonly FragmentContext _database;
-    private readonly ChatLobbyStore _chatLobbyStore;
 
-    public CreateGuildRequest(FragmentContext database, ChatLobbyStore chatlobbystore)
+    public CreateGuildRequest(FragmentContext database)
     {
         _database = database;
-        _chatLobbyStore = chatlobbystore;
     }
 
     public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
@@ -49,8 +47,6 @@ public class CreateGuildRequest : BaseRequest
         _database.Add(guild);
         _database.SaveChanges();
 
-        ChatLobbyModel clm = new ChatLobbyModel(0, guildName, guild.Id);
-        _chatLobbyStore.AddLobby(clm);
         return Task.FromResult<ICollection<FragmentMessage>>(new[]
         {
             new CreateGuildResponse(guild.Id).Build(),

@@ -2,6 +2,7 @@ using System;
 using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Objects;
 using System.Buffers.Binary;
+using Fragment.NetSlum.Core.Buffers;
 
 namespace Fragment.NetSlum.Networking.Packets.Response.ChatLobby;
 
@@ -30,18 +31,18 @@ public class LobbyEventResponse:BaseResponse
 
     public override FragmentMessage Build()
     {
-        var bufferMemory = new Memory<byte>(new byte[_data.Length]);
-        var buffer = bufferMemory.Span;
+        var expectedIndex = _isSender ? (ushort)0xFFFF : _senderIndex;
+        var writer = new MemoryWriter(_data.Length + sizeof(ushort));
 
-        _data.CopyTo(bufferMemory);
-
-        BinaryPrimitives.WriteUInt16BigEndian(buffer[..2], !_isSender ? _senderIndex : (ushort)0xFFFF);
+        writer.Write((byte)(expectedIndex >> 8));
+        writer.Write((byte)(expectedIndex & 0xFF));
+        writer.Write(_data);
 
         return new FragmentMessage
         {
             MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataLobbyEvent,
-            Data = bufferMemory,
+            Data = writer.Buffer,
         };
     }
 }

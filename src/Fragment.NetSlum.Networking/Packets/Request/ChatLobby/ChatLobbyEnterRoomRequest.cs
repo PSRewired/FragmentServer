@@ -8,43 +8,36 @@ using Fragment.NetSlum.Networking.Stores;
 using Microsoft.Extensions.Logging;
 using System.Buffers.Binary;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Fragment.NetSlum.Networking.Models;
 using Fragment.NetSlum.Core.Constants;
+using Fragment.NetSlum.Persistence;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.ChatLobby;
 
 [FragmentPacket(MessageType.Data, OpCodes.DataLobbyEnterRoomRequest)]
-public class ChatLobbyEnterRoomRequest:BaseRequest
+public class ChatLobbyEnterRoomRequest : BaseRequest
 {
     private readonly ILogger<ChatLobbyEnterRoomRequest> _logger;
     private readonly ChatLobbyStore _chatLobbyStore;
-    public ChatLobbyEnterRoomRequest(ILogger<ChatLobbyEnterRoomRequest> logger, ChatLobbyStore chatLobbyStore)
+    private readonly FragmentContext _database;
+
+    public ChatLobbyEnterRoomRequest(ILogger<ChatLobbyEnterRoomRequest> logger, ChatLobbyStore chatLobbyStore, FragmentContext database)
     {
         _logger = logger;
         _chatLobbyStore = chatLobbyStore;
+        _database = database;
     }
 
     public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
-        ushort chatLobbyId = (ushort)(BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[..2]) -1);
-        ChatLobbyType chatType = (ChatLobbyType)(BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[2..4]));
-        var chatLobby = _chatLobbyStore.GetLobby(chatLobbyId);
+        ushort chatLobbyId = BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[..2]);
+        ChatLobbyType chatType = (ChatLobbyType)BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[2..4]);
 
-        if(chatType == ChatLobbyType.Guild)
-        {
-            chatLobbyId++;
-            chatLobby = _chatLobbyStore.GetLobby(chatLobbyId, true);
-        }
+        var chatLobby = GetOrCreateLobby(chatLobbyId, chatType);
 
-        if (chatLobby == null)
-        {
-            throw new ArgumentException($"Attempted to enter {chatLobbyId} which is not a valid chat room");
-        }
-        var myPlayer = new ChatLobbyPlayer(session);
-        chatLobby.AddPlayer(myPlayer);
-
-        // Send the current client Cound
+        // Send the current client count
         var responses = new List<FragmentMessage>
         {
             new ChatLobbyEnterRoomResponse()
@@ -52,14 +45,75 @@ public class ChatLobbyEnterRoomRequest:BaseRequest
                 .Build()
         };
 
-        // Send all client info
         foreach (var player in chatLobby.GetPlayers())
         {
             responses.Add(new ChatLobbyStatusUpdateResponse()
-                .SetLastStatus(player.TcpSession.LastStatus)
+                .SetLastStatus(player.LastStatus)
+                .SetPlayerIndex(player.PlayerIndex)
                 .Build());
         }
 
+        var myPlayer = new ChatLobbyPlayer(session);
+        chatLobby.AddPlayer(myPlayer);
+
+        _logger.LogWarning("Player {PlayerName} has entered {LobbyType} lobby {LobbyName} at player slot {PlayerIndex}",
+            myPlayer.PlayerName, chatType, chatLobby.LobbyName, myPlayer.PlayerIndex);
+
         return Task.FromResult<ICollection<FragmentMessage>>(responses);
+    }
+
+    /// <summary>
+    /// Attempts to look up the lobby by ID and type. If not found, based on the specified type, will attempt to create a new instance
+    /// of the applicable lobby.
+    /// </summary>
+    /// <param name="lobbyId"></param>
+    /// <param name="lobbyType"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException">Failed to find an acceptable lobby ID for the given type</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Invalid <paramref name="lobbyType"/> given</exception>
+    private ChatLobbyModel GetOrCreateLobby(ushort lobbyId, ChatLobbyType lobbyType)
+    {
+        var chatLobby = _chatLobbyStore.GetLobby(lobbyId, lobbyType);
+
+        if (chatLobby != null)
+        {
+            return chatLobby;
+        }
+
+        _logger.LogInformation("Chat lobby {LobbyId} ({LobbyType}) does not exist. Attempting to create it", lobbyId, lobbyType);
+
+        var newLobby = lobbyType switch
+        {
+            ChatLobbyType.Guild => CreateGuildLobby(lobbyId),
+            ChatLobbyType.Default => CreateDefaultLobby(lobbyId),
+            _ => throw new ArgumentOutOfRangeException(nameof(lobbyType), lobbyType, null)
+        };
+
+        _chatLobbyStore.AddLobby(newLobby);
+
+        return newLobby;
+    }
+
+    private ChatLobbyModel CreateDefaultLobby(ushort lobbyId)
+    {
+        var defaultLobby = _database.DefaultLobbies.FirstOrDefault(l => l.Id == lobbyId);
+        if (defaultLobby == null)
+        {
+            throw new ArgumentException($"Could not create chat lobby. {lobbyId} is not a valid default ID");
+        }
+
+        return new ChatLobbyModel((ushort)defaultLobby.Id, defaultLobby.DefaultLobbyName);
+    }
+
+    private ChatLobbyModel CreateGuildLobby(ushort lobbyId)
+    {
+        var guild = _database.Guilds.FirstOrDefault(g => g.Id == lobbyId);
+
+        if (guild == null)
+        {
+            throw new ArgumentException($"Could not create guild lobby. {lobbyId} is not a valid guild.");
+        }
+
+        return new ChatLobbyModel(guild.Id, guild.Name, ChatLobbyType.Guild);
     }
 }

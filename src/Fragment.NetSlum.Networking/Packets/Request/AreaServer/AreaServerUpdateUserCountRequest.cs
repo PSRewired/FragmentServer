@@ -1,4 +1,3 @@
-using System;
 using Fragment.NetSlum.Networking.Objects;
 using Fragment.NetSlum.Networking.Sessions;
 using Microsoft.Extensions.Logging;

@@ -35,7 +35,6 @@ public class FragmentTcpSession : TcpSession, IScopeable
     public int CharacterId { get; set; }
 
     public CharacterInfo? CharacterInfo { get; set; }
-    public byte[] LastStatus { get; set; } = Array.Empty<byte>();
     public ChatLobbyType CurrentChatLobbyType { get; set; }
     public ushort CurrentChatLobbyId { get; set; }
 
@@ -49,20 +48,25 @@ public class FragmentTcpSession : TcpSession, IScopeable
     [MethodImpl(MethodImplOptions.AggressiveOptimization | MethodImplOptions.AggressiveInlining)]
     protected override async Task OnReceived(Memory<byte> data, CancellationToken cancellationToken)
     {
-        #if (DEBUG)
+#if (DEBUG)
         _logger.LogDebug("Received packet\n{LineBreak1}\n{HexDump}\n{LineBreak2}",
             new string('=', 32),
             data.ToHexDump(),
             new string('=', 32)
         );
         _logger.LogDebug("Data Stream: {Stream}", data.Span.ToHexString());
-        #endif
+#endif
 
         try
         {
             var resp = await _packetPipeline.Handle(this, data, cancellationToken);
 
-            #if (DEBUG)
+            if (resp.Length <= 0)
+            {
+                return;
+            }
+
+#if (DEBUG)
             _logger.LogDebug("[{ClsName}] Sending packet to {SessionId}\n{LineBreak1}\n{HexDump}\n{LineBreak2}",
                 Id,
                 GetType().Name,
@@ -70,7 +74,7 @@ public class FragmentTcpSession : TcpSession, IScopeable
                 resp.Span.ToHexDump(),
                 new string('=', 32)
             );
-            #endif
+#endif
 
             Send(resp.Span);
         }
@@ -93,7 +97,20 @@ public class FragmentTcpSession : TcpSession, IScopeable
     /// <returns></returns>
     protected internal void Send(List<FragmentMessage> data)
     {
-       Send(_packetPipeline.Encode(data, CancellationToken.None).Span);
+        var respData = _packetPipeline.Encode(data, CancellationToken.None).Span;
+
+#if (DEBUG)
+        _logger.LogDebug("[{ClsName}] Manually Sending packet to {SessionId}\n{LineBreak1}\n{HexDump}\n{LineBreak2}",
+            Id,
+            GetType().Name,
+            new string('=', 32),
+            respData.ToHexDump(),
+            new string('=', 32)
+        );
+#endif
+
+        Send(respData);
+        Flush();
     }
 
     /// <summary>
@@ -115,6 +132,8 @@ public class FragmentTcpSession : TcpSession, IScopeable
             _logger.LogDebug("Disposing service scope for {ClassName}", GetType().Name);
             ServiceScope.Dispose();
         }
-        catch (ObjectDisposedException) { } // Catch and ignore error if the scope is already disposed
+        catch (ObjectDisposedException)
+        {
+        } // Catch and ignore error if the scope is already disposed
     }
 }

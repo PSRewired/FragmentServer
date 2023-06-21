@@ -9,7 +9,6 @@ using Fragment.NetSlum.Networking.Objects;
 using Fragment.NetSlum.Networking.Packets.Response.Guilds;
 using Fragment.NetSlum.Networking.Sessions;
 using Fragment.NetSlum.Persistence;
-using Microsoft.EntityFrameworkCore;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.Guilds;
 

@@ -1,3 +1,4 @@
+using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
@@ -25,19 +26,23 @@ public class LobbyEventRequest : BaseRequest
 
     public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
-        var chatLobbyPlayer = _chatLobbyStore.GetLobbyBySession(session)?.GetPlayerByAccountId(session.PlayerAccountId);
+        var chatLobbyPlayer = _chatLobbyStore.GetLobbyBySession(session)?.GetPlayerByCharacterId(session.CharacterId);
 
         if (chatLobbyPlayer == null)
         {
             throw new DataException("Could not find player reference for this session");
         }
 
+        var senderId = BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[..2]);
+        var data = request.Data[2..];
+
+        var responses = new List<FragmentMessage>();
         var response = new LobbyEventResponse()
-            .SetData(request.Data)
-            .SetSenderIndex(chatLobbyPlayer.PlayerIndex);
+            .SetData(data)
+            .SetSenderIndex(senderId);
 
         //We have to send out a status update to all clients in this chat room but I don't understand where that comes from?
-        chatLobbyPlayer.ChatLobby.NotifyAll(chatLobbyPlayer, response.Build());
+        chatLobbyPlayer.ChatLobby.NotifyAllExcept(chatLobbyPlayer, response.Build());
 
         return Task.FromResult<ICollection<FragmentMessage>>(new[] { response
             .SetIsSender(true)

@@ -35,6 +35,7 @@ public class ServerBackgroundService : BackgroundService
             startTasks.Add(Task.Run(server.Start, stoppingToken));
         }
 
+        /*
         var database = scope.ServiceProvider.GetRequiredService<FragmentContext>();
         var chatLobbyStore = scope.ServiceProvider.GetRequiredService<ChatLobbyStore>();
 
@@ -47,6 +48,7 @@ public class ServerBackgroundService : BackgroundService
         {
             chatLobbyStore.AddLobby(new ChatLobbyModel(0, "", g.Id));
         }
+        */
 
         Task.WaitAll(startTasks.ToArray(), stoppingToken);
 
