@@ -17,7 +17,7 @@ namespace Fragment.NetSlum.Networking.Models;
 
 public class ChatLobbyModel : IScopeable
 {
-    public IServiceScope ServiceScope { get; set; }
+    public IServiceScope ServiceScope { get; set; } = null!;
 
     private const ushort MaxPlayers = 255;
 
@@ -174,7 +174,7 @@ public class ChatLobbyModel : IScopeable
 
     private ushort GetAvailablePlayerIndex()
     {
-        for (ushort i = 1; i < _chatLobbyPlayers.Length; i++)
+        for (ushort i = 0; i < _chatLobbyPlayers.Length; i++)
         {
             if (_chatLobbyPlayers[i] == null)
             {

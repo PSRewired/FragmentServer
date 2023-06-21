@@ -37,11 +37,7 @@ public class ChatLobbyStatusUpdateRequest:BaseRequest
 
         _logger.LogInformation("Player {PlayerName} sent chat lobby status update of:\n{HexDump}", session.CharacterInfo?.CharacterName, request.Data.ToHexDump());
 
-        var dataWithChecksum = new MemoryWriter(request.Data.Length + 2);
-        dataWithChecksum.Write(request.Checksum);
-        dataWithChecksum.Write(request.Data);
-
-        myChatLobbyPlayer.UpdateStatus(dataWithChecksum.Buffer);
+        myChatLobbyPlayer.UpdateStatus(request.Data);
 
         _logger.LogInformation("Current Lobby status:\n{LobbyInfo}", myChatLobbyPlayer.ChatLobby.ToString());
 

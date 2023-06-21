@@ -45,6 +45,9 @@ public class ChatLobbyEnterRoomRequest : BaseRequest
                 .Build()
         };
 
+        var myPlayer = new ChatLobbyPlayer(session);
+        chatLobby.AddPlayer(myPlayer);
+
         foreach (var player in chatLobby.GetPlayers())
         {
             responses.Add(new ChatLobbyStatusUpdateResponse()
@@ -52,9 +55,6 @@ public class ChatLobbyEnterRoomRequest : BaseRequest
                 .SetPlayerIndex(player.PlayerIndex)
                 .Build());
         }
-
-        var myPlayer = new ChatLobbyPlayer(session);
-        chatLobby.AddPlayer(myPlayer);
 
         _logger.LogWarning("Player {PlayerName} has entered {LobbyType} lobby {LobbyName} at player slot {PlayerIndex}",
             myPlayer.PlayerName, chatType, chatLobby.LobbyName, myPlayer.PlayerIndex);

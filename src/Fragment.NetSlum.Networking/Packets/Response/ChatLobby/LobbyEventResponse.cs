@@ -34,8 +34,7 @@ public class LobbyEventResponse:BaseResponse
         var expectedIndex = _isSender ? (ushort)0xFFFF : _senderIndex;
         var writer = new MemoryWriter(_data.Length + sizeof(ushort));
 
-        writer.Write((byte)(expectedIndex >> 8));
-        writer.Write((byte)(expectedIndex & 0xFF));
+        writer.Write(expectedIndex);
         writer.Write(_data);
 
         return new FragmentMessage

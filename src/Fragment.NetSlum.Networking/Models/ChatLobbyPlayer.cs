@@ -12,15 +12,13 @@ namespace Fragment.NetSlum.Networking.Models;
 
 public class ChatLobbyPlayer
 {
-    public ushort PlayerIndex { get; set; }
+    protected internal ushort PlayerIndex { get; set; }
     public int PlayerCharacterId => TcpSession.CharacterId;
     public string? PlayerName => TcpSession.CharacterInfo?.CharacterName;
     public FragmentTcpSession TcpSession { get; }
     public ChatLobbyModel ChatLobby { get; set; } = null!;
 
-
-    private Memory<byte> _lastStatus = Array.Empty<byte>();
-    public Memory<byte> LastStatus { get; private set; }
+    public Memory<byte> LastStatus { get; private set; } = Array.Empty<byte>();
     private ILogger Logger => Log.ForContext<ChatLobbyPlayer>();
 
     public ChatLobbyPlayer(FragmentTcpSession session)
@@ -42,12 +40,14 @@ public class ChatLobbyPlayer
     /// <param name="status"></param>
     public void UpdateStatus(Memory<byte> status)
     {
+        //TODO: Something is buggy and is causing this to return 6 characters too many.
+        status = status[..^6];
         var statusResponse = new ChatLobbyStatusUpdateResponse()
             .SetPlayerIndex(PlayerIndex)
             .SetLastStatus(status)
             .Build();
 
-        LastStatus = statusResponse.Data;
+        LastStatus = status;
 
         ChatLobby.NotifyAllExcept(this, statusResponse);
     }

@@ -33,13 +33,9 @@ public class LobbyEventRequest : BaseRequest
             throw new DataException("Could not find player reference for this session");
         }
 
-        var senderId = BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[..2]);
-        var data = request.Data[2..];
-
-        var responses = new List<FragmentMessage>();
         var response = new LobbyEventResponse()
-            .SetData(data)
-            .SetSenderIndex(senderId);
+            .SetData(request.Data[2..])
+            .SetSenderIndex(chatLobbyPlayer.PlayerIndex);
 
         //We have to send out a status update to all clients in this chat room but I don't understand where that comes from?
         chatLobbyPlayer.ChatLobby.NotifyAllExcept(chatLobbyPlayer, response.Build());

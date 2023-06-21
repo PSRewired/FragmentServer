@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Fragment.NetSlum.Core.Constants;
 using Fragment.NetSlum.Networking.Attributes;
 using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Objects;
@@ -32,7 +33,7 @@ namespace Fragment.NetSlum.Networking.Packets.Request.ChatLobby
                 chatLobby?.RemovePlayer(player);
             }
 
-            if (chatLobby?.PlayerCount < 1)
+            if (chatLobby?.PlayerCount < 1 && chatLobby?.LobbyType == ChatLobbyType.Guild)
             {
                 _logger.LogInformation("Removing {LobbyName} since the last player in it has left", chatLobby.LobbyName);
                 _chatLobbyStore.RemoveChatLobbyById(chatLobby.LobbyId);

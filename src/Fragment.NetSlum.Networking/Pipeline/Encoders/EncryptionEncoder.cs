@@ -27,16 +27,17 @@ public class EncryptionEncoder : IMessageEncoder
         {
             var checksum = response.Checksum;
 
+            /*
             if (response.MessageType == MessageType.Data)
             {
                 var paddedBuff = new Memory<byte>(new byte[GetPaddedBufferLength(response.Data.Length)]);
                 response.Data.CopyTo(paddedBuff);
                 response.Data = paddedBuff;
             }
-
+            */
 
             // Need to copy the checksum to the payload before encryption
-            var payloadLength = response.Data.Length + 2;
+            var payloadLength = GetPaddedBufferLength(response.Data.Length + 2);
 
             using var bufferOwner = MemoryPool<byte>.Shared.Rent(payloadLength);
             var buffer = bufferOwner.Memory.Span;
@@ -59,11 +60,6 @@ public class EncryptionEncoder : IMessageEncoder
     /// <returns></returns>
     private static int GetPaddedBufferLength(int dataLength)
     {
-        while ((dataLength + 2 & 7) != 0)
-        {
-            dataLength++;
-        }
-
-        return dataLength;
+        return (dataLength + 7) & ~7;
     }
 }
