@@ -11,7 +11,7 @@ able to provide us with the steps used in order to reproduce the problem. You ma
 track new features that you which to see implemented or plan to implement yourself.
 
 Issues filed for the following reasons will be ignored/closed:
-- Generalized questions, including by not limited to software support, installation support
+- Generalized questions including (but not limited to) software support, installation support
 - Off Topic discussions that are not related to this repository or the information within it
 
 ## Contributing Code or Documentation Changes
