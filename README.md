@@ -23,4 +23,4 @@ A huge thanks to the following developers who worked on the following projects:
 
 - [lobbyemu](https://github.com/Lord-Ptolemy/lobbyemu) -- The original fragment server written in C/C++
 - [FragmentServerWV](https://github.com/zeroKilo/FragmentServerWV) -- The original port of the server into C#
-- [FragmentServer_netCore](https://github.com/Zackmon/FragmentNetslumServer)https://github.com/Zackmon/FragmentNetslumServer -- A more recent port of the server into C# by Zackmon
+- [FragmentServer_netCore](https://github.com/Zackmon/FragmentNetslumServer) -- A more recent port of the server into C# by Zackmon
