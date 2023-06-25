@@ -1,9 +1,7 @@
-using System;
 using System.Buffers;
 using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.IO;
-using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Crypto;
 using Fragment.NetSlum.Networking.Objects;
 using Microsoft.Extensions.Logging;

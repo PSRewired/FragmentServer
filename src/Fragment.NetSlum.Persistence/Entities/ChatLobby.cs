@@ -14,7 +14,7 @@ public class ChatLobby : IConfigurableEntity<ChatLobby>
     [MySqlCharSet("sjis")]
     [MySqlCollation("sjis_japanese_ci")]
     [MaxLength(30)]
-    public string ChatLobbyName { get; set; }
+    public required string ChatLobbyName { get; set; }
     public bool DefaultChannel { get; set; } = false;
     public bool PlayerLobby { get; set; } = false;
     public bool GuildLobby { get; set; } = false;

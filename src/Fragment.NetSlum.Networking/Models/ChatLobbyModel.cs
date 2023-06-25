@@ -3,23 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using Fragment.NetSlum.Core.CommandBus;
 using Fragment.NetSlum.Core.Constants;
-using Fragment.NetSlum.Core.DependencyInjection;
 using Fragment.NetSlum.Core.Extensions;
-using Fragment.NetSlum.Networking.Events;
 using Fragment.NetSlum.Persistence.Entities;
 using Fragment.NetSlum.Networking.Objects;
 using Fragment.NetSlum.Networking.Packets.Response.ChatLobby;
-using Microsoft.Extensions.DependencyInjection;
 using ILogger = Serilog.ILogger;
 
 namespace Fragment.NetSlum.Networking.Models;
 
-public class ChatLobbyModel : IScopeable
+public class ChatLobbyModel
 {
-    public IServiceScope ServiceScope { get; set; } = null!;
-
     private const ushort MaxPlayers = 255;
 
     public ushort LobbyId { get; private set; }
@@ -56,7 +50,6 @@ public class ChatLobbyModel : IScopeable
             player.ChatLobby = this;
 
             _chatLobbyPlayers[idx] = player;
-            ServiceScope.ServiceProvider.GetRequiredService<ICommandBus>().Notify(new PlayerEnteredChatLobbyEvent(player));
             return idx;
         }
         finally
@@ -95,9 +88,6 @@ public class ChatLobbyModel : IScopeable
 
                 NotifyAllExcept(null,
                     new ClientLeftChatLobbyResponse(chatPlayer.PlayerIndex).Build());
-                ServiceScope.ServiceProvider.GetRequiredService<ICommandBus>()
-                    .Notify(new PlayerLeftChatLobbyEvent(chatPlayer))
-                    .Wait();
             }
         }
         finally

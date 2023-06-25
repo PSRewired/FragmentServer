@@ -4,7 +4,6 @@ using Fragment.NetSlum.Core.Constants;
 using Fragment.NetSlum.Networking.Attributes;
 using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Objects;
-using Fragment.NetSlum.Networking.Packets.Response;
 using Fragment.NetSlum.Networking.Sessions;
 using Fragment.NetSlum.Networking.Stores;
 using Microsoft.Extensions.Logging;

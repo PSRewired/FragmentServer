@@ -1,7 +1,6 @@
 using System;
 using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Objects;
-using System.Buffers.Binary;
 using Fragment.NetSlum.Core.Buffers;
 
 namespace Fragment.NetSlum.Networking.Packets.Response.ChatLobby;

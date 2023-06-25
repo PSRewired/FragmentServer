@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading;
 using Fragment.NetSlum.Core.Constants;
 using Fragment.NetSlum.Networking.Sessions;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Fragment.NetSlum.Networking.Stores;
 
@@ -14,12 +13,6 @@ public class ChatLobbyStore : IDisposable
 {
     private readonly Dictionary<ushort, ChatLobbyModel> _chatLobbies = new();
     private readonly ReaderWriterLockSlim _rwLock = new();
-    private readonly IServiceScopeFactory _serviceScopeFactory;
-
-    public ChatLobbyStore(IServiceScopeFactory serviceScopeFactory)
-    {
-        _serviceScopeFactory = serviceScopeFactory;
-    }
 
     public IReadOnlyCollection<ChatLobbyModel> ChatLobbies
     {
@@ -44,7 +37,6 @@ public class ChatLobbyStore : IDisposable
         {
             _rwLock.EnterWriteLock();
             _chatLobbies.TryAdd(lobby.LobbyId, lobby);
-            lobby.ServiceScope = _serviceScopeFactory.CreateScope();
         }
         finally
         {
@@ -130,8 +122,7 @@ public class ChatLobbyStore : IDisposable
         try
         {
             _rwLock.EnterWriteLock();
-            _chatLobbies.Remove(id, out var lobby);
-            lobby?.ServiceScope.Dispose();
+            _chatLobbies.Remove(id, out _);
         }
         finally
         {
@@ -143,7 +134,7 @@ public class ChatLobbyStore : IDisposable
     {
         var sb = new StringBuilder("============ Chat Lobby Store ============");
 
-        foreach (var (c, cb) in _chatLobbies)
+        foreach (var (_, cb) in _chatLobbies)
         {
             sb.AppendLine(cb.ToString());
             sb.AppendLine("--------");
