@@ -50,6 +50,11 @@ public class ChatLobbyEnterRoomRequest : BaseRequest
 
         foreach (var player in chatLobby.GetPlayers())
         {
+            if (myPlayer.PlayerIndex == player.PlayerIndex)
+            {
+                continue;
+            }
+
             responses.Add(new ChatLobbyStatusUpdateResponse()
                 .SetLastStatus(player.LastStatus)
                 .SetPlayerIndex(player.PlayerIndex)

@@ -10,6 +10,7 @@ using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Networking.Events;
 using Fragment.NetSlum.Persistence.Entities;
 using Fragment.NetSlum.Networking.Objects;
+using Fragment.NetSlum.Networking.Packets.Response.ChatLobby;
 using Microsoft.Extensions.DependencyInjection;
 using ILogger = Serilog.ILogger;
 
@@ -69,6 +70,11 @@ public class ChatLobbyModel : IScopeable
         return _chatLobbyPlayers.Where(p => p != null).ToArray()!;
     }
 
+    public ChatLobbyPlayer? GetPlayer(int idx)
+    {
+        return _chatLobbyPlayers.FirstOrDefault(p => p?.PlayerIndex == idx);
+    }
+
     public void RemovePlayer(ChatLobbyPlayer player)
     {
         _playerIdxLock.WaitOne();
@@ -87,6 +93,8 @@ public class ChatLobbyModel : IScopeable
 
                 _chatLobbyPlayers[pIdx] = null;
 
+                NotifyAllExcept(null,
+                    new ClientLeftChatLobbyResponse(chatPlayer.PlayerIndex).Build());
                 ServiceScope.ServiceProvider.GetRequiredService<ICommandBus>()
                     .Notify(new PlayerLeftChatLobbyEvent(chatPlayer))
                     .Wait();

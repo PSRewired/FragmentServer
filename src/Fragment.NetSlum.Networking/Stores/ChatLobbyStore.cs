@@ -74,13 +74,24 @@ public class ChatLobbyStore : IDisposable
         }
     }
 
-    public ChatLobbyModel? GetLobby(ushort lobbyId, ChatLobbyType lobbyType = ChatLobbyType.Default)
+    /// <summary>
+    /// Gets a lobby by it's ID
+    /// </summary>
+    /// <param name="lobbyId"></param>
+    /// <param name="lobbyType">When Any, the function will not check the type of lobby</param>
+    /// <returns></returns>
+    public ChatLobbyModel? GetLobby(ushort lobbyId, ChatLobbyType lobbyType = ChatLobbyType.Any)
     {
         try
         {
             _rwLock.EnterReadLock();
 
             _chatLobbies.TryGetValue(lobbyId, out var value);
+
+            if (lobbyType == ChatLobbyType.Any)
+            {
+                return value;
+            }
 
             return value?.LobbyType != lobbyType ? null : value;
         }

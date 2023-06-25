@@ -18,7 +18,7 @@ public class ChatLobbyPlayer
     public FragmentTcpSession TcpSession { get; }
     public ChatLobbyModel ChatLobby { get; set; } = null!;
 
-    public Memory<byte> LastStatus { get; private set; } = Array.Empty<byte>();
+    public Memory<byte> LastStatus { get; set; } = Array.Empty<byte>();
     private ILogger Logger => Log.ForContext<ChatLobbyPlayer>();
 
     public ChatLobbyPlayer(FragmentTcpSession session)
@@ -42,6 +42,7 @@ public class ChatLobbyPlayer
     {
         //TODO: Something is buggy and is causing this to return 6 characters too many.
         status = status[..^6];
+
         var statusResponse = new ChatLobbyStatusUpdateResponse()
             .SetPlayerIndex(PlayerIndex)
             .SetLastStatus(status)
