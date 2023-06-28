@@ -157,7 +157,7 @@ public class GuildLoggedInMembersResponse : BaseResponse
         var leaderNameBytes = _leaderName.ToShiftJis();
 
         var writer = new MemoryWriter(sizeof(ushort) * 8 + sizeof(uint) * 4 + _guildEmblem.Length + nameBytes.Length +
-                                      descriptionBytes.Length + timestampBytes.Length + leaderNameBytes.Length + 2);
+                                      descriptionBytes.Length + timestampBytes.Length + leaderNameBytes.Length + 4);
 
         writer.Write(nameBytes);
         writer.Write(timestampBytes);
