@@ -6,10 +6,17 @@ by the PSRewired closed-source Medius server.
 ___
 
 ## Resources and Documentation
+
+### Development and General Information
 The `docs/` directory within this repo documents various aspects of Fragment and is constantly being updated.
 The documentation is structured for `mkdocs` and can be rendered in the browser, or viewed by a markdown editor of your choice.
 
 If you wish to view the docs here on Github, you can click [Here](docs/index.md)
+
+### API Documentation
+The included REST API documentation is available in OpenApi V3 specification via the following routes on the server:
+- /api/docs
+- /swagger/v1/swagger.json
 
 ## Contributors
 A huge thanks to the following people who contribute to this project!
