@@ -30,6 +30,10 @@ public class GuildLoggedInMembersResponse : BaseResponse
     private uint _goldCount;
     private uint _gpCount;
 
+    private uint _numberJoined;
+    private uint _generalItemsAvailable;
+    private uint _memberItemsAvailable;
+
     public GuildLoggedInMembersResponse SetGuildName(string name)
     {
         _guildName = name;
@@ -149,6 +153,27 @@ public class GuildLoggedInMembersResponse : BaseResponse
         return this;
     }
 
+    public GuildLoggedInMembersResponse SetNumberJoined(uint num)
+    {
+        _numberJoined = num;
+
+        return this;
+    }
+
+    public GuildLoggedInMembersResponse SetMemberItemsAvailable(uint items)
+    {
+        _memberItemsAvailable = items;
+
+        return this;
+    }
+
+    public GuildLoggedInMembersResponse SetGeneralItemsAvailable(uint items)
+    {
+        _generalItemsAvailable = items;
+
+        return this;
+    }
+
     public override FragmentMessage Build()
     {
         var nameBytes = _guildName.ToShiftJis();
@@ -156,12 +181,18 @@ public class GuildLoggedInMembersResponse : BaseResponse
         var timestampBytes = _createdAt.ToString("yyyy/MM/dd").ToShiftJis();
         var leaderNameBytes = _leaderName.ToShiftJis();
 
-        var writer = new MemoryWriter(sizeof(ushort) * 8 + sizeof(uint) * 4 + _guildEmblem.Length + nameBytes.Length +
-                                      descriptionBytes.Length + timestampBytes.Length + leaderNameBytes.Length + 4);
+        var writer = new MemoryWriter(sizeof(ushort) * 8 +
+                                      sizeof(uint) * 7 +
+                                      _guildEmblem.Length +
+                                      nameBytes.Length +
+                                      descriptionBytes.Length +
+                                      timestampBytes.Length +
+                                      leaderNameBytes.Length);
 
         writer.Write(nameBytes);
         writer.Write(timestampBytes);
         writer.Write(leaderNameBytes);
+
         writer.Write(_memberCount);
         writer.Write(_numTwinBlades);
         writer.Write(_numBladeMasters);
@@ -170,18 +201,26 @@ public class GuildLoggedInMembersResponse : BaseResponse
         writer.Write(_numLongArms);
         writer.Write(_numWaveMasters);
         writer.Write(_averageLevel);
+
         writer.Write(_goldCount);
         writer.Write(_silverCount);
         writer.Write(_bronzeCount);
         writer.Write(_gpCount);
+
         writer.Write(descriptionBytes);
         writer.Write(_guildEmblem);
-        writer.Write<short>(0x00);
+
+        // Guild Scale
+        writer.Write(_memberItemsAvailable);
+        writer.Write(_generalItemsAvailable);
+        writer.Write(_numberJoined);
+
+
         return new FragmentMessage
         {
             MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataGuildLoggedInMembersResponse,
-            Data = writer.Buffer,
+            Data = writer.Buffer, //This is probably wrong, but it does stop the TLB miss.
         };
     }
 }

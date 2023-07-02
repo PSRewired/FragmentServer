@@ -34,6 +34,10 @@ public class GetGuildLoggedInMembersRequest : BaseRequest
             .Include(g => g.Stats)
             .First(g => g.Id == guildId);
 
+        var guildShopInfoQuery = _database.GuildShopItems
+            .AsNoTracking()
+            .Where(gs => gs.GuildId == guildId);
+
         return Task.FromResult<ICollection<FragmentMessage>>(new[]
         {
             new GuildLoggedInMembersResponse()
@@ -54,7 +58,9 @@ public class GetGuildLoggedInMembersRequest : BaseRequest
                 .SetWaveMasterCount((ushort)guild.Members.Count(m => m.Class == CharacterClass.WaveMaster))
                 .SetHeavyBladeCount((ushort)guild.Members.Count(m => m.Class == CharacterClass.HeavyBlade))
                 .SetAverageLevel((ushort)(guild.Members.Sum(m => m.CurrentLevel) / guild.Members.Count))
-
+                .SetGeneralItemsAvailable((uint)guildShopInfoQuery.Count(gs => gs.AvailableForGeneral))
+                .SetMemberItemsAvailable((uint)guildShopInfoQuery.Count(gs => gs.AvailableForMember))
+                .SetNumberJoined(0) //TODO: I have no idea what this is actually supposed to represent in the 'guild scale' section of the stats..
                 .Build()
         });
     }
