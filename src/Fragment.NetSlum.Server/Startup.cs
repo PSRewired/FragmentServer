@@ -1,3 +1,4 @@
+using System;
 using System.Data;
 using System.Text;
 using System.Text.Json;
@@ -99,8 +100,13 @@ public class Startup
             ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
         });
 
+        app.UseStaticFiles();
         app.UseOpenApi();
-        app.UseSwaggerUi3(opt => opt.Path = "/api/docs");
+        app.UseSwaggerUi3(opt =>
+        {
+            opt.Path = "/api/docs";
+            opt.CustomStylesheetPath = "/swagger/css/ui.css";
+        });
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllerRoute(
