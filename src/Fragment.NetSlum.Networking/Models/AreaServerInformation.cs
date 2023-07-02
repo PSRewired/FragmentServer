@@ -15,6 +15,7 @@ public class AreaServerInformation
     public ushort CurrentPlayerCount { get;set; }
     public Memory<byte> Detail { get; set; } = Array.Empty<byte>();
     public IPEndPoint? ConnectionEndpoint { get; set; }
+    public DateTime ActiveSince => DateTime.UtcNow;
 
     public override string ToString()
     {

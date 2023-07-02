@@ -1,5 +1,7 @@
 using System.Data;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Networking.Extensions;
 using Fragment.NetSlum.Networking.Stores;
@@ -18,6 +20,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 
 namespace Fragment.NetSlum.Server;
 
@@ -41,6 +44,16 @@ public class Startup
         }
 
         services
+            .Configure<JsonSerializerOptions>(opt =>
+            {
+                opt.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+                opt.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            })
+            .AddRouting(opt => opt.LowercaseUrls = true)
+            .AddEndpointsApiExplorer()
+            .AddControllers();
+
+        services
             .AddDbContext<FragmentContext>((provider, opt) =>
             {
                 opt.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
@@ -60,6 +73,12 @@ public class Startup
 
         services.AddCommandBus(typeof(Startup), typeof(Networking.Entrypoint));
         services.AddAutoMapper(typeof(Startup));
+        services.AddOpenApiDocument(doc =>
+        {
+            doc.Version = "v1";
+            doc.Title = "Fragment.Netslum";
+            doc.Description = "REST API that provides information from the .hack//Fragment server";
+        });
 
         services.AddSingleton<ImageConverter>();
 
@@ -74,12 +93,24 @@ public class Startup
 
     public void Configure(IApplicationBuilder app, IHostEnvironment env)
     {
+        app.UseRouting();
         app.UseHealthChecks("/health", new HealthCheckOptions
         {
             ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
         });
 
+        app.UseOpenApi();
+        app.UseSwaggerUi3(opt => opt.Path = "/api/docs");
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
+        });
+
         // Register additional encodings, since dotnet core only supports ASCII, ISO-8859, and UTF by default
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
+        Log.ForContext<Program>().Warning("Server is live!");
     }
 }

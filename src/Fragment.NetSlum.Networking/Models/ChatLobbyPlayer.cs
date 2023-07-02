@@ -20,6 +20,7 @@ public class ChatLobbyPlayer
 
     public Memory<byte> LastStatus { get; set; } = Array.Empty<byte>();
     private ILogger Logger => Log.ForContext<ChatLobbyPlayer>();
+    public DateTime JoinedAt = DateTime.UtcNow;
 
     public ChatLobbyPlayer(FragmentTcpSession session)
     {
