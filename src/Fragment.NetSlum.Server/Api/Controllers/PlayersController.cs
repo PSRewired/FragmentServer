@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
@@ -96,6 +97,29 @@ public class PlayersController : ControllerBase
         foreach (var stats in playerStats)
         {
             yield return _mapper.Map<PlayerStats>(stats);
+        }
+    }
+
+    /// <summary>
+    /// Retrieves a list of characters based on a case-insensitive search of their name
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    [HttpGet("search")]
+    public IEnumerable<PlayerInfo> SearchCharactersByName(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            yield break;
+        }
+
+        var characters = _database.Characters
+            .AsNoTracking()
+            .Where(c => c.CharacterName.Contains(name));
+
+        foreach (var character in characters)
+        {
+            yield return _mapper.Map<PlayerInfo>(character);
         }
     }
 }
