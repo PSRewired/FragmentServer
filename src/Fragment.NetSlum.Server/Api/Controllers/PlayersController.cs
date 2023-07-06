@@ -32,13 +32,18 @@ public class PlayersController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public PagedResult<PlayerInfo> GetAllPlayers(int page = 1, int pageSize = 50)
+    public PagedResult<PlayerInfo> GetAllPlayers(int page = 1, int pageSize = 50, string? characterName = null)
     {
         var guilds = _database.Characters
             .AsNoTracking()
             .Include(g => g.CharacterStats)
             .OrderBy(g => g.Id)
             .Paginate(page, pageSize);
+
+        if (!string.IsNullOrWhiteSpace(characterName))
+        {
+            guilds = guilds.Where(c => c.CharacterName.Contains(characterName));
+        }
 
         var guildCount = _database.Guilds.Count();
 
@@ -97,29 +102,6 @@ public class PlayersController : ControllerBase
         foreach (var stats in playerStats)
         {
             yield return _mapper.Map<PlayerStats>(stats);
-        }
-    }
-
-    /// <summary>
-    /// Retrieves a list of characters based on a case-insensitive search of their name
-    /// </summary>
-    /// <param name="name"></param>
-    /// <returns></returns>
-    [HttpGet("search")]
-    public IEnumerable<PlayerInfo> SearchCharactersByName(string name)
-    {
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            yield break;
-        }
-
-        var characters = _database.Characters
-            .AsNoTracking()
-            .Where(c => c.CharacterName.Contains(name));
-
-        foreach (var character in characters)
-        {
-            yield return _mapper.Map<PlayerInfo>(character);
         }
     }
 }

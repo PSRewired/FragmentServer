@@ -80,6 +80,7 @@ public class Startup
             doc.Title = "Fragment.Netslum";
             doc.Description = "REST API that provides information from the .hack//Fragment server";
         });
+        services.AddCors();
 
         services.AddSingleton<ImageConverter>();
 
@@ -95,6 +96,13 @@ public class Startup
     public void Configure(IApplicationBuilder app, IHostEnvironment env)
     {
         app.UseRouting();
+        app.UseCors(opt =>
+        {
+            opt.AllowAnyHeader();
+            opt.AllowAnyMethod();
+            opt.AllowAnyOrigin();
+        });
+
         app.UseHealthChecks("/health", new HealthCheckOptions
         {
             ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,

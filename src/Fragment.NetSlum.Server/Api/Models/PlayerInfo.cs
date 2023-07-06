@@ -4,6 +4,7 @@ namespace Fragment.NetSlum.Server.Api.Models;
 
 public class PlayerInfo
 {
+    public int Id { get; set; }
     public string CharacterName { get; set; } = default!;
     public CharacterClass Class { get; set; }
     public ushort? GuildId { get; set; }
@@ -18,4 +19,5 @@ public class PlayerInfo
     public ushort SilverCoinCount { get; set; }
     public ushort BronzeCoinCount { get; set; }
     public uint ModelId { get; set; }
+    public string AvatarId { get; set; }
 }
