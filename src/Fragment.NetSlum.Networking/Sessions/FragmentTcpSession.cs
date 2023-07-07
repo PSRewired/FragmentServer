@@ -11,6 +11,7 @@ using Fragment.NetSlum.Core.Models;
 using Fragment.NetSlum.Networking.Models;
 using Fragment.NetSlum.Networking.Objects;
 using Fragment.NetSlum.Networking.Pipeline;
+using Fragment.NetSlum.Networking.Stores;
 using Fragment.NetSlum.TcpServer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -157,6 +158,8 @@ public class FragmentTcpSession : TcpSession, IScopeable
 
         try
         {
+            ServiceScope.ServiceProvider.GetRequiredService<ChatLobbyStore>().RemoveSession(this);
+
             _logger.LogDebug("Disposing service scope for {ClassName}", GetType().Name);
             ServiceScope.Dispose();
         }

@@ -3,6 +3,7 @@ using System;
 using Fragment.NetSlum.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Fragment.NetSlum.Persistence.Migrations
 {
     [DbContext(typeof(FragmentContext))]
-    partial class FragmentContextModelSnapshot : ModelSnapshot
+    [Migration("20230707151942_ChatLobbyTypes")]
+    partial class ChatLobbyTypes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -425,12 +428,6 @@ namespace Fragment.NetSlum.Persistence.Migrations
                             Id = 2,
                             ChatLobbyName = "Main 2",
                             LobbyType = "Default"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ChatLobbyName = "General",
-                            LobbyType = "Player"
                         });
                 });
 

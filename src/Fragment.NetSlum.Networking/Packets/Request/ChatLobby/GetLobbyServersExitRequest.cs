@@ -13,6 +13,6 @@ public class GetLobbyServersExitRequest : BaseRequest
 {
     public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
-        return ReturnSingle(new LobbyGetServersResponse().Build());
+        return ReturnSingle(new LobbyGetServersExitResponse().Build());
     }
 }

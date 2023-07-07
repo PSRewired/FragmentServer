@@ -34,6 +34,8 @@ public class ChatLobbyPlayer
     /// </summary>
     public Memory<byte> LastStatus { get; set; } = Array.Empty<byte>();
 
+    public DateTime LastStatusUpdateReceivedAt { get; private set; } = DateTime.UtcNow;
+
     /// <summary>
     /// When a guild invite is sent to this player, this field is populated with the guild ID that
     /// the invite came from
@@ -79,6 +81,7 @@ public class ChatLobbyPlayer
             .Build();
 
         LastStatus = status;
+        LastStatusUpdateReceivedAt = DateTime.UtcNow;
 
         ChatLobby.NotifyAllExcept(this, statusResponse);
     }

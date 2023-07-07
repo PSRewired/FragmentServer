@@ -36,6 +36,11 @@ public class ChatLobbyModel
     /// </summary>
     public ushort PlayerCount => (ushort)GetPlayers().Length;
 
+    /// <summary>
+    /// The password required to enter the room. Defaults to <see cref="string.Empty" />
+    /// </summary>
+    public string Password { get; set; } = string.Empty;
+
     private readonly ChatLobbyPlayer?[] _chatLobbyPlayers;
     private static ILogger Log => Serilog.Log.ForContext<ChatLobbyModel>();
     private readonly Semaphore _playerIdxLock = new(1, 1);
@@ -58,6 +63,13 @@ public class ChatLobbyModel
         try
         {
             _playerIdxLock.WaitOne();
+
+            // If this player already exists, just update their record at the current index
+            if (GetPlayerByCharacterId(player.PlayerCharacterId) != null)
+            {
+                return player.PlayerIndex;
+            }
+
             var idx = GetAvailablePlayerIndex();
             player.PlayerIndex = idx;
             player.ChatLobby = this;
@@ -217,7 +229,7 @@ public class ChatLobbyModel
     public override string ToString()
     {
         var sb = new StringBuilder();
-        sb.AppendLine($"===== Chat Lobby: {LobbyName} ({LobbyId} =====");
+        sb.AppendLine($"===== Chat Lobby: {LobbyName} ({LobbyId}) =====");
         sb.AppendLine($"Lobby Type: {LobbyType}");
         sb.AppendLine($"Player Count: {PlayerCount}");
         sb.AppendLine("Player List:");

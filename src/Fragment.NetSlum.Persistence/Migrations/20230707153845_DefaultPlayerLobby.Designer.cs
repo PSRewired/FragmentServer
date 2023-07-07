@@ -3,6 +3,7 @@ using System;
 using Fragment.NetSlum.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Fragment.NetSlum.Persistence.Migrations
 {
     [DbContext(typeof(FragmentContext))]
-    partial class FragmentContextModelSnapshot : ModelSnapshot
+    [Migration("20230707153845_DefaultPlayerLobby")]
+    partial class DefaultPlayerLobby
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

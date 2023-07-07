@@ -1,7 +1,9 @@
+using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Fragment.NetSlum.Core.Constants;
 
 namespace Fragment.NetSlum.Persistence.Entities;
 
@@ -15,23 +17,35 @@ public class ChatLobby : IConfigurableEntity<ChatLobby>
     [MySqlCollation("sjis_japanese_ci")]
     [MaxLength(30)]
     public required string ChatLobbyName { get; set; }
-    public bool DefaultChannel { get; set; } = false;
-    public bool PlayerLobby { get; set; } = false;
-    public bool GuildLobby { get; set; } = false;
+
+    public ChatLobbyType LobbyType { get; set; } = ChatLobbyType.Default;
 
     public void Configure(EntityTypeBuilder<ChatLobby> entityBuilder)
     {
+        // Store enum values as strings in the database
+        entityBuilder
+            .Property(e => e.LobbyType)
+            .HasConversion(
+                v => v.ToString(),
+                v => (ChatLobbyType)Enum.Parse(typeof(ChatLobbyType), v));
+
         entityBuilder.HasData(new ChatLobby
         {
             Id = 1,
             ChatLobbyName = "Main",
-            DefaultChannel = true,
+            LobbyType = ChatLobbyType.Default,
         });
         entityBuilder.HasData(new ChatLobby
         {
             Id = 2,
             ChatLobbyName = "Main 2",
-            DefaultChannel = true,
+            LobbyType = ChatLobbyType.Default,
+        });
+        entityBuilder.HasData(new ChatLobby
+        {
+            Id = 3,
+            ChatLobbyName = "General",
+            LobbyType = ChatLobbyType.Player,
         });
     }
 }

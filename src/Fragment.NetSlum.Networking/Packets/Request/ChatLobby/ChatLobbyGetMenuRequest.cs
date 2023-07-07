@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Fragment.NetSlum.Core.Constants;
 using Fragment.NetSlum.Networking.Attributes;
 using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Objects;
@@ -26,17 +27,19 @@ public class ChatLobbyGetMenuRequest : BaseRequest
     public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         //var channels = _database.ChatLobbies.Where(c => c.DefaultChannel == true).ToList();
-        var chatLobbies = _chatLobbyStore.ChatLobbies.Where(c => c.LobbyId != 0).ToList();
+        var chatLobbies = _chatLobbyStore.GetLobbiesByType(ChatLobbyType.Default);
         var responses = new List<FragmentMessage>
         {
             //Add the ChatLobby count response to the collection list
-            new ChatLobbyCountResponse().SetChatLobbyCount((ushort)chatLobbies.Count).Build(),
+            new ChatLobbyCountResponse()
+                .SetChatLobbyCount((ushort)chatLobbies.Length)
+                .Build(),
         };
 
         //Build the Chat Lobby List
         responses.AddRange(chatLobbies.Select(c => new ChatLobbyEntryResponse()
             .SetChatLobbyName(c.LobbyName)
-            .SetChatLobbyId((ushort)c.LobbyId)
+            .SetChatLobbyId(c.LobbyId)
             .SetClientCount(c.PlayerCount)
             .Build()));
 

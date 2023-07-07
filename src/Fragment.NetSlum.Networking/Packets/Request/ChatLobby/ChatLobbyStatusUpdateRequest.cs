@@ -1,3 +1,5 @@
+using System;
+using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
@@ -24,7 +26,8 @@ public class ChatLobbyStatusUpdateRequest:BaseRequest
 
     public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
-        var cl = _chatLobbyStore.GetLobbyBySession(session);
+        var lobbyId = BitConverter.ToUInt16(request.Data[..2].Span);
+        var cl = _chatLobbyStore.GetLobby(lobbyId);
 
         var myChatLobbyPlayer = cl?.GetPlayerByCharacterId(session.CharacterId);
 

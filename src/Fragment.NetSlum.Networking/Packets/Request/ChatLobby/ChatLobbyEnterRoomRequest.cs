@@ -9,9 +9,11 @@ using Microsoft.Extensions.Logging;
 using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Authentication;
 using System.Threading.Tasks;
 using Fragment.NetSlum.Networking.Models;
 using Fragment.NetSlum.Core.Constants;
+using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Persistence;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.ChatLobby;
@@ -34,6 +36,7 @@ public class ChatLobbyEnterRoomRequest : BaseRequest
     {
         ushort chatLobbyId = BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[..2]);
         ChatLobbyType chatType = (ChatLobbyType)BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[2..4]);
+        string roomPassword = request.Data.Span[4..].ToShiftJisString();
 
         var chatLobby = GetOrCreateLobby(chatLobbyId, chatType);
 
@@ -45,21 +48,24 @@ public class ChatLobbyEnterRoomRequest : BaseRequest
                 .Build()
         };
 
-        var myPlayer = new ChatLobbyPlayer(session);
-        chatLobby.AddPlayer(myPlayer);
+        if (chatType == ChatLobbyType.Player && roomPassword != chatLobby.Password)
+        {
+            //TODO: Fix this to return an error response instead of disconnecting the player
+            //throw new AuthenticationException(
+                //$"Invalid password specified by {session.CharacterInfo!.CharacterName} while entering room {chatLobby.LobbyName}");
+        }
+
 
         foreach (var player in chatLobby.GetPlayers())
         {
-            if (myPlayer.PlayerIndex == player.PlayerIndex)
-            {
-                continue;
-            }
-
             responses.Add(new ChatLobbyStatusUpdateResponse()
                 .SetLastStatus(player.LastStatus)
                 .SetPlayerIndex(player.PlayerIndex)
                 .Build());
         }
+
+        var myPlayer = new ChatLobbyPlayer(session);
+        chatLobby.AddPlayer(myPlayer);
 
         _logger.LogWarning("Player {PlayerName} has entered {LobbyType} lobby {LobbyName} at player slot {PlayerIndex}",
             myPlayer.PlayerName, chatType, chatLobby.LobbyName, myPlayer.PlayerIndex);
@@ -101,13 +107,13 @@ public class ChatLobbyEnterRoomRequest : BaseRequest
 
     private ChatLobbyModel CreateDefaultLobby(ushort lobbyId)
     {
-        var defaultLobby = _database.DefaultLobbies.FirstOrDefault(l => l.Id == lobbyId);
+        var defaultLobby = _database.ChatLobbies.FirstOrDefault(l => l.Id == lobbyId && l.LobbyType == ChatLobbyType.Default);
         if (defaultLobby == null)
         {
             throw new ArgumentException($"Could not create chat lobby. {lobbyId} is not a valid default ID");
         }
 
-        return new ChatLobbyModel((ushort)defaultLobby.Id, defaultLobby.DefaultLobbyName);
+        return new ChatLobbyModel((ushort)defaultLobby.Id, defaultLobby.ChatLobbyName);
     }
 
     private ChatLobbyModel CreateGuildLobby(ushort lobbyId)

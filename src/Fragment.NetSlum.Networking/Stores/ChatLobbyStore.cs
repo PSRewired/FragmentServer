@@ -66,6 +66,29 @@ public class ChatLobbyStore : IDisposable
         }
     }
 
+    public ChatLobbyModel[] GetLobbiesByType(ChatLobbyType type = ChatLobbyType.Any)
+    {
+        try
+        {
+            _rwLock.EnterReadLock();
+            var lobbies = _chatLobbies.Values
+                .ToArray();
+
+            if (type == ChatLobbyType.Any)
+            {
+                return lobbies;
+            }
+
+            return lobbies
+                .Where(l => l.LobbyType == type)
+                .ToArray();
+        }
+        finally
+        {
+            _rwLock.ExitReadLock();
+        }
+    }
+
     /// <summary>
     /// Gets a lobby by it's ID
     /// </summary>
@@ -139,6 +162,25 @@ public class ChatLobbyStore : IDisposable
         }
 
         return null;
+    }
+
+    /// <summary>
+    /// Removes a given session from all lobbies they exist in
+    /// </summary>
+    /// <param name="session"></param>
+    public void RemoveSession(FragmentTcpSession session)
+    {
+        foreach (var lobby in _chatLobbies.Values)
+        {
+            var player = lobby.GetPlayerByCharacterId(session.CharacterId);
+
+            if (player == null)
+            {
+                continue;
+            }
+
+            lobby.RemovePlayer(player);
+        }
     }
 
     public void RemoveChatLobbyById(ushort id)
