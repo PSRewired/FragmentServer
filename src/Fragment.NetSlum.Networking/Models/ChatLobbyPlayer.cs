@@ -12,21 +12,50 @@ namespace Fragment.NetSlum.Networking.Models;
 
 public class ChatLobbyPlayer
 {
+    /// <summary>
+    /// The slot index that this player currently holds
+    /// </summary>
     protected internal ushort PlayerIndex { get; set; }
+
+    /// <summary>
+    /// The character ID associated with this lobby player
+    /// </summary>
     public int PlayerCharacterId => TcpSession.CharacterId;
+
+    /// <summary>
+    /// The character name associated with this lobby player
+    /// </summary>
     public string? PlayerName => TcpSession.CharacterInfo?.CharacterName;
-    public FragmentTcpSession TcpSession { get; }
+
     public ChatLobbyModel ChatLobby { get; set; } = null!;
 
+    /// <summary>
+    /// Holds the current status that we've received from this player
+    /// </summary>
     public Memory<byte> LastStatus { get; set; } = Array.Empty<byte>();
-    private ILogger Logger => Log.ForContext<ChatLobbyPlayer>();
+
+    /// <summary>
+    /// When a guild invite is sent to this player, this field is populated with the guild ID that
+    /// the invite came from
+    /// </summary>
+    public ushort? CurrentGuildEnticementId { get; set; }
+
+    /// <summary>
+    /// Timestamp that signifies when this player joined the lobby
+    /// </summary>
     public DateTime JoinedAt = DateTime.UtcNow;
+
+    private FragmentTcpSession TcpSession { get; }
 
     public ChatLobbyPlayer(FragmentTcpSession session)
     {
         TcpSession = session;
     }
 
+    /// <summary>
+    /// Sends messages to this player
+    /// </summary>
+    /// <param name="messages"></param>
     public void Send(List<FragmentMessage> messages)
     {
         Log.ForContext<ChatLobbyPlayer>().Debug("Sending data to player {PlayerName} at index {PlayerIndex}\n{HexDump}", PlayerName,

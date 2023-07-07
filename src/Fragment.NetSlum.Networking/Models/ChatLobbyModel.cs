@@ -16,14 +16,28 @@ public class ChatLobbyModel
 {
     private const ushort MaxPlayers = 255;
 
-    public ushort LobbyId { get; private set; }
-    public string LobbyName { get; private set; }
-    public ushort PlayerChatLobbyId { get; private set; }
+    /// <summary>
+    /// The ID assigned to this lobby when it was created
+    /// </summary>
+    public ushort LobbyId { get; }
+
+    /// <summary>
+    /// The name designated to this lobby during creation
+    /// </summary>
+    public string LobbyName { get; }
+
+    /// <summary>
+    /// Designates whether this is a general or private lobby type
+    /// </summary>
     public ChatLobbyType LobbyType { get; set; }
+
+    /// <summary>
+    /// The current number of active players within this lobby
+    /// </summary>
+    public ushort PlayerCount => (ushort)GetPlayers().Length;
 
     private readonly ChatLobbyPlayer?[] _chatLobbyPlayers;
     private static ILogger Log => Serilog.Log.ForContext<ChatLobbyModel>();
-    public ushort PlayerCount => (ushort)GetPlayers().Length;
     private readonly Semaphore _playerIdxLock = new(1, 1);
 
     public ChatLobbyModel(ushort id, string name, ChatLobbyType lobbyType = ChatLobbyType.Default)
@@ -34,12 +48,11 @@ public class ChatLobbyModel
         LobbyType = lobbyType;
     }
 
-
-    public static ChatLobbyModel FromEntity(DefaultLobby lobbyEntity)
-    {
-        return new ChatLobbyModel((ushort)lobbyEntity.Id, lobbyEntity.DefaultLobbyName);
-    }
-
+    /// <summary>
+    /// Adds a new player to this lobby and returns the player index that was assigned to them
+    /// </summary>
+    /// <param name="player"></param>
+    /// <returns></returns>
     public int AddPlayer(ChatLobbyPlayer player)
     {
         try
@@ -58,16 +71,30 @@ public class ChatLobbyModel
             _playerIdxLock.Release();
         }
     }
+
+    /// <summary>
+    /// Returns all active <see cref="ChatLobbyPlayer"/> instances in this lobby
+    /// </summary>
+    /// <returns></returns>
     public ChatLobbyPlayer[] GetPlayers()
     {
         return _chatLobbyPlayers.Where(p => p != null).ToArray()!;
     }
 
+    /// <summary>
+    /// Attempts to retrieve a player by their lobby index
+    /// </summary>
+    /// <param name="idx"></param>
+    /// <returns></returns>
     public ChatLobbyPlayer? GetPlayer(int idx)
     {
         return _chatLobbyPlayers.FirstOrDefault(p => p?.PlayerIndex == idx);
     }
 
+    /// <summary>
+    /// Removes an player instance from the current lobby
+    /// </summary>
+    /// <param name="player"></param>
     public void RemovePlayer(ChatLobbyPlayer player)
     {
         _playerIdxLock.WaitOne();
@@ -97,6 +124,11 @@ public class ChatLobbyModel
         }
     }
 
+    /// <summary>
+    /// Looks up an active player by their character ID
+    /// </summary>
+    /// <param name="accountId"></param>
+    /// <returns></returns>
     public ChatLobbyPlayer? GetPlayerByCharacterId(int accountId)
     {
         foreach (var player in _chatLobbyPlayers)
@@ -186,7 +218,6 @@ public class ChatLobbyModel
     {
         var sb = new StringBuilder();
         sb.AppendLine($"===== Chat Lobby: {LobbyName} ({LobbyId} =====");
-        sb.AppendLine($"Player ChatRoom Id: {PlayerChatLobbyId}");
         sb.AppendLine($"Lobby Type: {LobbyType}");
         sb.AppendLine($"Player Count: {PlayerCount}");
         sb.AppendLine("Player List:");

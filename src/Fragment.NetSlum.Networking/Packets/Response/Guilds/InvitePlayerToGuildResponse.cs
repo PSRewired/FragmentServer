@@ -17,7 +17,7 @@ public class InvitePlayerToGuildResponse : BaseResponse
     public override FragmentMessage Build()
     {
         var buffer = new Memory<byte>(new byte[2]);
-        BinaryPrimitives.WriteUInt16BigEndian(buffer.Span, _playerIndex);
+        BinaryPrimitives.WriteUInt16BigEndian(buffer.Span[..2], _playerIndex);
 
         return new FragmentMessage
         {

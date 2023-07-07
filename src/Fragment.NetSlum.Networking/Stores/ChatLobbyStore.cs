@@ -117,6 +117,30 @@ public class ChatLobbyStore : IDisposable
         return null;
     }
 
+    public ChatLobbyPlayer? GetLobbyPlayerBySession(FragmentTcpSession session)
+    {
+        try
+        {
+            _rwLock.EnterReadLock();
+
+            foreach (var lobby in _chatLobbies.Values)
+            {
+                var player = lobby.GetPlayerByCharacterId(session.CharacterId);
+
+                if (player != null)
+                {
+                    return player;
+                }
+            }
+        }
+        finally
+        {
+            _rwLock.ExitReadLock();
+        }
+
+        return null;
+    }
+
     public void RemoveChatLobbyById(ushort id)
     {
         try

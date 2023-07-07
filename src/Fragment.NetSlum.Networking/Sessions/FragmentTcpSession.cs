@@ -22,21 +22,49 @@ public class FragmentTcpSession : TcpSession, IScopeable
     public IServiceScope ServiceScope { get; }
     private readonly ILogger<FragmentTcpSession> _logger;
     private readonly FragmentPacketPipeline<FragmentTcpSession> _packetPipeline;
-    private Stopwatch _lastFlushTimer { get; } = Stopwatch.StartNew();
-    public long ElapsedMillisecondsSinceLastFlush => _lastFlushTimer.ElapsedMilliseconds;
 
+    /// <summary>
+    /// Timer that monitors the packet aggregation interval for this session
+    /// </summary>
+    private Stopwatch LastFlushTimer { get; } = Stopwatch.StartNew();
+
+    /// <summary>
+    /// The number of milliseconds elapsed since the last time data was flushed out to this session.
+    /// </summary>
+    public long ElapsedMillisecondsSinceLastFlush => LastFlushTimer.ElapsedMilliseconds;
+
+    //Fields for area server sessions
+    /// <summary>
+    /// Dictates that this session has signaled that it is an area server instead of a player session
+    /// </summary>
     public bool IsAreaServer => AreaServerInfo != null;
+
+    /// <summary>
+    /// Metadata associated with the area server that this session is currently hosting
+    /// </summary>
     public AreaServerInformation? AreaServerInfo { get; set; }
 
+    /// <summary>
+    /// Timestamp that represents the last time we received a ping from this session
+    /// </summary>
     public DateTime LastContacted { get; set; } = DateTime.UtcNow;
 
     //Fields only used for a Player
+    /// <summary>
+    /// The active "save" ID that is associated to this session
+    /// </summary>
     public int PlayerAccountId { get; set; }
+
+    /// <summary>
+    /// The character reference that belongs to this session
+    /// </summary>
     public int CharacterId { get; set; }
 
+    /// <summary>
+    /// Metadata for the character that is currently assigned to this session
+    /// </summary>
     public CharacterInfo? CharacterInfo { get; set; }
-    public ChatLobbyType CurrentChatLobbyType { get; set; }
-    public ushort CurrentChatLobbyId { get; set; }
+
 
     public FragmentTcpSession(ITcpServer server, IServiceScope serviceScope) : base(server)
     {
@@ -45,7 +73,7 @@ public class FragmentTcpSession : TcpSession, IScopeable
         _logger = serviceScope.ServiceProvider.GetRequiredService<ILogger<FragmentTcpSession>>();
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveOptimization | MethodImplOptions.AggressiveInlining)]
+    [MethodImpl(MethodImplOptions.AggressiveOptimization)]
     protected override async Task OnReceived(Memory<byte> data, CancellationToken cancellationToken)
     {
 #if (DEBUG)
@@ -119,7 +147,7 @@ public class FragmentTcpSession : TcpSession, IScopeable
     public override void Flush()
     {
         base.Flush();
-        _lastFlushTimer.Restart();
+        LastFlushTimer.Restart();
     }
 
     protected override void OnDisconnected()

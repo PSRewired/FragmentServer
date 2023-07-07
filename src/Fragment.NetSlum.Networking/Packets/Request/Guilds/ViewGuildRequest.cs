@@ -8,6 +8,7 @@ using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Objects;
 using Fragment.NetSlum.Networking.Packets.Response.Guilds;
 using Fragment.NetSlum.Networking.Sessions;
+using Fragment.NetSlum.Networking.Stores;
 using Fragment.NetSlum.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,10 +18,12 @@ namespace Fragment.NetSlum.Networking.Packets.Request.Guilds;
 public class ViewGuildInfoRequest : BaseRequest
 {
     private readonly FragmentContext _database;
+    private readonly ChatLobbyStore _chatLobbyStore;
 
-    public ViewGuildInfoRequest(FragmentContext database)
+    public ViewGuildInfoRequest(FragmentContext database, ChatLobbyStore chatLobbyStore)
     {
         _database = database;
+        _chatLobbyStore = chatLobbyStore;
     }
 
     public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
@@ -33,6 +36,15 @@ public class ViewGuildInfoRequest : BaseRequest
             .Include(g => g.Leader)
             .Include(g => g.Stats)
             .First(g => g.Id == guildId);
+
+        var myLobbyPlayer = _chatLobbyStore.GetLobbyPlayerBySession(session);
+
+        // When a guild invite is responded to, the player will look up the guild info before submitting the response.
+        // Therefore, we need to mark this player with the prospective guild ID
+        if (myLobbyPlayer != null)
+        {
+            myLobbyPlayer.CurrentGuildEnticementId = guildId;
+        }
 
         return Task.FromResult<ICollection<FragmentMessage>>(new[]
         {

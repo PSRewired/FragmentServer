@@ -1,6 +1,7 @@
 using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 using Fragment.NetSlum.Networking.Attributes;
 using Fragment.NetSlum.Networking.Constants;
@@ -8,6 +9,8 @@ using Fragment.NetSlum.Networking.Objects;
 using Fragment.NetSlum.Networking.Packets.Response.Guilds;
 using Fragment.NetSlum.Networking.Sessions;
 using Fragment.NetSlum.Networking.Stores;
+using Fragment.NetSlum.Persistence;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.Guilds;
@@ -15,11 +18,13 @@ namespace Fragment.NetSlum.Networking.Packets.Request.Guilds;
 [FragmentPacket(MessageType.Data, OpCodes.DataSendGuildInvite)]
 public class SendGuildInviteRequest : BaseRequest
 {
+    private readonly FragmentContext _database;
     private readonly ChatLobbyStore _chatLobbyStore;
     private readonly ILogger<SendGuildInviteRequest> _logger;
 
-    public SendGuildInviteRequest(ChatLobbyStore chatLobbyStore, ILogger<SendGuildInviteRequest> logger)
+    public SendGuildInviteRequest(FragmentContext database, ChatLobbyStore chatLobbyStore, ILogger<SendGuildInviteRequest> logger)
     {
+        _database = database;
         _chatLobbyStore = chatLobbyStore;
         _logger = logger;
     }
@@ -50,6 +55,11 @@ public class SendGuildInviteRequest : BaseRequest
         _logger.LogInformation("Guild request sent from {SenderName} to player {RecipientName} in chat lobby {ChatLobbyName}",
             myPlayer.PlayerName, playerToInvite.PlayerName, myChatLobby!.LobbyName);
 
+        var myGuildId = _database.Guilds.AsNoTracking()
+            .Where(g => g.LeaderId == session.CharacterId)
+            .Select(g => g.Id).FirstOrDefault();
+
+        playerToInvite.CurrentGuildEnticementId = myGuildId;
         myChatLobby.SendTo(playerToInviteIdx, new InvitePlayerToGuildResponse(myPlayer.PlayerIndex).Build());
 
         return NoResult();

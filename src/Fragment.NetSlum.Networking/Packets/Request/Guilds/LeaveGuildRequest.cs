@@ -1,5 +1,6 @@
 using System.Buffers.Binary;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Fragment.NetSlum.Networking.Attributes;
@@ -25,26 +26,27 @@ public class LeaveGuildRequest : BaseRequest
 
     public override async Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
-        var kickedPlayerId = BinaryPrimitives.ReadInt32BigEndian(request.Data.Span[..4]);
+        var myCharacter = _database.Characters
+            .Include(c => c.Guild)
+            .First(c => c.Id == session.CharacterId);
 
-        await _database.Characters
-            .Where(c => c.Id == kickedPlayerId)
-            .ExecuteUpdateAsync(c => c.SetProperty(p => p.GuildId, p => null));
+        if (myCharacter.Guild == null)
+        {
+            throw new DataException("Player {PlayerName} requested to leave a guild, but is not currently in one");
+        }
 
-        var guild = _database.Guilds
-            .AsNoTracking()
-            .First(g => g.LeaderId == session.CharacterId);
+        myCharacter.GuildId = null;
 
         _database.Add(new GuildActivityLog
         {
             ActionPerformed = GuildActivityLog.GuildPlayerAction.PlayerLeft,
-            GuildId = guild.Id,
+            GuildId = myCharacter.Guild.Id,
             PerformedByCharacterId = session.CharacterId,
-            PerformedOnCharacterId = kickedPlayerId,
+            PerformedOnCharacterId = session.CharacterId,
         });
 
         await _database.SaveChangesAsync();
 
-        return new[] { new LeaveGuildResponse().Build() };
+        return ReturnSingleAsync(new LeaveGuildResponse().Build());
     }
 }
