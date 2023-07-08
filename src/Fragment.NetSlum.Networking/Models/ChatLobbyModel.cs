@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading;
 using Fragment.NetSlum.Core.Constants;
 using Fragment.NetSlum.Core.Extensions;
-using Fragment.NetSlum.Persistence.Entities;
 using Fragment.NetSlum.Networking.Objects;
 using Fragment.NetSlum.Networking.Packets.Response.ChatLobby;
 using ILogger = Serilog.ILogger;
@@ -19,7 +18,7 @@ public class ChatLobbyModel
     /// <summary>
     /// The ID assigned to this lobby when it was created
     /// </summary>
-    public ushort LobbyId { get; }
+    public ushort LobbyId { get; protected internal set; }
 
     /// <summary>
     /// The name designated to this lobby during creation
@@ -39,11 +38,19 @@ public class ChatLobbyModel
     /// <summary>
     /// The password required to enter the room. Defaults to <see cref="string.Empty" />
     /// </summary>
-    public string Password { get; set; } = string.Empty;
+    public string Password { get; set; } = "1234";
 
     private readonly ChatLobbyPlayer?[] _chatLobbyPlayers;
     private static ILogger Log => Serilog.Log.ForContext<ChatLobbyModel>();
     private readonly Semaphore _playerIdxLock = new(1, 1);
+
+    public ChatLobbyModel(string name, ChatLobbyType lobbyType = ChatLobbyType.Default)
+    {
+        LobbyId = 0;
+        LobbyName = name;
+        _chatLobbyPlayers = new ChatLobbyPlayer[MaxPlayers + 1];
+        LobbyType = lobbyType;
+    }
 
     public ChatLobbyModel(ushort id, string name, ChatLobbyType lobbyType = ChatLobbyType.Default)
     {

@@ -58,12 +58,13 @@ public enum OpCodes : ushort
     DataLobbyChatroomListError = 0x7408,
 
     //not seen?
-    DataLobbyChatroomEntryCategory = 0x7409,
-    DataLobbyChatroomChatroom = 0x740a,
-    DataLobbyChatroomEntryChatroom = 0x740b,
+    //DataLobbyChatroomEntryCategory = 0x7409, -- Incorrect
+    //DataLobbyChatroomChatroom = 0x740a, -- Incorrect
+    //DataLobbyChatroomEntryChatroom = 0x740b, -- Incorrect
 
+    DataLobbyChatroomOpenCreate = 0x7412,
 
-    DataLobbyChatroomCreate = 0x7415,
+    DataLobbyChatroomProtectedCreate = 0x7415,
     DataLobbyChatroomCreateOk = 0x7416,
     DataLobbyChatroomCreateError = 0x7417,
 

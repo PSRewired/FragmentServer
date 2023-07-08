@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Fragment.NetSlum.Core.Constants;
 using Fragment.NetSlum.Networking.Attributes;
@@ -26,22 +25,26 @@ namespace Fragment.NetSlum.Networking.Packets.Request.ChatLobby
 
         public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
         {
-            var availableLobbies = _chatLobbyStore.GetLobbiesByType(ChatLobbyType.Player);
-
-            if (availableLobbies.Length < 1)
-            {
-                return ReturnSingle(new LobbyChatroomCategoryCountResponse(2).Build());
-            }
+            var availableLobbies = _chatLobbyStore.GetLobbiesByType(ChatLobbyType.Chatroom);
 
             var responses = new List<FragmentMessage>();
+
+            responses.Add(new LobbyChatroomCategoryCountResponse((ushort)(availableLobbies.Length + 1)).Build());
+
+            responses.Add(
+                new LobbyChatroomCategoryEntryResponse(OpCodes.DataLobbyChatroomListError)
+                    .SetCategoryName("-- Create New --")
+                    .SetIsCreationEntry(true)
+                    .Build());
 
             foreach (var lobby in availableLobbies)
             {
                 responses.Add(
-                    new LobbyChatroomCategoryEntryResponse()
+                    new LobbyChatroomCategoryEntryResponse(OpCodes.DataLobbyChatroomListError)
                         .SetCategoryId(lobby.LobbyId)
                         .SetCategoryName(lobby.LobbyName)
                         .SetCurrentPlayerCount(lobby.PlayerCount)
+                        .SetPasswordRequired(!string.IsNullOrWhiteSpace(lobby.Password))
                         .Build());
             }
 

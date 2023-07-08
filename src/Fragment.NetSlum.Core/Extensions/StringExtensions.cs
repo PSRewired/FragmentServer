@@ -61,6 +61,11 @@ public static class StringExtensions
     /// <returns></returns>
     public static Span<byte> ReadToNullByte(this Span<byte> arr)
     {
+        if (arr.Length < 1)
+        {
+            return Array.Empty<byte>();
+        }
+
         var nullIndex = 0;
 
         do

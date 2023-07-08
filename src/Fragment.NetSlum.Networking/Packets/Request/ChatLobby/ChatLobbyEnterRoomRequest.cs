@@ -9,7 +9,6 @@ using Microsoft.Extensions.Logging;
 using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Authentication;
 using System.Threading.Tasks;
 using Fragment.NetSlum.Networking.Models;
 using Fragment.NetSlum.Core.Constants;
@@ -48,11 +47,12 @@ public class ChatLobbyEnterRoomRequest : BaseRequest
                 .Build()
         };
 
-        if (chatType == ChatLobbyType.Player && roomPassword != chatLobby.Password)
+        if (chatType == ChatLobbyType.Chatroom && roomPassword != chatLobby.Password)
         {
             //TODO: Fix this to return an error response instead of disconnecting the player
             //throw new AuthenticationException(
                 //$"Invalid password specified by {session.CharacterInfo!.CharacterName} while entering room {chatLobby.LobbyName}");
+            return Task.FromResult<ICollection<FragmentMessage>>(responses);
         }
 
 
@@ -97,6 +97,7 @@ public class ChatLobbyEnterRoomRequest : BaseRequest
         {
             ChatLobbyType.Guild => CreateGuildLobby(lobbyId),
             ChatLobbyType.Default => CreateDefaultLobby(lobbyId),
+            ChatLobbyType.Chatroom => CreateDefaultLobby(lobbyId, lobbyType),
             _ => throw new ArgumentOutOfRangeException(nameof(lobbyType), lobbyType, null)
         };
 
@@ -105,9 +106,9 @@ public class ChatLobbyEnterRoomRequest : BaseRequest
         return newLobby;
     }
 
-    private ChatLobbyModel CreateDefaultLobby(ushort lobbyId)
+    private ChatLobbyModel CreateDefaultLobby(ushort lobbyId, ChatLobbyType chatLobbyType = ChatLobbyType.Default)
     {
-        var defaultLobby = _database.ChatLobbies.FirstOrDefault(l => l.Id == lobbyId && l.LobbyType == ChatLobbyType.Default);
+        var defaultLobby = _database.ChatLobbies.FirstOrDefault(l => l.Id == lobbyId && l.LobbyType == chatLobbyType);
         if (defaultLobby == null)
         {
             throw new ArgumentException($"Could not create chat lobby. {lobbyId} is not a valid default ID");

@@ -36,6 +36,13 @@ public class ChatLobbyStore : IDisposable
         try
         {
             _rwLock.EnterWriteLock();
+
+            // If the lobby ID is not set, we need to assign it a lobby ID
+            if (lobby.LobbyId == 0)
+            {
+                lobby.LobbyId = (ushort)(_chatLobbies.Keys.Max() + 1);
+            }
+
             _chatLobbies.TryAdd(lobby.LobbyId, lobby);
         }
         finally

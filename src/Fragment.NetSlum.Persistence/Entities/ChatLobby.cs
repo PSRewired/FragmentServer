@@ -41,11 +41,5 @@ public class ChatLobby : IConfigurableEntity<ChatLobby>
             ChatLobbyName = "Main 2",
             LobbyType = ChatLobbyType.Default,
         });
-        entityBuilder.HasData(new ChatLobby
-        {
-            Id = 3,
-            ChatLobbyName = "General",
-            LobbyType = ChatLobbyType.Player,
-        });
     }
 }

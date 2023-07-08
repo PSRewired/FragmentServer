@@ -425,12 +425,6 @@ namespace Fragment.NetSlum.Persistence.Migrations
                             Id = 2,
                             ChatLobbyName = "Main 2",
                             LobbyType = "Default"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ChatLobbyName = "General",
-                            LobbyType = "Player"
                         });
                 });
 
