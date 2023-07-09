@@ -10,22 +10,22 @@ updates:
       schedule:
           interval: weekly
       open-pull-requests-limit: 5
-      - package-ecosystem: nuget
+    - package-ecosystem: nuget
       directory: "/src/Fragment.NetSlum.Networking"
       schedule:
           interval: weekly
       open-pull-requests-limit: 5
-      - package-ecosystem: nuget
+    - package-ecosystem: nuget
       directory: "/src/Fragment.NetSlum.Persistence"
       schedule:
           interval: weekly
       open-pull-requests-limit: 5
-      - package-ecosystem: nuget
+    - package-ecosystem: nuget
       directory: "/src/Fragment.NetSlum.Server"
       schedule:
           interval: weekly
       open-pull-requests-limit: 5
-      - package-ecosystem: nuget
+    - package-ecosystem: nuget
       directory: "/src/Fragment.NetSlum.TcpServer"
       schedule:
           interval: weekly
