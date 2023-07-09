@@ -36,6 +36,7 @@ public class CreateLobbyChatroomRequest : BaseRequest
         var newLobby = new ChatLobbyModel(roomNameBytes, ChatLobbyType.Chatroom)
         {
             Password = roomPasswordBytes,
+            ParentChatLobby = _chatLobbyStore.GetLobbyBySession(session, ChatLobbyType.Default),
         };
 
         _chatLobbyStore.AddLobby(newLobby);

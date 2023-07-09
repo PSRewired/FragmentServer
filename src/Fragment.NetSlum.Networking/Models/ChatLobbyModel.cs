@@ -40,6 +40,8 @@ public class ChatLobbyModel
     /// </summary>
     public string Password { get; set; } = "1234";
 
+    public ChatLobbyModel? ParentChatLobby { get; init; }
+
     private readonly ChatLobbyPlayer?[] _chatLobbyPlayers;
     private static ILogger Log => Serilog.Log.ForContext<ChatLobbyModel>();
     private readonly Semaphore _playerIdxLock = new(1, 1);

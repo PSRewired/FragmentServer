@@ -28,7 +28,8 @@ public class LobbyEventRequest : BaseRequest
     {
         var lobbyId = BinaryPrimitives.ReadUInt16BigEndian(request.Data[..2].Span);
 
-        var chatLobby = _chatLobbyStore.GetLobby(lobbyId);
+        //var chatLobby = _chatLobbyStore.GetLobby(lobbyId);
+        var chatLobby = _chatLobbyStore.GetLobbyBySession(session);
         var chatLobbyPlayer = chatLobby?.GetPlayerByCharacterId(session.CharacterId);
 
         if (chatLobbyPlayer == null)

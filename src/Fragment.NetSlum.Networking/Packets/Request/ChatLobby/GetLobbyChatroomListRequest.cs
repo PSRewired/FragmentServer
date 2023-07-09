@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Fragment.NetSlum.Core.Constants;
 using Fragment.NetSlum.Networking.Attributes;
@@ -25,14 +26,19 @@ namespace Fragment.NetSlum.Networking.Packets.Request.ChatLobby
 
         public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
         {
-            var availableLobbies = _chatLobbyStore.GetLobbiesByType(ChatLobbyType.Chatroom);
+            // If no default lobby was found, attempt to look up by guild
+            var gameLobby = _chatLobbyStore.GetLobbyBySession(session, ChatLobbyType.Default) ?? _chatLobbyStore.GetLobbyBySession(session, ChatLobbyType.Guild);
+
+            var availableLobbies = _chatLobbyStore.GetLobbiesByType(ChatLobbyType.Chatroom)
+                .Where(l => l.ParentChatLobby == gameLobby)
+                .ToList();
 
             var responses = new List<FragmentMessage>();
 
-            responses.Add(new LobbyChatroomCategoryCountResponse((ushort)(availableLobbies.Length + 1)).Build());
+            responses.Add(new LobbyChatroomCategoryCountResponse((ushort)(availableLobbies.Count + 1)).Build());
 
             responses.Add(
-                new LobbyChatroomCategoryEntryResponse(OpCodes.DataLobbyChatroomListError)
+                new LobbyChatroomCategoryEntryResponse()
                     .SetCategoryName("-- Create New --")
                     .SetIsCreationEntry(true)
                     .Build());
@@ -40,7 +46,7 @@ namespace Fragment.NetSlum.Networking.Packets.Request.ChatLobby
             foreach (var lobby in availableLobbies)
             {
                 responses.Add(
-                    new LobbyChatroomCategoryEntryResponse(OpCodes.DataLobbyChatroomListError)
+                    new LobbyChatroomCategoryEntryResponse()
                         .SetCategoryId(lobby.LobbyId)
                         .SetCategoryName(lobby.LobbyName)
                         .SetCurrentPlayerCount(lobby.PlayerCount)

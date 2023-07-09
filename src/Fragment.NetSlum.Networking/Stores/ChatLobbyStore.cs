@@ -123,7 +123,7 @@ public class ChatLobbyStore : IDisposable
         }
     }
 
-    public ChatLobbyModel? GetLobbyBySession(FragmentTcpSession session)
+    public ChatLobbyModel? GetLobbyBySession(FragmentTcpSession session, ChatLobbyType lobbyType = ChatLobbyType.Any)
     {
         try
         {
@@ -131,6 +131,11 @@ public class ChatLobbyStore : IDisposable
 
             foreach (var lobby in _chatLobbies.Values)
             {
+                if (lobbyType != ChatLobbyType.Any && lobby.LobbyType != lobbyType)
+                {
+                    continue;
+                }
+
                 var player = lobby.GetPlayerByCharacterId(session.CharacterId);
 
                 if (player != null)
@@ -195,7 +200,14 @@ public class ChatLobbyStore : IDisposable
         try
         {
             _rwLock.EnterWriteLock();
-            _chatLobbies.Remove(id, out _);
+
+            _chatLobbies.Remove(id, out var lobby);
+
+            // Remove all child lobbies
+            foreach (var childLobby in _chatLobbies.Values.Where(l => l.ParentChatLobby == lobby))
+            {
+                _chatLobbies.Remove(childLobby.LobbyId);
+            }
         }
         finally
         {

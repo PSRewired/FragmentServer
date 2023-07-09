@@ -8,7 +8,6 @@ namespace Fragment.NetSlum.Networking.Packets.Response.ChatLobby;
 
 public class LobbyChatroomCategoryEntryResponse : BaseResponse
 {
-    private readonly OpCodes _entryType;
     private ushort _id;
     private string _name = "";
     private ushort _currentPlayerCount;
@@ -16,9 +15,8 @@ public class LobbyChatroomCategoryEntryResponse : BaseResponse
     private bool _isCreationEntry;
     private bool _requiresPassword;
 
-    public LobbyChatroomCategoryEntryResponse(OpCodes entryType)
+    public LobbyChatroomCategoryEntryResponse()
     {
-        _entryType = entryType;
     }
 
     public LobbyChatroomCategoryEntryResponse SetCategoryId(ushort id)
@@ -78,7 +76,7 @@ public class LobbyChatroomCategoryEntryResponse : BaseResponse
         return new FragmentMessage
         {
             MessageType = MessageType.Data,
-            DataPacketType = _entryType,
+            DataPacketType = OpCodes.DataLobbyChatroomListError,
             Data = writer.Buffer,
         };
     }

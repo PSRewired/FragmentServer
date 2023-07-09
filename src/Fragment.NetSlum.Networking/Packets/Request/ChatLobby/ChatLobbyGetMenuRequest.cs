@@ -27,21 +27,29 @@ public class ChatLobbyGetMenuRequest : BaseRequest
     public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         //var channels = _database.ChatLobbies.Where(c => c.DefaultChannel == true).ToList();
-        var chatLobbies = _chatLobbyStore.GetLobbiesByType(ChatLobbyType.Default);
+        var lobbies = _chatLobbyStore.GetLobbiesByType(ChatLobbyType.Default);
         var responses = new List<FragmentMessage>
         {
             //Add the ChatLobby count response to the collection list
             new ChatLobbyCountResponse()
-                .SetChatLobbyCount((ushort)chatLobbies.Length)
+                .SetChatLobbyCount((ushort)lobbies.Length)
                 .Build(),
         };
 
         //Build the Chat Lobby List
-        responses.AddRange(chatLobbies.Select(c => new ChatLobbyEntryResponse()
-            .SetChatLobbyName(c.LobbyName)
-            .SetChatLobbyId(c.LobbyId)
-            .SetClientCount(c.PlayerCount)
-            .Build()));
+        responses.AddRange(lobbies.Select(c =>
+        {
+            // Include counts of all players that may be in chat lobbies within this server lobby
+            var childLobbyPlayerCount = _chatLobbyStore.GetLobbiesByType(ChatLobbyType.Chatroom)
+                .Where(cl => cl.ParentChatLobby == c)
+                .Sum(cl => cl.PlayerCount);
+
+            return new ChatLobbyEntryResponse()
+                .SetChatLobbyName(c.LobbyName)
+                .SetChatLobbyId(c.LobbyId)
+                .SetClientCount((ushort)(c.PlayerCount + childLobbyPlayerCount))
+                .Build();
+        }));
 
         return Task.FromResult<ICollection<FragmentMessage>>(responses);
     }

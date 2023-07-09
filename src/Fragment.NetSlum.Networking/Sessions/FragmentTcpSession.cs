@@ -127,16 +127,6 @@ public class FragmentTcpSession : TcpSession, IScopeable
     {
         var respData = _packetPipeline.Encode(data, CancellationToken.None).Span;
 
-#if (DEBUG)
-        _logger.LogDebug("[{ClsName}] Manually Sending packet to {SessionId}\n{LineBreak1}\n{HexDump}\n{LineBreak2}",
-            Id,
-            GetType().Name,
-            new string('=', 32),
-            respData.ToHexDump(),
-            new string('=', 32)
-        );
-#endif
-
         Send(respData);
         Flush();
     }

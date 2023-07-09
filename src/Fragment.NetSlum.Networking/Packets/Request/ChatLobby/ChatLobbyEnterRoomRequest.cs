@@ -37,6 +37,7 @@ public class ChatLobbyEnterRoomRequest : BaseRequest
         ChatLobbyType chatType = (ChatLobbyType)BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[2..4]);
         string roomPassword = request.Data.Span[4..].ToShiftJisString();
 
+        _chatLobbyStore.RemoveSession(session);
         var chatLobby = GetOrCreateLobby(chatLobbyId, chatType);
 
         // Send the current client count
