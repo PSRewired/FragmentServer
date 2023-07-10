@@ -38,7 +38,7 @@ namespace Fragment.NetSlum.Networking.Packets.Request.ChatLobby
                 _chatLobbyStore.RemoveChatLobbyById(chatLobby.LobbyId);
             }
 
-            return ReturnSingle(new LobbyExitResponse().Build());
+            return SingleMessage(new LobbyExitResponse().Build());
         }
 
     }

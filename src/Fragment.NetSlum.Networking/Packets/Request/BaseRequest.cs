@@ -18,12 +18,12 @@ public abstract class BaseRequest
     /// </summary>
     /// <param name="response"></param>
     /// <returns></returns>
-    protected static Task<ICollection<FragmentMessage>> ReturnSingle(FragmentMessage response) =>
-        Task.FromResult(ReturnSingleAsync(response));
+    protected static Task<ICollection<FragmentMessage>> SingleMessage(FragmentMessage response) =>
+        Task.FromResult(SingleMessageAsync(response));
 
-    protected static ICollection<FragmentMessage> ReturnSingleAsync(FragmentMessage response) =>
+    protected static ICollection<FragmentMessage> SingleMessageAsync(FragmentMessage response) =>
         new[] { response };
 
-    protected static Task<ICollection<FragmentMessage>> NoResult() =>
+    protected static Task<ICollection<FragmentMessage>> NoResponse() =>
         Task.FromResult<ICollection<FragmentMessage>>(Array.Empty<FragmentMessage>());
 }

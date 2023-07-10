@@ -20,7 +20,7 @@ public class PingRequest : BaseRequest
 
         BaseResponse response = new PingResponse();
 
-        return ReturnSingle(response.Build());
+        return SingleMessage(response.Build());
 
     }
 }

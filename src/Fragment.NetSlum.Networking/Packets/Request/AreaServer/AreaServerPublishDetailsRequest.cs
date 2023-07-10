@@ -62,9 +62,9 @@ public class AreaServerPublishDetailsRequest:BaseRequest
             case OpCodes.Data_AreaServerPublishDetails6Request:
                 //response = new AreaServerPublishDetailsResponse() { PacketType = OpCodes.Data_AreaServerPublishDetails6Success, Data = new byte[] { 0x00, 0x09 } };
             default:
-                return NoResult();
+                return NoResponse();
         }
 
-        return ReturnSingle(response.Build());
+        return SingleMessage(response.Build());
     }
 }

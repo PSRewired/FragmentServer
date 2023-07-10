@@ -24,6 +24,6 @@ public class AreaServerShutdownRequest : BaseRequest
     {
         BaseResponse response = new AreaServerShutdownResponse();
 
-        return ReturnSingle(response.Build());
+        return SingleMessage(response.Build());
     }
 }

@@ -13,6 +13,6 @@ public class UnregisterCharacterRequest : BaseRequest
 {
     public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
-        return ReturnSingle(new UnregisterCharacterResponse().Build());
+        return SingleMessage(new UnregisterCharacterResponse().Build());
     }
 }

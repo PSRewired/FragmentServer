@@ -49,7 +49,7 @@ public class SendGuildInviteRequest : BaseRequest
                 "Failed to invite player at index {PlayerIndex} in lobby {LobbyName}. The lobby or player index does not exist",
                 playerToInviteIdx, myChatLobby?.LobbyName);
 
-            return NoResult();
+            return NoResponse();
         }
 
         _logger.LogInformation("Guild request sent from {SenderName} to player {RecipientName} in chat lobby {ChatLobbyName}",
@@ -62,6 +62,6 @@ public class SendGuildInviteRequest : BaseRequest
         playerToInvite.CurrentGuildEnticementId = myGuildId;
         myChatLobby.SendTo(playerToInviteIdx, new InvitePlayerToGuildResponse(myPlayer.PlayerIndex).Build());
 
-        return NoResult();
+        return NoResponse();
     }
 }

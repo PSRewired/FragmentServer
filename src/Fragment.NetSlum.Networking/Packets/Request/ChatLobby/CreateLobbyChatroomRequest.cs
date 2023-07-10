@@ -41,6 +41,6 @@ public class CreateLobbyChatroomRequest : BaseRequest
 
         _chatLobbyStore.AddLobby(newLobby);
 
-        return ReturnSingle(new CreateLobbyChatroomResponse(newLobby.LobbyId).Build());
+        return SingleMessage(new CreateLobbyChatroomResponse(newLobby.LobbyId).Build());
     }
 }

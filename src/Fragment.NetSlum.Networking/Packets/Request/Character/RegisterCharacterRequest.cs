@@ -6,9 +6,11 @@ using Fragment.NetSlum.Core.Models;
 using Fragment.NetSlum.Networking.Attributes;
 using Fragment.NetSlum.Networking.Commands.Characters;
 using Fragment.NetSlum.Networking.Constants;
+using Fragment.NetSlum.Networking.Events;
 using Fragment.NetSlum.Networking.Objects;
 using Fragment.NetSlum.Networking.Packets.Response.Character;
 using Fragment.NetSlum.Networking.Sessions;
+using Fragment.NetSlum.TcpServer.Extensions;
 using Microsoft.Extensions.Logging;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.Character;
@@ -41,10 +43,12 @@ public class RegisterCharacterRequest : BaseRequest
 
         session.CharacterId = character.Id;
 
+        await _commandBus.Notify(new CharacterLoggedInEvent(character.Id, session.Socket!.GetClientIp()));
+
         return new[]
         {
             new RegisterCharacterResponse()
-            .SetGuildId(character?.GuildId ?? 0)
+            .SetGuildId(character.GuildId ?? 0)
             .SetGuildStatus(guildStatus)
                 .Build()
         };

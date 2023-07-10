@@ -23,6 +23,6 @@ public class AreaServerPublshRequest :BaseRequest
     public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         BaseResponse response = new AreaServerPublishResponse();
-        return ReturnSingle(response.Build());
+        return SingleMessage(response.Build());
     }
 }

@@ -41,6 +41,6 @@ public class ChatLobbyStatusUpdateRequest:BaseRequest
 
         _logger.LogInformation("Current Lobby status:\n{LobbyInfo}", myChatLobbyPlayer.ChatLobby.ToString());
 
-        return NoResult();
+        return NoResponse();
     }
 }

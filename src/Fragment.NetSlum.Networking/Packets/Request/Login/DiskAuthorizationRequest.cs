@@ -24,6 +24,6 @@ public class DiskAuthorizationRequest : BaseRequest
     {
         BaseResponse response = new DiskAuthorizationResponse();
 
-        return ReturnSingle(response.Build());
+        return SingleMessage(response.Build());
     }
 }

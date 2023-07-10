@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Fragment.NetSlum.Core.Constants;
@@ -17,6 +18,7 @@ public class Character : IConfigurableEntity<Character>
     public PlayerAccount? PlayerAccount { get; set; }
 
     public CharacterStats CharacterStats { get; set; } = new();
+    public ICollection<CharacterIpLog> IpLogs { get; set; } = new List<CharacterIpLog>();
 
     [MySqlCharSet("cp932")]
     [MySqlCollation("cp932_japanese_ci")]

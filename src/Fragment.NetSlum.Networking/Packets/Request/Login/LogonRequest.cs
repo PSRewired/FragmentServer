@@ -38,6 +38,6 @@ public class LogonRequest : BaseRequest
                 break;
         }
 
-        return ReturnSingle(response.Build());
+        return SingleMessage(response.Build());
     }
 }

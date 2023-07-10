@@ -54,7 +54,7 @@ public class GuildInvitationResultRequest : BaseRequest
             _logger.LogInformation("Successfully added member {CharacterName} to guild {GuildName}", myCharacter.CharacterName, guild.Name);
         }
 
-        return ReturnSingle(new GuildInvitationResultConfirmationResponse(responseCode)
+        return SingleMessage(new GuildInvitationResultConfirmationResponse(responseCode)
             .Build());
     }
 }

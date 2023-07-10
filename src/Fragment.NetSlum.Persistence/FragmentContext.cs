@@ -46,6 +46,7 @@ public class FragmentContext : DbContext
 
     public virtual DbSet<Character> Characters { get; set; }
     public virtual DbSet<CharacterStats> CharacterStats { get; set; }
+    public virtual DbSet<CharacterIpLog> CharacterIpLogs { get; set; }
     public virtual DbSet<PlayerAccount> PlayerAccounts { get; set; }
     public virtual DbSet<CharacterStatHistory> CharacterStatHistory { get; set; }
     public virtual DbSet<ServerNews> ServerNews { get; set; }
@@ -63,4 +64,5 @@ public class FragmentContext : DbContext
     public virtual DbSet<AreaServerIpMapping> AreaServerIpMappings { get; set; }
     public virtual DbSet<GuildActivityLog> GuildMembershipLogs { get; set; }
     public virtual DbSet<GuildShopItem> GuildShopItems { get; set; }
+    public virtual DbSet<BannedIp> BannedIps { get; set; }
 }

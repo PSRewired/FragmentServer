@@ -46,6 +46,6 @@ public class PrivateBroadcastRequest : BaseRequest
             chatLobby?.SendTo(recipient.PlayerIndex, response.SetSenderIndex(myLobbySession.PlayerIndex).Build());
         }
 
-        return ReturnSingle(response.SetIsSender(true).Build());
+        return SingleMessage(response.SetIsSender(true).Build());
     }
 }

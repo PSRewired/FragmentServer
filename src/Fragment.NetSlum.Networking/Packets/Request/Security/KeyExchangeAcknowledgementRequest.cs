@@ -23,6 +23,6 @@ public class KeyExchangeAcknowledgementRequest : BaseRequest
         _cryptoHandler.ClientCipher.Initialize();
         _cryptoHandler.ServerCipher.Initialize();
 
-        return NoResult();
+        return NoResponse();
     }
 }

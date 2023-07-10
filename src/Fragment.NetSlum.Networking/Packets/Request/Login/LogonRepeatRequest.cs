@@ -24,6 +24,6 @@ public class LogonRepeatRequest :BaseRequest
     {
         BaseResponse response = new LogonRepeatResponse();
 
-        return ReturnSingle(response.Build());
+        return SingleMessage(response.Build());
     }
 }

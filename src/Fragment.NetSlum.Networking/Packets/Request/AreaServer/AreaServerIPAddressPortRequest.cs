@@ -33,6 +33,6 @@ public class AreaServerIPAddressPortRequest : BaseRequest
             new IPAddress(ipAddressBytes.ToArray()), BinaryPrimitives.ReadUInt16BigEndian(request.Data[4..6].Span));
 
         BaseResponse response = new AreaServerIPAddressPortResponse();
-        return ReturnSingle(response.Build());
+        return SingleMessage(response.Build());
     }
 }

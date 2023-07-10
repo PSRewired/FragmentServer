@@ -35,6 +35,6 @@ public class AreaServerUpdateStatusRequest :BaseRequest
 
         _logger.LogDebug("Area server status update:\n{Details}", session.AreaServerInfo.ToString());
 
-        return NoResult();
+        return NoResponse();
     }
 }

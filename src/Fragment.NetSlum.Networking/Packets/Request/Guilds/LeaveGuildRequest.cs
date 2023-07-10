@@ -46,6 +46,6 @@ public class LeaveGuildRequest : BaseRequest
 
         await _database.SaveChangesAsync();
 
-        return ReturnSingleAsync(new LeaveGuildResponse().Build());
+        return SingleMessageAsync(new LeaveGuildResponse().Build());
     }
 }

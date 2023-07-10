@@ -24,6 +24,6 @@ public class GetBBSUpdatesRequest:BaseRequest
     {
         BaseResponse response = new GetBBSUpdatesResponse();
 
-        return ReturnSingle(response.Build());
+        return SingleMessage(response.Build());
     }
 }
