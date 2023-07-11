@@ -3,6 +3,7 @@ using System;
 using Fragment.NetSlum.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Fragment.NetSlum.Persistence.Migrations
 {
     [DbContext(typeof(FragmentContext))]
-    partial class FragmentContextModelSnapshot : ModelSnapshot
+    [Migration("20230711022204_Mail")]
+    partial class Mail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -690,8 +693,7 @@ namespace Fragment.NetSlum.Persistence.Migrations
 
                     b.Property<string>("AvatarId")
                         .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("varchar(32)")
+                        .HasColumnType("longtext")
                         .HasColumnName("avatar_id");
 
                     b.Property<DateTime>("CreatedAt")
@@ -712,8 +714,7 @@ namespace Fragment.NetSlum.Persistence.Migrations
 
                     b.Property<string>("RecipientName")
                         .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("varchar(32)")
+                        .HasColumnType("longtext")
                         .HasColumnName("recipient_name");
 
                     b.Property<int?>("SenderId")
@@ -722,14 +723,12 @@ namespace Fragment.NetSlum.Persistence.Migrations
 
                     b.Property<string>("SenderName")
                         .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("varchar(32)")
+                        .HasColumnType("longtext")
                         .HasColumnName("sender_name");
 
                     b.Property<string>("Subject")
                         .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("varchar(128)")
+                        .HasColumnType("longtext")
                         .HasColumnName("subject");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -757,8 +756,7 @@ namespace Fragment.NetSlum.Persistence.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasMaxLength(1200)
-                        .HasColumnType("varchar(1200)")
+                        .HasColumnType("longtext")
                         .HasColumnName("content");
 
                     b.Property<int>("MailId")

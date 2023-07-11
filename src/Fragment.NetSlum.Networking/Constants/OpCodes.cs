@@ -145,10 +145,10 @@ public enum OpCodes : ushort
     DataNewsPostErrorResponse = 0x7857,
 
 
-    DataMailGet = 0x7803,
-    DataMailGetOk = 0x7804,
-    DataMailGetMailBody = 0x7806,
-    DataMailGetMailBodyResponse = 0x7807,
+    DataGetMailList = 0x7803,
+    DataMailCountResponse = 0x7804,
+    DataGetMailContent = 0x7806,
+    DataGetMailContentResponse = 0x7807,
     DataMailGetNewMailHeader = 0x788a,
     DataGuildReassignMasterResponse = 0x788e,
 

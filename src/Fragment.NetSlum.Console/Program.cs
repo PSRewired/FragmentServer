@@ -49,6 +49,8 @@ app.Configure(config =>
         .WithDescription("Migrates the old server guild shop items to the new format used by this server");
     config.AddCommand<MigrateBbsCommand>("migrate-bbs")
         .WithDescription("Migrates the old server BBS entities to the new format used by this server");
+    config.AddCommand<MigrateMailCommand>("migrate-mail")
+        .WithDescription("Migrates the old server Mail entities to the new format used by this server");
 });
 
 return app.Run(args);

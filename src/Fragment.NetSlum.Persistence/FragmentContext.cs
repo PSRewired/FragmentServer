@@ -65,4 +65,6 @@ public class FragmentContext : DbContext
     public virtual DbSet<GuildActivityLog> GuildMembershipLogs { get; set; }
     public virtual DbSet<GuildShopItem> GuildShopItems { get; set; }
     public virtual DbSet<BannedIp> BannedIps { get; set; }
+    public virtual DbSet<Mail> Mails { get; set; }
+    public virtual DbSet<MailContent> MailContents { get; set; }
 }

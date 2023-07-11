@@ -20,6 +20,16 @@ public static class StringExtensions
     }
 
     /// <summary>
+    /// Transforms a null-terminated Shift-JIS encoded byte array into its string representation
+    /// </summary>
+    /// <param name="stringBytes"></param>
+    /// <returns></returns>
+    public static string ToShiftJisString(this Memory<byte> stringBytes)
+    {
+        return ShiftJisEncoder.GetString(stringBytes.Span.ReadToNullByte());
+    }
+
+    /// <summary>
     /// Transforms a utf8 encoded string to a Shift-JIS encoded byte array. Appends a null-terminator by default
     /// </summary>
     /// <param name="text"></param>
