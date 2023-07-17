@@ -11,7 +11,7 @@ public class UnregisterCharacterResponse : BaseResponse
         return new FragmentMessage
         {
             MessageType = MessageType.Data,
-            DataPacketType = OpCodes.Data_AreaServerPublishSuccess,
+            DataPacketType = OpCodes.DataUnregisterCharSuccess,
             Data = new Memory<byte>(new byte[2]),
         };
     }
