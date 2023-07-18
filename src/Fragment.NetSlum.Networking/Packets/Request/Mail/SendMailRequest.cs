@@ -36,8 +36,6 @@ namespace Fragment.NetSlum.Networking.Packets.Request.Mail
             // Gap of just nothing between subject and body
             var body = request.Data.Span[176..1376].ToShiftJisString();
             var face = request.Data.Span[1378..1403].ToShiftJisString();
-            //PlayerAccount? recipient = null;
-            //PlayerAccount? sender = null;
             
             IQueryable<Persistence.Entities.Character> accountLookupQuery = _database.Characters.Include(p => p.PlayerAccount);
             PlayerAccount? recipient = accountLookupQuery.FirstOrDefault(p => p.PlayerAccountId == receiverAccountId)?.PlayerAccount;
@@ -51,11 +49,9 @@ namespace Fragment.NetSlum.Networking.Packets.Request.Mail
             var mail = new Persistence.Entities.Mail()
             {
                 AvatarId = face,
-                Recipient = recipient,
-                RecipientId =recipient.Id,
+                Recipient = recipient,            
                 RecipientName =receiverName,
                 Sender = sender,
-                SenderId = sender.Id,
                 SenderName =senderName,
                 CreatedAt = DateTime.UtcNow,
                 Delivered = true,
@@ -70,7 +66,9 @@ namespace Fragment.NetSlum.Networking.Packets.Request.Mail
                 Content = body,
                 Mail = mail
             };
-
+            _database.Add(mail);
+            _database.Add(mailContent);
+            _database.SaveChanges();
             return SingleMessage(new SendMailResponse().SetStatusCode(OpCodes.DataMailSendOk).Build());
         }
     }
