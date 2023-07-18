@@ -32,8 +32,7 @@ namespace Fragment.NetSlum.Networking.Packets.Request.Mail
             var receiverName = request.Data.Span[8..24].ToShiftJisString();
             var senderAccountId = BinaryPrimitives.ReadUInt32BigEndian(request.Data[26..30].Span);
             var senderName = request.Data.Span[30..46].ToShiftJisString();
-            var subject = request.Data.Span[48..80].ToShiftJisString();
-            // Gap of just nothing between subject and body
+            var subject = request.Data.Span[48..176].ToShiftJisString();
             var body = request.Data.Span[176..1376].ToShiftJisString();
             var face = request.Data.Span[1378..1403].ToShiftJisString();
             

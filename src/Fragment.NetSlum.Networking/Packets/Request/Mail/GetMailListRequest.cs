@@ -24,7 +24,7 @@ public class GetMailListRequest : BaseRequest
 
     public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
-        var accountId = BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[2..]);
+        var accountId = BinaryPrimitives.ReadUInt32BigEndian(request.Data.Span[0..4]);
 
         var availableMail = _database.Mails
             .AsNoTracking()

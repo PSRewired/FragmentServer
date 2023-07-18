@@ -27,11 +27,11 @@ public class MailCheckRequest : BaseRequest
         var accountId = BinaryPrimitives.ReadInt32BigEndian(request.Data.Span[..4]);
 
         var undeliveredMailCount = _database.Mails
-            .Count(m => m.RecipientId == accountId && m.Delivered == false);
+            .Count(m => m.RecipientId == accountId && m.Read == false);
 
-        await _database.Mails
-            .Where(m => m.RecipientId == accountId && m.Delivered == false)
-            .ExecuteUpdateAsync(m => m.SetProperty(p => p.Delivered, v => true));
+        //await _database.Mails
+        //    .Where(m => m.RecipientId == accountId && m.Delivered == false)
+        //    .ExecuteUpdateAsync(m => m.SetProperty(p => p.Delivered, v => true));
 
         return SingleMessageAsync(new MailCheckResponse()
             .SetHasMail((uint)undeliveredMailCount)
