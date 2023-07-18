@@ -231,6 +231,7 @@ DATA_SELECT_CHAR2 seems to be a 1:1 clone of the normal OPCODE_DATA_SELECT_CHAR 
     DataBbsPost = 0x7812,
 
     DataMailSendOk = 0x7801,
+    DataMailSendFailed = 0x7802,
     DataGuildMailSendOk = 0x780A,
 
 
