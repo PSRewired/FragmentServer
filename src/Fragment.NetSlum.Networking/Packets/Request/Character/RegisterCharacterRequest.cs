@@ -39,6 +39,7 @@ public class RegisterCharacterRequest : BaseRequest
         if(character.Guild != null)
         {
             guildStatus = character.Id == character.Guild.LeaderId ? GuildStatus.GuildMaster : GuildStatus.Member;
+            session.GuildId = character.Guild.Id;
         }
 
         session.CharacterId = character.Id;

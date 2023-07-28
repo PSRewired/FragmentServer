@@ -30,7 +30,6 @@ public class CharacterInfo
     public string ModelFile => GetModelFileName();
     public char ModelClass => GetModelClass(ModelId);
     public int ModelNumber => GetModelNumber(ModelId);
-
     public static CharacterInfo FromBinaryData(Span<byte> data)
     {
         var pos = 1;

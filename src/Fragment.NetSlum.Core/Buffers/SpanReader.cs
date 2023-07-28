@@ -1,5 +1,6 @@
 using System;
 using System.Buffers.Binary;
+using System.Collections.Generic;
 using Fragment.NetSlum.Core.Extensions;
 
 namespace Fragment.NetSlum.Core.Buffers;
@@ -151,20 +152,34 @@ public ref struct SpanReader
     /// <returns></returns>
     public Span<byte> ReadToByte(byte expectedByte)
     {
-        var nullIndex = 0;
-
-        do
+        List<byte> result = new List<byte>();
+        for (int i = _position; i < _holdingSpan.Length; i++)
         {
-            if (_holdingSpan[nullIndex] == 0)
+            byte b = _holdingSpan[i];
+            if (b != expectedByte)
             {
-                break;
+                result.Add((byte)b);
+                continue;
             }
-
-            nullIndex++;
         }
-        while (nullIndex < _holdingSpan.Length) ;
 
-        return _holdingSpan[..(nullIndex+1)];
+        return result.ToArray();
+        //var nullIndex = 0;
+
+        //do
+        //{
+        //    if (_holdingSpan[nullIndex] == 0)
+        //    {
+        //        break;
+        //    }
+
+        //    nullIndex++;
+        //}
+        //while (nullIndex < _holdingSpan.Length) ;
+
+        //return _holdingSpan[..(nullIndex+1)];
+
+
     }
 
     /// <summary>

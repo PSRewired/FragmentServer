@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Fragment.NetSlum.Core.Buffers;
 using Fragment.NetSlum.Core.Extensions;
+using Fragment.NetSlum.Networking.Attributes;
+using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Objects;
 using Fragment.NetSlum.Networking.Packets.Response.Guilds;
 using Fragment.NetSlum.Networking.Sessions;
@@ -12,10 +14,11 @@ using Fragment.NetSlum.Persistence;
 using Fragment.NetSlum.Persistence.Entities;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.Guilds;
-
+[FragmentPacket(MessageType.Data, OpCodes.DataGuildUpdateDetails)]
 public class UpdateGuildDetailsRequest : BaseRequest
 {
     private readonly FragmentContext _database;
+
 
     public UpdateGuildDetailsRequest(FragmentContext database)
     {
