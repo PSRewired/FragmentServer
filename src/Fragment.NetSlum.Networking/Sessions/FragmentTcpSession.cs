@@ -65,6 +65,10 @@ public class FragmentTcpSession : TcpSession, IScopeable
     /// </summary>
     public CharacterInfo? CharacterInfo { get; set; }
 
+    /// <summary>
+    /// Character's GuildId
+    /// </summary>
+    public ushort GuildId { get; set; } = 0;
 
     public FragmentTcpSession(ITcpServer server, IServiceScope serviceScope) : base(server)
     {

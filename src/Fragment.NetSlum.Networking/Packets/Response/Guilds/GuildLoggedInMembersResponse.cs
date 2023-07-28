@@ -187,7 +187,7 @@ public class GuildLoggedInMembersResponse : BaseResponse
                                       nameBytes.Length +
                                       descriptionBytes.Length +
                                       timestampBytes.Length +
-                                      leaderNameBytes.Length);
+                                      leaderNameBytes.Length + 2);
 
         writer.Write(nameBytes);
         writer.Write(timestampBytes);
