@@ -18,35 +18,41 @@ public class ImageConverter
 
     public ImageInfo Convert(byte[] imageBytes)
     {
-        using var image = new MagickImage(imageBytes)
+        byte[] convertedImage;
+        try
         {
-            Format = MagickFormat.Tga,
-            ColorType = ColorType.Palette,
-            ColorSpace = ColorSpace.RGB,
-            Depth = 32,
-            Orientation = OrientationType.TopLeft,
-            Comment = null,
-            Quality = 20,
-        };
-        // Ensure the image is always 128x128 otherwise it gets corrupted in-game
-        image.Resize(128, 128);
+            using var image = new MagickImage(imageBytes)
+            {
+                Format = MagickFormat.Tga,
+                ColorType = ColorType.Palette,
+                ColorSpace = ColorSpace.RGB,
+                Depth = 32,
+                Orientation = OrientationType.TopLeft,
+                Comment = null,
+                Quality = 20,
+            };
+            // Ensure the image is always 128x128 otherwise it gets corrupted in-game
+            image.Resize(128, 128);
 
-        var convertedImage = image.ToByteArray().AsMemory();
-        image.Write("test.tga");
+            convertedImage = image.ToByteArray();
+            image.Write("test.tga");
 
-        _logger.LogDebug("Converted image data:\n{HexDump}", convertedImage.ToHexDump());
-        //MagickNET.SetLogEvents(LogEvents.All);
-        //MagickNET.Log += (s, a) => _logger.LogDebug("{Type}: {Message}", a.EventType, a.Message);
+            _logger.LogDebug("Converted image data:\n{HexDump}", convertedImage.ToHexDump());
+            //MagickNET.SetLogEvents(LogEvents.All);
+            //MagickNET.Log += (s, a) => _logger.LogDebug("{Type}: {Message}", a.EventType, a.Message);
 
-        //var colorMapLength = image.ColormapSize;
+            //var colorMapLength = image.ColormapSize;
 
-        // Ensure origin TopLeft is set since ImageMagick doesn't seem to set this bit
-        //convertedImage.Span[0x11] = 0x08;
+            // Ensure origin TopLeft is set since ImageMagick doesn't seem to set this bit
+            //convertedImage.Span[0x11] = 0x08;
+        }
+        catch (MagickMissingDelegateErrorException) // Assume if conversion fails, this image is already formatted
+        {
+            convertedImage = imageBytes;
+        }
 
         return new ImageInfo
         {
-            //ColorData = convertedImage[..(18+colorMapLength)],
-            //ImageData = convertedImage[(18+colorMapLength)..],
             ImageData = convertedImage,
         };
     }

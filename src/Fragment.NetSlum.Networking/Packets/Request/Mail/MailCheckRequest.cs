@@ -22,7 +22,7 @@ public class MailCheckRequest : BaseRequest
         _database = database;
     }
 
-    public override async Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         var accountId = BinaryPrimitives.ReadInt32BigEndian(request.Data.Span[..4]);
 
@@ -33,7 +33,7 @@ public class MailCheckRequest : BaseRequest
         //    .Where(m => m.RecipientId == accountId && m.Delivered == false)
         //    .ExecuteUpdateAsync(m => m.SetProperty(p => p.Delivered, v => true));
 
-        return SingleMessageAsync(new MailCheckResponse()
+        return SingleMessage(new MailCheckResponse()
             .SetHasMail((uint)undeliveredMailCount)
             .Build());
     }

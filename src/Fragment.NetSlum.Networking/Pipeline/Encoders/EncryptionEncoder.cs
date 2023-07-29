@@ -58,6 +58,12 @@ public class EncryptionEncoder : IMessageEncoder
     /// <returns></returns>
     private static int GetPaddedBufferLength(int dataLength)
     {
-        return (dataLength + 7) & ~7;
+        //return (dataLength + 7) & ~7;
+        while (((dataLength) & 7) != 0)
+        {
+            dataLength += 1;
+        }
+
+        return dataLength;
     }
 }
