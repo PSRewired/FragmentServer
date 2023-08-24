@@ -3,6 +3,7 @@ using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Networking.Attributes;
 using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Objects;
@@ -10,6 +11,7 @@ using Fragment.NetSlum.Networking.Packets.Response;
 using Fragment.NetSlum.Networking.Sessions;
 using Microsoft.Extensions.Logging;
 using Fragment.NetSlum.Networking.Packets.Response.AreaServer;
+using Fragment.NetSlum.TcpServer.Extensions;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.AreaServer;
 
@@ -29,8 +31,17 @@ public class AreaServerIPAddressPortRequest : BaseRequest
         request.Data.Span[..4].CopyTo(ipAddressBytes);
         ipAddressBytes.Reverse();
 
+        var asIpAddress = new IPAddress(ipAddressBytes.ToArray());
+
+        if (asIpAddress.IsPrivate())
+        {
+            var socketIp = IPAddress.Parse(session.Socket!.GetClientIp());
+            _logger.LogWarning("Area server {ServerName} sent a private IP of {PrivateIp}. Attempting to override using their socket IP of {SocketIp}", session.AreaServerInfo!.ServerName, asIpAddress, socketIp);
+            asIpAddress = socketIp;
+        }
+
         session.AreaServerInfo!.ConnectionEndpoint = new IPEndPoint(
-            new IPAddress(ipAddressBytes.ToArray()), BinaryPrimitives.ReadUInt16BigEndian(request.Data[4..6].Span));
+            asIpAddress, BinaryPrimitives.ReadUInt16BigEndian(request.Data[4..6].Span));
 
         BaseResponse response = new AreaServerIPAddressPortResponse();
         return SingleMessage(response.Build());
