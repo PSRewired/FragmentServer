@@ -8,6 +8,7 @@ using Fragment.NetSlum.Networking.Objects;
 using Fragment.NetSlum.Networking.Packets.Response.AreaServer;
 using Fragment.NetSlum.Networking.Packets.Response;
 using Fragment.NetSlum.Networking.Sessions;
+using Fragment.NetSlum.Persistence;
 using Microsoft.Extensions.Logging;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.AreaServer;
@@ -19,10 +20,12 @@ namespace Fragment.NetSlum.Networking.Packets.Request.AreaServer;
 [FragmentPacket(MessageType.Data, OpCodes.Data_AreaServerPublishDetails6Request)]
 public class AreaServerPublishDetailsRequest:BaseRequest
 {
+    private readonly FragmentContext _database;
     private readonly ILogger<AreaServerPublishDetailsRequest> _logger;
 
-    public AreaServerPublishDetailsRequest(ILogger<AreaServerPublishDetailsRequest> logger)
+    public AreaServerPublishDetailsRequest(FragmentContext database, ILogger<AreaServerPublishDetailsRequest> logger)
     {
+        _database = database;
         _logger = logger;
     }
 

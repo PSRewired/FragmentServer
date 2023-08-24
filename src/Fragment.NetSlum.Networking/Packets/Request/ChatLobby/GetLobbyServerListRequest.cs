@@ -1,6 +1,7 @@
 using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Fragment.NetSlum.Networking.Attributes;
 using Fragment.NetSlum.Networking.Constants;
@@ -8,6 +9,8 @@ using Fragment.NetSlum.Networking.Objects;
 using Fragment.NetSlum.Networking.Packets.Response.ChatLobby;
 using Fragment.NetSlum.Networking.Sessions;
 using Fragment.NetSlum.Persistence;
+using Fragment.NetSlum.TcpServer.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.ChatLobby;
 
@@ -30,6 +33,10 @@ public class GetLobbyServerListRequest : BaseRequest
             return Task.FromResult(HandleCategories());
         }
 
+        var category = _database.AreaServerCategories
+            .AsNoTracking()
+            .FirstOrDefault(c => c.Id == categoryId);
+
         var areaServers = session.Server.Sessions
             .Cast<FragmentTcpSession>()
             .Where(s => s.IsAreaServer)
@@ -42,11 +49,17 @@ public class GetLobbyServerListRequest : BaseRequest
         ushort cId = 0;
         foreach (var server in areaServers)
         {
+            // If the game-client IP matches the recorded private IP address of the area-server, we need to send back their local IP
+            // so they are able to connect without NAT
+            var clientIpMatchesPrivate = server.AreaServerInfo!.PrivateConnectionEndpoint != null &&
+                                                 server.AreaServerInfo!.PrivateConnectionEndpoint.Address.Equals(
+                                            IPAddress.Parse(session.Socket!.GetClientIp()));
+
             responses.Add(new LobbyServerEntryResponse()
                 .SetServerId(cId++)
                 .SetLevel(server.AreaServerInfo!.Level)
                 .SetStatus(server.AreaServerInfo.State)
-                .SetExternalAddress(server.AreaServerInfo!.ConnectionEndpoint!)
+                .SetExternalAddress((clientIpMatchesPrivate ? server.AreaServerInfo!.PrivateConnectionEndpoint : server.AreaServerInfo!.PublicConnectionEndpoint)!)
                 .SetDetails(server.AreaServerInfo.Detail)
                 .SetPlayerCount(server.AreaServerInfo.CurrentPlayerCount)
                 .SetServerName(server.AreaServerInfo.ServerName)

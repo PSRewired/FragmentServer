@@ -32,15 +32,17 @@ public class AreaServerIPAddressPortRequest : BaseRequest
         ipAddressBytes.Reverse();
 
         var asIpAddress = new IPAddress(ipAddressBytes.ToArray());
+        var asPort = BinaryPrimitives.ReadUInt16BigEndian(request.Data[4..6].Span);
 
         if (asIpAddress.IsPrivate())
         {
             var socketIp = IPAddress.Parse(session.Socket!.GetClientIp());
             _logger.LogWarning("Area server {ServerName} sent a private IP of {PrivateIp}. Attempting to override using their socket IP of {SocketIp}", session.AreaServerInfo!.ServerName, asIpAddress, socketIp);
+            session.AreaServerInfo!.PrivateConnectionEndpoint = new IPEndPoint(asIpAddress, asPort);
             asIpAddress = socketIp;
         }
 
-        session.AreaServerInfo!.ConnectionEndpoint = new IPEndPoint(
+        session.AreaServerInfo!.PublicConnectionEndpoint = new IPEndPoint(
             asIpAddress, BinaryPrimitives.ReadUInt16BigEndian(request.Data[4..6].Span));
 
         BaseResponse response = new AreaServerIPAddressPortResponse();
