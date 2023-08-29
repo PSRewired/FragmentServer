@@ -9,14 +9,13 @@ public class CharacterStatsChangeListener : AbstractEntityChangeListener<Fragmen
 {
     protected override Task OnEntityChanged(FragmentContext context, EntityEntry entry)
     {
-
         if (entry.Entity is not CharacterStats statsEntry)
         {
             return Task.CompletedTask;
         }
 
-        // Only update the history tables when stats are modified or added for the first time
-        if (entry.State != EntityState.Modified || entry.State != EntityState.Added)
+        // If the player stats are deleted (which should never happen), we can ignore stats updates
+        if (entry.State == EntityState.Deleted)
         {
             return Task.CompletedTask;
         }

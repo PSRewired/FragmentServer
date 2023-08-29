@@ -46,7 +46,9 @@ public class EntityChangeInterceptor : SaveChangesInterceptor
     {
         context.ChangeTracker.DetectChanges();
 
-        var changedEntities = context.ChangeTracker.Entries().ToArray();
+        var changedEntities = context.ChangeTracker.Entries()
+            .Where(e => e.State is EntityState.Added or EntityState.Modified or EntityState.Deleted)
+            .ToArray();
 
         foreach (var entry in changedEntities)
         {
