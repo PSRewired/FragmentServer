@@ -27,11 +27,8 @@ public class MailContentResponse : BaseResponse
 
     public override FragmentMessage Build()
     {
-        var contentBytes = new Span<byte>(new byte[1200]);
-        var avatarBytes = new Span<byte>(new byte[130]);
-
-        _content.ToShiftJis(false).CopyTo(contentBytes);
-        _avatarDescriptor.ToShiftJis(false).CopyTo(avatarBytes);
+        var contentBytes = _content.ToShiftJis(false).EnsureSize(1200);
+        var avatarBytes = _avatarDescriptor.ToShiftJis(false).EnsureSize(130);
 
         var writer = new MemoryWriter(contentBytes.Length +
                                       avatarBytes.Length +
@@ -39,18 +36,21 @@ public class MailContentResponse : BaseResponse
                                       sizeof(uint)
         );
 
+        var foo = new Span<byte>(new byte[130]);
+        foo[2] = 0x20;
+
         writer.Write((byte)5);
         writer.Skip(3);
         writer.Write((ushort)0);
-        writer.Write(new byte[1200].AsSpan());
+        writer.Write(contentBytes);
         writer.Write((ushort)0);
-        writer.Write(new byte[130].AsSpan());
+        writer.Write(foo);
 
         return new FragmentMessage
         {
             MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataGetMailContentResponse,
-            Data = new byte[2],
+            Data = writer.Buffer,
         };
     }
 }

@@ -2,6 +2,7 @@ using System.Buffers;
 using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.IO;
+using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Crypto;
 using Fragment.NetSlum.Networking.Objects;
 using Microsoft.Extensions.Logging;
@@ -26,7 +27,7 @@ public class EncryptionEncoder : IMessageEncoder
             var checksum = response.Checksum;
 
             // Need to copy the checksum to the payload before encryption
-            var payloadLength = GetPaddedBufferLength(response.Data.Length + 2);
+            var payloadLength = GetPaddedBufferLength(response.Data.Length + 2, response.MessageType);
 
             using var bufferOwner = MemoryPool<byte>.Shared.Rent(payloadLength);
             var buffer = bufferOwner.Memory.Span;
@@ -42,19 +43,20 @@ public class EncryptionEncoder : IMessageEncoder
             }
         }
     }
+
     /// <summary>
     /// Fragment requires data packets to be packed into buffers aligned by 8 bytes
     /// </summary>
     /// <param name="dataLength"></param>
+    /// <param name="responseMessageType"></param>
     /// <returns></returns>
-    private static int GetPaddedBufferLength(int dataLength)
+    private static int GetPaddedBufferLength(int dataLength, MessageType responseMessageType)
     {
+        if (responseMessageType != MessageType.Data)
+        {
+            return dataLength;
+        }
+
         return (dataLength + 7) & ~7;
-        // while (((dataLength) & 7) != 0)
-        // {
-        //     dataLength += 1;
-        // }
-        //
-        // return dataLength;
     }
 }

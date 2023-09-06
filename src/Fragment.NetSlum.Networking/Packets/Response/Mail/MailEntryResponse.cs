@@ -69,10 +69,10 @@ public class MailEntryResponse : BaseResponse
     {
         var recipientNameBytes = _recipientName.ToShiftJis(false).EnsureSize(18);
         var senderNameBytes = _senderName.ToShiftJis(false).EnsureSize(18);
-        var subjectLineBytes = _subjectLine.ToShiftJis(false).EnsureSize(128);
+        var subjectLineBytes = _subjectLine.ToShiftJis(false).EnsureSize(80);
 
 
-        var writer = new MemoryWriter(sizeof(uint) * 5 +
+        var writer = new MemoryWriter(sizeof(uint) * 6 +
                                       recipientNameBytes.Length +
                                       senderNameBytes.Length +
                                       subjectLineBytes.Length +
@@ -81,6 +81,7 @@ public class MailEntryResponse : BaseResponse
 
         writer.Write(_mailId);
         writer.Write(_recipientAccountId);
+        writer.Write((uint)0);
         writer.Write((uint)_sentAt.ToEpoch());
         writer.Write((byte)0x07);
         writer.Write(_senderAccountId);

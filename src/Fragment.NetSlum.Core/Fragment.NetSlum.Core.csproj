@@ -9,7 +9,7 @@
 
     <ItemGroup>
         <PackageReference Include="EFCore.NamingConventions" Version="7.0.2" />
-        <PackageReference Include="IPNetwork2" Version="2.6.605" />
+        <PackageReference Include="IPNetwork2" Version="2.6.608" />
         <PackageReference Include="MediatR" Version="12.1.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.10" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
