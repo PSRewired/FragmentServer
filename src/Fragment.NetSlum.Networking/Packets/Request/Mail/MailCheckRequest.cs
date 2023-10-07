@@ -27,7 +27,7 @@ public class MailCheckRequest : BaseRequest
         var accountId = BinaryPrimitives.ReadInt32BigEndian(request.Data.Span[..4]);
 
         var undeliveredMailCount = _database.Mails
-            .Count(m => m.RecipientId == accountId && m.Read == false);
+            .Count(m => m.RecipientId == accountId && m.Delivered == false);
 
         //await _database.Mails
         //    .Where(m => m.RecipientId == accountId && m.Delivered == false)

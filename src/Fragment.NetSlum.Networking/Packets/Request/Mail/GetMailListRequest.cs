@@ -28,7 +28,7 @@ public class GetMailListRequest : BaseRequest
 
         var availableMail = _database.Mails
             .AsNoTracking()
-            .Where(m => m.RecipientId == accountId);
+            .Where(m => m.RecipientId == accountId && m.Delivered == false);
 
         var responses = new List<FragmentMessage>
         {
