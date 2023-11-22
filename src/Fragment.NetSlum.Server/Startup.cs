@@ -109,7 +109,7 @@ public class Startup
 
         app.UseStaticFiles();
         app.UseOpenApi();
-        app.UseSwaggerUi3(opt =>
+        app.UseSwaggerUi(opt =>
         {
             opt.Path = "/api/docs";
             opt.CustomStylesheetPath = "/swagger/css/ui.css";
