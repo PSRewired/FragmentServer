@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="EFCore.NamingConventions" Version="8.0.0-rc.2" />
+        <PackageReference Include="EFCore.NamingConventions" Version="8.0.2" />
         <PackageReference Include="IPNetwork2" Version="2.6.618">
             <Aliases>IPNetwork2</Aliases>
         </PackageReference>

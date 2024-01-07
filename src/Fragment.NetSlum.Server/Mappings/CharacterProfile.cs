@@ -18,6 +18,7 @@ public class CharacterProfile : Profile
             .ForMember(x => x.Greeting, y => y.MapFrom(z => z.GreetingMessage))
             .ForMember(x => x.ModelId, y => y.MapFrom(z => z.FullModelId))
             .ForMember(x => x.GuildId, y => y.MapFrom(z => z.GuildId))
+            .ForMember(x => x.AccountId, y => y.MapFrom(z => z.PlayerAccountId))
             .ForMember(x => x.CurrentHp, y => y.MapFrom(z => z.CharacterStats.CurrentHp))
             .ForMember(x => x.CurrentSp, y => y.MapFrom(z => z.CharacterStats.CurrentSp))
             .ForMember(x => x.CurrentGp, y => y.MapFrom(z => z.CharacterStats.CurrentGp))

@@ -20,4 +20,5 @@ public class PlayerInfo
     public ushort BronzeCoinCount { get; set; }
     public uint ModelId { get; set; }
     public string AvatarId { get; set; } = "";
+    public int AccountId { get; set; }
 }

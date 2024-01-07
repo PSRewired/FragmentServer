@@ -85,6 +85,23 @@ public class PlayersController : ControllerBase
     }
 
     /// <summary>
+    /// Returns character information for all characters associated with an account ID
+    /// </summary>
+    /// <param name="accountId"></param>
+    /// <response code="200"></response>
+    /// <response code="204">Account does not exist or no data could be found</response>
+    [HttpGet("account/{accountId:int}")]
+    public IEnumerable<PlayerInfo> GetAccountPlayerInfos(int accountId)
+    {
+        var players = _database.Characters
+            .AsNoTracking()
+            .Include(p => p.CharacterStats)
+            .Where(p => p.PlayerAccountId == accountId);
+
+        return _mapper.Map<IEnumerable<PlayerInfo>>(players);
+    }
+
+    /// <summary>
     /// Returns historical statistics for the given player ID
     /// </summary>
     /// <param name="characterId"></param>
@@ -95,7 +112,7 @@ public class PlayersController : ControllerBase
     {
         var playerStats = _database.CharacterStatHistory
             .AsNoTracking()
-            .Where(p => p.Id == characterId)
+            .Where(p => p.CharacterId == characterId)
             .OrderByDescending(p => p.CreatedAt);
 
         foreach (var stats in playerStats)
