@@ -87,6 +87,18 @@ public class MigratePlayersCommand : AsyncCommand<MigratePlayersCommand.Settings
                 continue;
             }
 
+            var lastLogin = _oldDatabase.RankingData
+                .AsNoTracking()
+                .Where(r => r.CharacterSaveId == existingCharacter.CharacterSaveId)
+                .OrderByDescending(r => r.Id)
+                .FirstOrDefault();
+
+            var firstLogin = _oldDatabase.RankingData
+                .AsNoTracking()
+                .Where(r => r.CharacterSaveId == existingCharacter.CharacterSaveId)
+                .OrderBy(r => r.Id)
+                .FirstOrDefault();
+
             var mappedCharacter = new Character
             {
                 Id = existingCharacter.PlayerId,
@@ -96,6 +108,12 @@ public class MigratePlayersCommand : AsyncCommand<MigratePlayersCommand.Settings
                 CurrentLevel = existingCharacter.CharacterLevel!.Value,
                 GreetingMessage = existingCharacter.Greeting.AsSpan().ToShiftJisString().Replace("\r\n", "\n").TrimNull(),
                 FullModelId = (uint)existingCharacter.ModelNumber!.Value,
+                LastLoginAt = lastLogin != null
+                    ? TryParseJankTimestamp(lastLogin.LoginTime)
+                    : DateTime.MinValue,
+                CreatedAt = firstLogin != null
+                    ? TryParseJankTimestamp(firstLogin.LoginTime)
+                    : DateTime.MinValue,
                 CharacterStats = new CharacterStats
                 {
                     Id = exists?.CharacterStats.Id ?? 0,
@@ -166,27 +184,6 @@ public class MigratePlayersCommand : AsyncCommand<MigratePlayersCommand.Settings
                 currentAccountId = stat.AccountId;
             }
 
-            // The ranking database uses multiple different date formats for whatever reason so we need to perform some jank here to get the
-            // right format.
-            var loginTime = DateTime.MinValue;
-
-            try
-            {
-                loginTime = DateTime.ParseExact(stat.LoginTime, "ddd MMM d HH:mm:ss yyyy", CultureInfo.InvariantCulture);
-            }
-            catch (FormatException)
-            {
-                try
-                {
-                    loginTime = DateTime.ParseExact(stat.LoginTime, "ddd MMM  d HH:mm:ss yyyy", CultureInfo.InvariantCulture);
-                }
-                catch (FormatException)
-                {
-                    AnsiConsole.WriteLine($"Failed to parse loginTime {stat.LoginTime}");
-                    continue;
-                }
-            }
-
             stat.CharacterSaveId = stat.CharacterSaveId.TrimNull();
 
             int? existingCharacterId = _database.Characters.AsNoTracking()
@@ -208,18 +205,18 @@ public class MigratePlayersCommand : AsyncCommand<MigratePlayersCommand.Settings
                 CurrentSp = stat.CharacterSp,
                 AverageFieldLevel = stat.AverageFieldLevel,
                 OnlineTreasures = (int)stat.GodStatueCounterOnline,
-                CreatedAt = loginTime,
+                CreatedAt = TryParseJankTimestamp(stat.LoginTime),
             };
 
             if (_database.CharacterStatHistory.AsNoTracking().Any(sh => sh.Id == mappedCharacter.Id))
             {
-
                 _database.CharacterStatHistory.Update(mappedCharacter);
             }
             else
             {
                 _database.CharacterStatHistory.Add(mappedCharacter);
             }
+
             count += 1;
 
             if (count % 5000 == 0)
@@ -275,5 +272,29 @@ public class MigratePlayersCommand : AsyncCommand<MigratePlayersCommand.Settings
         }
 
         AnsiConsole.MarkupLine("[green]Done updating players![/]");
+    }
+
+    private static DateTime TryParseJankTimestamp(string timestamp)
+    {
+        // The ranking database uses multiple different date formats for whatever reason so we need to perform some jank here to get the
+        // right format.
+        var loginTime = DateTime.MinValue;
+
+        try
+        {
+            loginTime = DateTime.ParseExact(timestamp, "ddd MMM d HH:mm:ss yyyy", CultureInfo.InvariantCulture);
+        }
+        catch (FormatException)
+        {
+            try
+            {
+                loginTime = DateTime.ParseExact(timestamp, "ddd MMM  d HH:mm:ss yyyy", CultureInfo.InvariantCulture);
+            }
+            catch (FormatException)
+            {
+            }
+        }
+
+        return loginTime;
     }
 }
