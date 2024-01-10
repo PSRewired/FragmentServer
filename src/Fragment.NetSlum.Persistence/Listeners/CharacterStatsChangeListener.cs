@@ -9,18 +9,13 @@ public class CharacterStatsChangeListener : AbstractEntityChangeListener<Fragmen
 {
     protected override Task OnEntityChanged(FragmentContext context, EntityEntry entry)
     {
-        if (entry.Entity is not CharacterStats statsEntry)
-        {
-            return Task.CompletedTask;
-        }
-
         // If the player stats are deleted (which should never happen), we can ignore stats updates
-        if (entry.State == EntityState.Deleted)
+        if (entry.State != EntityState.Modified)
         {
             return Task.CompletedTask;
         }
 
-        context.CharacterStatHistory.Add(CharacterStatHistory.FromStats(statsEntry));
+        context.CharacterStatHistory.Add(CharacterStatHistory.FromStats((CharacterStats)entry.OriginalValues.ToObject()));
 
         return Task.CompletedTask;
     }
