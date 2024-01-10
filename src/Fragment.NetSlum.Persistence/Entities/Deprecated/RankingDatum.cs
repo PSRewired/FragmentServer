@@ -10,7 +10,7 @@ public class RankingDatum
     [Column("ID")]
     public int Id { get; set; }
 
-    [Column(TypeName = "tinytext")]
+    [Column("AntiCheatEngineResult", TypeName = "tinytext")]
     public string AntiCheatEngineResult { get; set; } = null!;
 
     [Column("loginTime", TypeName = "text")]
@@ -25,12 +25,13 @@ public class RankingDatum
     [Column("CharacterSaveID", TypeName = "text")]
     public string CharacterSaveId { get; set; } = null!;
 
-    [Column(TypeName = "text")]
+    [Column("CharacterName", TypeName = "text")]
     public string CharacterName { get; set; } = null!;
 
+    [Column("CharacterLevel")]
     public byte CharacterLevel { get; set; }
 
-    [Column(TypeName = "text")]
+    [Column("CharacterClassName", TypeName = "text")]
     public string CharacterClassName { get; set; } = null!;
 
     [Column("CharacterHP")]
@@ -42,9 +43,10 @@ public class RankingDatum
     [Column("CharacterGP", TypeName = "mediumint unsigned")]
     public uint CharacterGp { get; set; }
 
-    [Column(TypeName = "mediumint unsigned")]
+    [Column("GodStatueCounterOnline", TypeName = "mediumint unsigned")]
     public uint GodStatueCounterOnline { get; set; }
 
+    [Column("AverageFieldLevel")]
     public byte AverageFieldLevel { get; set; }
 
     [Column("AccountID")]

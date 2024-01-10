@@ -60,8 +60,8 @@ public class MigrateGuildsCommand : AsyncCommand<MigrateGuildsCommand.Settings>
             var mappedGuild = new Guild
             {
                 Id = (ushort)existingGuild.GuildId,
-                Name = existingGuild.GuildName!.AsSpan().ToShiftJisString(),
-                Comment = existingGuild.GuildComment!.AsSpan().ToShiftJisString(),
+                Name = existingGuild.GuildName!.AsSpan().ToShiftJisString().TrimNull(),
+                Comment = existingGuild.GuildComment!.AsSpan().ToShiftJisString().TrimNull(),
                 Emblem = existingGuild.GuildEmblem!,
                 Stats = new GuildStats
                 {

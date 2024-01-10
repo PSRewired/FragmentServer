@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Fragment.NetSlum.Core.Constants;
@@ -28,17 +29,25 @@ public class MigratePlayersCommand : AsyncCommand<MigratePlayersCommand.Settings
 
     public override Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
+        /*
         AnsiConsole.Progress()
             .AutoClear(false)
             .Columns(new TaskDescriptionColumn(), new ProgressBarColumn(), new PercentageColumn(), new RemainingTimeColumn(),
                 new SpinnerColumn())
             .Start(MigratePlayerRecords);
+            */
 
         AnsiConsole.Progress()
             .AutoClear(false)
             .Columns(new TaskDescriptionColumn(), new ProgressBarColumn(), new PercentageColumn(), new RemainingTimeColumn(),
                 new SpinnerColumn())
             .Start(MigrateCharacterRecords);
+
+        AnsiConsole.Progress()
+            .AutoClear(false)
+            .Columns(new TaskDescriptionColumn(), new ProgressBarColumn(), new PercentageColumn(), new RemainingTimeColumn(),
+                new SpinnerColumn())
+            .Start(MigrateCharacterStatHistory);
 
 
         return Task.FromResult(0);
@@ -62,7 +71,8 @@ public class MigratePlayersCommand : AsyncCommand<MigratePlayersCommand.Settings
 
             if (oldPlayerRecord == null)
             {
-                AnsiConsole.MarkupLine("[orange3]Unable to find old player record ID {0} for character {1}. Was the table migrated?[/]", existingCharacter.AccountId!, existingCharacter.CharacterName!.AsSpan().ToShiftJisString());
+                AnsiConsole.MarkupLine("[orange3]Unable to find old player record ID {0} for character {1}. Was the table migrated?[/]",
+                    existingCharacter.AccountId!, existingCharacter.CharacterName!.AsSpan().ToShiftJisString());
                 pTask.Increment(1);
                 continue;
             }
@@ -71,7 +81,8 @@ public class MigratePlayersCommand : AsyncCommand<MigratePlayersCommand.Settings
 
             if (newPlayerRecord == null)
             {
-                AnsiConsole.MarkupLine("[orange3]Unable to find new player record ID {0} for character {1}. Was the table migrated?[/]", existingCharacter.AccountId!, existingCharacter.CharacterName!.AsSpan().ToShiftJisString());
+                AnsiConsole.MarkupLine("[orange3]Unable to find new player record ID {0} for character {1}. Was the table migrated?[/]",
+                    existingCharacter.AccountId!, existingCharacter.CharacterName!.AsSpan().ToShiftJisString());
                 pTask.Increment(1);
                 continue;
             }
@@ -79,12 +90,13 @@ public class MigratePlayersCommand : AsyncCommand<MigratePlayersCommand.Settings
             var mappedCharacter = new Character
             {
                 Id = existingCharacter.PlayerId,
-                CharacterName = existingCharacter.CharacterName.AsSpan().ToShiftJisString(),
+                SaveId = existingCharacter.CharacterSaveId!.TrimNull(),
+                CharacterName = existingCharacter.CharacterName.AsSpan().ToShiftJisString().TrimNull(),
                 Class = (CharacterClass)existingCharacter.ClassId!,
                 CurrentLevel = existingCharacter.CharacterLevel!.Value,
-                GreetingMessage = existingCharacter.Greeting.AsSpan().ToShiftJisString().Replace("\r\n", "\n"),
+                GreetingMessage = existingCharacter.Greeting.AsSpan().ToShiftJisString().Replace("\r\n", "\n").TrimNull(),
                 FullModelId = (uint)existingCharacter.ModelNumber!.Value,
-                CharacterStats = new()
+                CharacterStats = new CharacterStats
                 {
                     Id = exists?.CharacterStats.Id ?? 0,
                     CharacterId = existingCharacter.PlayerId,
@@ -110,6 +122,7 @@ public class MigratePlayersCommand : AsyncCommand<MigratePlayersCommand.Settings
                 {
                     _database.Add(mappedCharacter);
                 }
+
                 _database.SaveChanges();
                 _database.ChangeTracker.Clear();
             }
@@ -120,8 +133,105 @@ public class MigratePlayersCommand : AsyncCommand<MigratePlayersCommand.Settings
                 AnsiConsole.WriteException(e);
                 continue;
             }
+
             pTask.Increment(1);
         }
+    }
+
+    private void MigrateCharacterStatHistory(ProgressContext ctx)
+    {
+        var existingStats = _oldDatabase.RankingData
+            .AsNoTracking()
+            .Where(s => s.AccountId > 0)
+            .OrderBy(s => s.AccountId);
+
+        var characterCount = existingStats.Count() / 5000;
+        var pTask = ctx.AddTask($"[bold yellow] Generating {characterCount} statistic records[/]", maxValue: characterCount);
+
+        var count = 0;
+        var currentAccountId = -1;
+        foreach (var stat in existingStats)
+        {
+            if (currentAccountId != stat.AccountId && !_database.PlayerAccounts.AsNoTracking().Any(c => c.Id == stat.AccountId))
+            {
+                AnsiConsole.WriteLine($"Account ID {stat.AccountId} does not exist");
+                //pTask.Increment(1);
+                count += 1;
+                continue;
+            }
+
+            if (currentAccountId != stat.AccountId)
+            {
+                AnsiConsole.WriteLine($"AccountID changed! {currentAccountId} -> {stat.AccountId}");
+                currentAccountId = stat.AccountId;
+            }
+
+            // The ranking database uses multiple different date formats for whatever reason so we need to perform some jank here to get the
+            // right format.
+            var loginTime = DateTime.MinValue;
+
+            try
+            {
+                loginTime = DateTime.ParseExact(stat.LoginTime, "ddd MMM d HH:mm:ss yyyy", CultureInfo.InvariantCulture);
+            }
+            catch (FormatException)
+            {
+                try
+                {
+                    loginTime = DateTime.ParseExact(stat.LoginTime, "ddd MMM  d HH:mm:ss yyyy", CultureInfo.InvariantCulture);
+                }
+                catch (FormatException)
+                {
+                    AnsiConsole.WriteLine($"Failed to parse loginTime {stat.LoginTime}");
+                    continue;
+                }
+            }
+
+            stat.CharacterSaveId = stat.CharacterSaveId.TrimNull();
+
+            int? existingCharacterId = _database.Characters.AsNoTracking()
+                .FirstOrDefault(c => c.SaveSlotId.Equals(stat.CharacterSaveId))?.Id;
+
+            if (existingCharacterId == null)
+            {
+                AnsiConsole.WriteLine($"No character with name {stat.CharacterName} -- '{stat.CharacterSaveId}'");
+                count += 1;
+                continue;
+            }
+
+            var mappedCharacter = new CharacterStatHistory
+            {
+                Id = stat.Id,
+                CharacterId = existingCharacterId!.Value,
+                CurrentHp = stat.CharacterHp,
+                CurrentGp = stat.CharacterGp,
+                CurrentSp = stat.CharacterSp,
+                AverageFieldLevel = stat.AverageFieldLevel,
+                OnlineTreasures = (int)stat.GodStatueCounterOnline,
+                CreatedAt = loginTime,
+            };
+
+            if (_database.CharacterStatHistory.AsNoTracking().Any(sh => sh.Id == mappedCharacter.Id))
+            {
+
+                _database.CharacterStatHistory.Update(mappedCharacter);
+            }
+            else
+            {
+                _database.CharacterStatHistory.Add(mappedCharacter);
+            }
+            count += 1;
+
+            if (count % 5000 == 0)
+            {
+                _database.SaveChanges();
+                _database.ChangeTracker.Clear();
+                pTask.Increment(1);
+            }
+        }
+
+        _database.SaveChanges();
+        _database.ChangeTracker.Clear();
     }
 
     private void MigratePlayerRecords(ProgressContext ctx)
@@ -150,20 +260,13 @@ public class MigratePlayersCommand : AsyncCommand<MigratePlayersCommand.Settings
                 var mappedPlayer = new PlayerAccount
                 {
                     Id = (ushort)existingPlayer.Id,
-                    SaveId = existingPlayer.Saveid,
+                    SaveId = existingPlayer.Saveid.TrimNull(),
                 };
 
                 _database.Add(mappedPlayer);
-                pTask.Increment(1);
-
-                if (pTask.Value % 100 != 0)
-                {
-                    continue;
-                }
-
-                AnsiConsole.MarkupLine("[cyan]Persisting 100 records to the database...[/]");
                 _database.SaveChanges();
                 _database.ChangeTracker.Clear();
+                pTask.Increment(1);
             }
             catch (Exception e)
             {
@@ -171,9 +274,6 @@ public class MigratePlayersCommand : AsyncCommand<MigratePlayersCommand.Settings
             }
         }
 
-        AnsiConsole.MarkupLine("[cyan]Flushing all remaining records...[/]");
-        _database.SaveChanges();
-        _database.ChangeTracker.Clear();
         AnsiConsole.MarkupLine("[green]Done updating players![/]");
     }
 }

@@ -54,7 +54,7 @@ public class MigrateBbsCommand : AsyncCommand<MigrateBbsCommand.Settings>
             var mappedThread = new BbsThread
             {
                 Id = (ushort)existingThread.ThreadId,
-                Title = existingThread.ThreadTitle.AsSpan().ToShiftJisString(),
+                Title = existingThread.ThreadTitle.AsSpan().ToShiftJisString().TrimNull(),
                 CategoryId = (ushort)existingThread.CategoryId,
             };
 
@@ -86,13 +86,13 @@ public class MigrateBbsCommand : AsyncCommand<MigrateBbsCommand.Settings>
                 {
                     Id = oldPost.PostId,
                     Thread = mappedThread,
-                    Title = oldPost.Title.AsSpan().ToShiftJisString(),
+                    Title = oldPost.Title.AsSpan().ToShiftJisString().TrimNull(),
                     PostedBy = _database.Characters.First(c => c.CharacterName == charName),
                     CreatedAt = oldPost.Date,
                     PostContent = new BbsPostContent
                     {
                         Id = (ushort)(oldContentRecord?.PostBodyId ?? 0),
-                        Content = (oldContentRecord?.PostBody.AsSpan().ToShiftJisString()) ?? "",
+                        Content = oldContentRecord?.PostBody.AsSpan().ToShiftJisString().TrimNull() ?? "",
                     },
                 };
 
@@ -100,7 +100,7 @@ public class MigrateBbsCommand : AsyncCommand<MigrateBbsCommand.Settings>
                 {
                     Id = (ushort)(oldContentRecord?.PostBodyId ?? 0),
                     Post = mappedPost,
-                    Content = oldContentRecord?.PostBody.AsSpan().ToShiftJisString() ?? "",
+                    Content = oldContentRecord?.PostBody.AsSpan().ToShiftJisString().TrimNull() ?? "",
                 };
 
                 _database.Add(postContent);

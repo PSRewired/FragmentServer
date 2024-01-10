@@ -102,4 +102,14 @@ public static class StringExtensions
     {
         return str.Length > size ? str[..size] : str;
     }
+
+    /// <summary>
+    /// Strips all NUL characters from the given string
+    /// </summary>
+    /// <param name="str"></param>
+    /// <returns></returns>
+    public static string TrimNull(this string str)
+    {
+        return str.Replace("\0", string.Empty);
+    }
 }

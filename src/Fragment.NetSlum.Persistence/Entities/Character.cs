@@ -28,6 +28,8 @@ public class Character : IConfigurableEntity<Character>
     [MySqlCollation("cp932_japanese_ci")]
     public required string GreetingMessage { get; set; }
 
+    [MaxLength(32)]
+    public string SaveId { get; set; } = default!;
     public byte SaveSlotId { get; set; }
 
     public required int CurrentLevel { get; set; }

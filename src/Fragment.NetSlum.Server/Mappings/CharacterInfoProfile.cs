@@ -9,6 +9,7 @@ public class CharacterInfoProfile : Profile
     public CharacterInfoProfile()
     {
         CreateMap<CharacterInfo, Character>()
+            .ForMember(x => x.SaveId, y => y.MapFrom(z => z.SaveId))
             .ForMember(x => x.SaveSlotId, y => y.MapFrom(z => z.SaveSlot))
             .ForMember(x => x.CharacterName, y => y.MapFrom(z => z.CharacterName))
             .ForMember(x => x.Class, y => y.MapFrom(z => z.Class))

@@ -58,7 +58,7 @@ public class MigrateMailCommand : AsyncCommand<MigrateMailCommand.Settings>
                     Content = new MailContent
                     {
                         Id = oldContent.MailBodyId,
-                        Content = oldContent.MailBody1.AsMemory().ToShiftJisString(),
+                        Content = oldContent.MailBody1.AsMemory().ToShiftJisString().TrimNull(),
                         MailId = oldContent.MailId,
                     }
                 })
@@ -69,14 +69,14 @@ public class MigrateMailCommand : AsyncCommand<MigrateMailCommand.Settings>
                 Id = mailMeta.MailId,
                 CreatedAt = mailMeta.Date,
                 Recipient = _database.PlayerAccounts.FirstOrDefault(pa => pa.Id == mailMeta.ReceiverAccountId),
-                RecipientName = mailMeta.ReceiverName.AsSpan().ToShiftJisString(),
+                RecipientName = mailMeta.ReceiverName.AsSpan().ToShiftJisString().TrimNull(),
                 Sender = _database.PlayerAccounts.FirstOrDefault(pa => pa.Id == mailMeta.SenderAccountId),
-                SenderName = mailMeta.SenderName.AsSpan().ToShiftJisString(),
+                SenderName = mailMeta.SenderName.AsSpan().ToShiftJisString().TrimNull(),
                 Read = true, // This field does not exist on the current database, default it to true for the migration
                 Delivered = mailMeta.MailDelivered!.Value,
                 AvatarId = mappedContent?.AvatarId ?? "",
                 Content = mappedContent?.Content,
-                Subject = mailMeta.MailSubject.AsSpan().ToShiftJisString(),
+                Subject = mailMeta.MailSubject.AsSpan().ToShiftJisString().TrimNull(),
             };
 
             _database.Add(mappedMail);
