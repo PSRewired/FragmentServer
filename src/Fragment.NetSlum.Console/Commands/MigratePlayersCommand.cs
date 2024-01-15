@@ -29,13 +29,11 @@ public class MigratePlayersCommand : AsyncCommand<MigratePlayersCommand.Settings
 
     public override Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
-        /*
         AnsiConsole.Progress()
             .AutoClear(false)
             .Columns(new TaskDescriptionColumn(), new ProgressBarColumn(), new PercentageColumn(), new RemainingTimeColumn(),
                 new SpinnerColumn())
             .Start(MigratePlayerRecords);
-            */
 
         AnsiConsole.Progress()
             .AutoClear(false)
@@ -43,11 +41,13 @@ public class MigratePlayersCommand : AsyncCommand<MigratePlayersCommand.Settings
                 new SpinnerColumn())
             .Start(MigrateCharacterRecords);
 
+        /*
         AnsiConsole.Progress()
             .AutoClear(false)
             .Columns(new TaskDescriptionColumn(), new ProgressBarColumn(), new PercentageColumn(), new RemainingTimeColumn(),
                 new SpinnerColumn())
             .Start(MigrateCharacterStatHistory);
+            */
 
 
         return Task.FromResult(0);

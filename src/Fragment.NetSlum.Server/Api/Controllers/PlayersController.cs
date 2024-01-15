@@ -3,6 +3,7 @@ using System.Linq;
 using AutoMapper;
 using Fragment.NetSlum.Networking.Sessions;
 using Fragment.NetSlum.Persistence;
+using Fragment.NetSlum.Persistence.Entities;
 using Fragment.NetSlum.Persistence.Extensions;
 using Fragment.NetSlum.Server.Api.Models;
 using Fragment.NetSlum.TcpServer;
@@ -33,20 +34,22 @@ public class PlayersController : ControllerBase
     [HttpGet]
     public PagedResult<PlayerInfo> GetAllPlayers(int page = 1, int pageSize = 50, string? characterName = null)
     {
-        var guilds = _database.Characters
+        IQueryable<Character> characters = _database.Characters
             .AsNoTracking()
-            .Include(g => g.CharacterStats)
-            .OrderBy(g => g.Id)
-            .Paginate(page, pageSize);
+            .Include(g => g.CharacterStats);
 
         if (!string.IsNullOrWhiteSpace(characterName))
         {
-            guilds = guilds.Where(c => c.CharacterName.Contains(characterName));
+            characters = characters.Where(c =>
+                EF.Functions.Collate(
+                    EF.Functions.Like(c.CharacterName, $"%{characterName}%"), $"utf8mb4_0900_ai_ci"));
         }
 
-        var guildCount = _database.Guilds.Count();
+        var characterCount = characters.Count();
 
-        return new PagedResult<PlayerInfo>(page, pageSize, guildCount, _mapper.Map<List<PlayerInfo>>(guilds.ToList()));
+        var results = characters.Paginate(page, pageSize);
+
+        return new PagedResult<PlayerInfo>(page, pageSize, characterCount, _mapper.Map<List<PlayerInfo>>(results));
     }
 
     /// <summary>
