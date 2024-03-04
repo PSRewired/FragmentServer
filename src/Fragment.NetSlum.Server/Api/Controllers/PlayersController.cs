@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
 using Fragment.NetSlum.Networking.Sessions;
 using Fragment.NetSlum.Persistence;
 using Fragment.NetSlum.Persistence.Entities;
 using Fragment.NetSlum.Persistence.Extensions;
 using Fragment.NetSlum.Server.Api.Models;
+using Fragment.NetSlum.Server.Mappings;
 using Fragment.NetSlum.TcpServer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,13 +18,11 @@ public class PlayersController : ControllerBase
 {
     private readonly ITcpServer _gameServer;
     private readonly FragmentContext _database;
-    private readonly IMapper _mapper;
 
-    public PlayersController(ITcpServer gameServer, FragmentContext database, IMapper mapper)
+    public PlayersController(ITcpServer gameServer, FragmentContext database)
     {
         _gameServer = gameServer;
         _database = database;
-        _mapper = mapper;
     }
 
     /// <summary>
@@ -47,9 +45,11 @@ public class PlayersController : ControllerBase
 
         var characterCount = characters.Count();
 
-        var results = characters.Paginate(page, pageSize);
+        var results = characters.Paginate(page, pageSize)
+            .Select(r => CharacterMapper.Map(r))
+            .ToList();
 
-        return new PagedResult<PlayerInfo>(page, pageSize, characterCount, _mapper.Map<List<PlayerInfo>>(results));
+        return new PagedResult<PlayerInfo>(page, pageSize, characterCount, results);
     }
 
     /// <summary>
@@ -84,7 +84,7 @@ public class PlayersController : ControllerBase
             .Include(p => p.CharacterStats)
             .FirstOrDefault(p => p.Id == characterId);
 
-        return _mapper.Map<PlayerInfo>(player);
+        return player == null ? null : CharacterMapper.Map(player);
     }
 
     /// <summary>
@@ -101,7 +101,10 @@ public class PlayersController : ControllerBase
             .Include(p => p.CharacterStats)
             .Where(p => p.PlayerAccountId == accountId);
 
-        return _mapper.Map<IEnumerable<PlayerInfo>>(players);
+        foreach (var player in players)
+        {
+            yield return CharacterMapper.Map(player);
+        }
     }
 
     /// <summary>
@@ -120,7 +123,7 @@ public class PlayersController : ControllerBase
 
         foreach (var stats in playerStats)
         {
-            yield return _mapper.Map<PlayerStats>(stats);
+            yield return CharacterMapper.Map(stats);
         }
     }
 }

@@ -72,7 +72,6 @@ public class Startup
         ;
 
         services.AddCommandBus(typeof(Startup), typeof(Networking.Entrypoint));
-        services.AddAutoMapper(typeof(Startup));
         services.AddOpenApiDocument(doc =>
         {
             doc.Version = "v1";

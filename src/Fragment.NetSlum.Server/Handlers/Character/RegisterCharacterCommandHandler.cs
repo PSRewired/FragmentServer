@@ -2,11 +2,11 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using Fragment.NetSlum.Core.CommandBus.Contracts.Commands;
 using Fragment.NetSlum.Networking.Commands.Characters;
 using Fragment.NetSlum.Persistence;
 using Fragment.NetSlum.Persistence.Entities;
+using Fragment.NetSlum.Server.Mappings;
 using Microsoft.EntityFrameworkCore;
 
 namespace Fragment.NetSlum.Server.Handlers.Character;
@@ -14,12 +14,10 @@ namespace Fragment.NetSlum.Server.Handlers.Character;
 public class RegisterCharacterCommandHandler : CommandHandler<RegisterCharacterCommand, Persistence.Entities.Character>
 {
     private readonly FragmentContext _database;
-    private readonly IMapper _mapper;
 
-    public RegisterCharacterCommandHandler(FragmentContext database, IMapper mapper)
+    public RegisterCharacterCommandHandler(FragmentContext database)
     {
         _database = database;
-        _mapper = mapper;
     }
 
     public override async Task<Persistence.Entities.Character> Handle(RegisterCharacterCommand command, CancellationToken cancellationToken)
@@ -36,7 +34,7 @@ public class RegisterCharacterCommandHandler : CommandHandler<RegisterCharacterC
 
         PlayerAccount? playerAccount = await _database.PlayerAccounts.FirstOrDefaultAsync(p => p.SaveId == characterInfo.SaveId, cancellationToken);
 
-        character = _mapper.Map(characterInfo, character!);
+        character = CharacterInfoMapper.MapOrCreate(characterInfo, character);
 
         // If a player account was found when looking up the save ID, use that player account instead of persisting a new one
         if (playerAccount != null)

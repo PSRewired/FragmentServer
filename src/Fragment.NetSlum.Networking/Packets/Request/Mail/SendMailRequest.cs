@@ -2,7 +2,6 @@ using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Networking.Attributes;
 using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Objects;
-using Fragment.NetSlum.Networking.Packets.Response.Character;
 using Fragment.NetSlum.Networking.Packets.Response.Mail;
 using Fragment.NetSlum.Networking.Sessions;
 using Fragment.NetSlum.Persistence;

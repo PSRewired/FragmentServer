@@ -1,4 +1,3 @@
-using System;
 using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Core.Models;
 using ImageMagick;

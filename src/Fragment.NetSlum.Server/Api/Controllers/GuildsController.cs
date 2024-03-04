@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
 using Fragment.NetSlum.Persistence;
 using Fragment.NetSlum.Persistence.Extensions;
 using Fragment.NetSlum.Server.Api.Models;
+using Fragment.NetSlum.Server.Mappings;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,12 +14,10 @@ namespace Fragment.NetSlum.Server.Api.Controllers;
 public class GuildsController
 {
     private readonly FragmentContext _database;
-    private readonly IMapper _mapper;
 
-    public GuildsController(FragmentContext database, IMapper mapper)
+    public GuildsController(FragmentContext database)
     {
         _database = database;
-        _mapper = mapper;
     }
 
     /// <summary>
@@ -40,7 +38,7 @@ public class GuildsController
 
         var guildCount = _database.Guilds.Count();
 
-        return new PagedResult<GuildInfo>(page, pageSize, guildCount, _mapper.Map<List<GuildInfo>>(guilds.ToList()));
+        return new PagedResult<GuildInfo>(page, pageSize, guildCount, guilds.Select(g => GuildMapper.Map(g)).ToList());
     }
 
     /// <summary>
@@ -57,7 +55,7 @@ public class GuildsController
             .Include(g => g.Members)
             .FirstOrDefault(g => g.Id == guildId);
 
-        return _mapper.Map<GuildInfo>(guild);
+        return guild == null ? null : GuildMapper.Map(guild);
     }
 
     /// <summary>
@@ -75,7 +73,7 @@ public class GuildsController
 
         foreach (var member in members)
         {
-            yield return _mapper.Map<PlayerInfo>(member);
+            yield return CharacterMapper.Map(member);
         }
     }
 }

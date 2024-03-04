@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using AutoMapper;
 using Fragment.NetSlum.Networking.Sessions;
 using Fragment.NetSlum.Server.Api.Models;
+using Fragment.NetSlum.Server.Mappings;
 using Fragment.NetSlum.TcpServer;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,12 +12,10 @@ namespace Fragment.NetSlum.Server.Api.Controllers;
 public class AreaServersController : ControllerBase
 {
     private readonly ITcpServer _gameServer;
-    private readonly IMapper _mapper;
 
-    public AreaServersController(ITcpServer gameServer, IMapper mapper)
+    public AreaServersController(ITcpServer gameServer)
     {
         _gameServer = gameServer;
-        _mapper = mapper;
     }
 
     /// <summary>
@@ -29,12 +27,17 @@ public class AreaServersController : ControllerBase
     {
         foreach (var client in _gameServer.Sessions)
         {
-            if (client is not FragmentTcpSession session || !session.IsAreaServer)
+            if (client is not FragmentTcpSession { IsAreaServer: true } session)
             {
                 continue;
             }
 
-            yield return _mapper.Map<AreaServerStatus>(session.AreaServerInfo);
+            if (session.AreaServerInfo == null)
+            {
+                continue;
+            }
+
+            yield return AreaServerMapper.Map(session.AreaServerInfo);
         }
     }
 }
