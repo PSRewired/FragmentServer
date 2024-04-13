@@ -9,14 +9,14 @@
 
     <ItemGroup>
         <PackageReference Include="EFCore.NamingConventions" Version="8.0.3" />
-        <PackageReference Include="IPNetwork2" Version="3.0.665">
+        <PackageReference Include="IPNetwork2" Version="3.0.667">
             <Aliases>IPNetwork2</Aliases>
         </PackageReference>
         <PackageReference Include="MediatR" Version="12.2.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.2" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.4" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
-        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.1" />
+        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />
         <PackageReference Include="Serilog" Version="3.1.1" />
         <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
     </ItemGroup>
