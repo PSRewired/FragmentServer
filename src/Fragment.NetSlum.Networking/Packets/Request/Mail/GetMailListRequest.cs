@@ -27,7 +27,6 @@ public class GetMailListRequest : BaseRequest
         var accountId = BinaryPrimitives.ReadUInt32BigEndian(request.Data.Span[..4]);
 
         var availableMail = _database.Mails
-            .AsNoTracking()
             .Where(m => m.RecipientId == accountId && m.Delivered == false);
 
         var responses = new List<FragmentMessage>
@@ -49,7 +48,6 @@ public class GetMailListRequest : BaseRequest
 
             // Set the mail as delivered
             mailPiece.Delivered = true;
-            _database.Entry(mailPiece).State = EntityState.Modified;
         }
 
         _database.SaveChanges();
