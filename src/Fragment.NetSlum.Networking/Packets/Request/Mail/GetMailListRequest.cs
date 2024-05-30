@@ -46,7 +46,13 @@ public class GetMailListRequest : BaseRequest
                 .SetRecipientAccountId((uint)(mailPiece.RecipientId ?? 0))
                 .SetSentAtDate(mailPiece.CreatedAt)
                 .Build());
+
+            // Set the mail as delivered
+            mailPiece.Delivered = true;
+            _database.Entry(mailPiece).State = EntityState.Modified;
         }
+
+        _database.SaveChanges();
 
         return Task.FromResult<ICollection<FragmentMessage>>(responses);
     }
