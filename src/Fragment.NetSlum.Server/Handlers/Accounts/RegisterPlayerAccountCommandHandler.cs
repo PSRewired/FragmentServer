@@ -16,7 +16,7 @@ public class RegisterPlayerAccountCommandHandler : CommandHandler<RegisterPlayer
         _database = database;
     }
 
-    public override async Task<int> Handle(RegisterPlayerAccountCommand command, CancellationToken cancellationToken)
+    public override async ValueTask<int> Handle(RegisterPlayerAccountCommand command, CancellationToken cancellationToken)
     {
         var newAccount = new PlayerAccount
         {

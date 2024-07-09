@@ -6,5 +6,5 @@ namespace Fragment.NetSlum.Networking.Messaging;
 
 public interface IPacketHandler<TRequest>
 {
-    public Task<ICollection<TRequest>> CreateResponse<TSession>(TSession session, TRequest o) where TSession : IScopeable;
+    public ValueTask<ICollection<TRequest>> CreateResponse<TSession>(TSession session, TRequest o) where TSession : IScopeable;
 }

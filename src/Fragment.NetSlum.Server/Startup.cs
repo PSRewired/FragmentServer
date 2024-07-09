@@ -2,6 +2,7 @@ using System.Data;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Fragment.NetSlum.Core.CommandBus;
 using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Networking.Extensions;
 using Fragment.NetSlum.Networking.Stores;
@@ -71,7 +72,13 @@ public class Startup
             .AddProcessAllocatedMemoryHealthCheck(2048)
         ;
 
-        services.AddCommandBus(typeof(Startup), typeof(Networking.Entrypoint));
+        // Register command bus
+        services.AddMediator(opt =>
+        {
+            opt.ServiceLifetime = ServiceLifetime.Transient;
+        });
+        services.AddScoped<ICommandBus, MediatorCommandBus>();
+
         services.AddOpenApiDocument(doc =>
         {
             doc.Version = "v1";

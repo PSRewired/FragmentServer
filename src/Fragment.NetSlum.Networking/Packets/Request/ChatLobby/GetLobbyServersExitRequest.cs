@@ -11,7 +11,7 @@ namespace Fragment.NetSlum.Networking.Packets.Request.ChatLobby;
 [FragmentPacket(MessageType.Data, OpCodes.DataLobbyGetServersExit)]
 public class GetLobbyServersExitRequest : BaseRequest
 {
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         return SingleMessage(new LobbyGetServersExitResponse().Build());
     }

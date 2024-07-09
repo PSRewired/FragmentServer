@@ -21,7 +21,7 @@ public class DissolveGuildRequest : BaseRequest
         _database = database;
     }
 
-    public override async Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override async ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         await _database.Guilds
             .Where(g => g.LeaderId == session.CharacterId)

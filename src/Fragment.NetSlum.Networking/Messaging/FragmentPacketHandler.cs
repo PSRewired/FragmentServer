@@ -20,7 +20,7 @@ public class FragmentPacketHandler : IPacketHandler<FragmentMessage>
         _packetCache = packetCache;
     }
 
-    public async Task<ICollection<FragmentMessage>> CreateResponse<TSession>(TSession session, FragmentMessage o) where TSession : IScopeable
+    public async ValueTask<ICollection<FragmentMessage>> CreateResponse<TSession>(TSession session, FragmentMessage o) where TSession : IScopeable
     {
         BaseRequest? availableResponseObject = GetRequest(session.ServiceScope.ServiceProvider, o);
 

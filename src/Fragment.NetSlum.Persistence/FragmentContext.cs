@@ -44,7 +44,7 @@ public class FragmentContext : DbContext
 
             var method = entityType.GetInterfaceMap(genericType).InterfaceMethods.First();
 
-            method.Invoke(eInstance, new[] { entityBuilderObject });
+            method.Invoke(eInstance, [entityBuilderObject]);
         }
     }
 

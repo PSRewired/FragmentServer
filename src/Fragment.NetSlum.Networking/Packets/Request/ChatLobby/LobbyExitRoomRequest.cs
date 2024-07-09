@@ -22,7 +22,7 @@ namespace Fragment.NetSlum.Networking.Packets.Request.ChatLobby
             _logger = logger;
             _chatLobbyStore = chatLobbyStore;
         }
-        public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+        public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
         {
             var chatLobby = _chatLobbyStore.GetLobbyBySession(session);
             var player = chatLobby?.GetPlayerByCharacterId(session.CharacterId);

@@ -26,7 +26,7 @@ public class ViewGuildInfoRequest : BaseRequest
         _chatLobbyStore = chatLobbyStore;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         ushort guildId = BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[..2]);
 
@@ -46,8 +46,7 @@ public class ViewGuildInfoRequest : BaseRequest
             myLobbyPlayer.CurrentGuildEnticementId = guildId;
         }
 
-        return Task.FromResult<ICollection<FragmentMessage>>(new[]
-        {
+        return SingleMessage(
             new GuildInfoResponse(OpCodes.DataViewGuildResponse)
                 .SetGuildName(guild.Name)
                 .SetGuildDescription(guild.Comment)
@@ -66,8 +65,7 @@ public class ViewGuildInfoRequest : BaseRequest
                 .SetWaveMasterCount((ushort)guild.Members.Count(m => m.Class == CharacterClass.WaveMaster))
                 .SetHeavyBladeCount((ushort)guild.Members.Count(m => m.Class == CharacterClass.HeavyBlade))
                 .SetAverageLevel((ushort)(guild.Members.Sum(m => m.CurrentLevel) / guild.Members.Count))
-
                 .Build()
-        });
+        );
     }
 }

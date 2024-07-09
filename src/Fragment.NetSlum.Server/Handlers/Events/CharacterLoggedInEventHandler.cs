@@ -16,7 +16,7 @@ public class CharacterLoggedInEventHandler : EventHandler<CharacterLoggedInEvent
         _database = database;
     }
 
-    public override async Task Handle(CharacterLoggedInEvent eventInfo, CancellationToken cancellationToken)
+    public override async ValueTask Handle(CharacterLoggedInEvent eventInfo, CancellationToken cancellationToken)
     {
         _database.CharacterIpLogs.Add(new CharacterIpLog
         {

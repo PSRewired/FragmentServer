@@ -14,6 +14,7 @@ using Fragment.NetSlum.Persistence;
 using Fragment.NetSlum.Persistence.Entities;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.Guilds;
+
 [FragmentPacket(MessageType.Data, OpCodes.DataGuildUpdateDetails)]
 public class UpdateGuildDetailsRequest : BaseRequest
 {
@@ -25,7 +26,7 @@ public class UpdateGuildDetailsRequest : BaseRequest
         _database = database;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         var reader = new SpanReader(request.Data.Span);
 
@@ -50,10 +51,7 @@ public class UpdateGuildDetailsRequest : BaseRequest
 
         _database.SaveChanges();
 
-        return Task.FromResult<ICollection<FragmentMessage>>(new[]
-        {
-            new UpdateGuildDetailsResponse().Build(),
-        });
+        return SingleMessage(new UpdateGuildDetailsResponse().Build());
     }
 
     private static string GetUpdatedInfoDescription(Guild guild, string newComment, Span<byte> newEmblem)

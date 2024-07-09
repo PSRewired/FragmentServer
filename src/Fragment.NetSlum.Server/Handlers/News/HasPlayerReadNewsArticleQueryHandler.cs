@@ -16,9 +16,9 @@ public class HasPlayerReadNewsArticleQueryHandler : QueryHandler<HasPlayerReadNe
         _database = database;
     }
 
-    public override Task<bool> Handle(HasPlayerReadNewsArticle command, CancellationToken cancellationToken)
+    public override async ValueTask<bool> Handle(HasPlayerReadNewsArticle command, CancellationToken cancellationToken)
     {
-        return _database.WebNewsReadLogs.AnyAsync(
+        return await _database.WebNewsReadLogs.AnyAsync(
             wnl => wnl.PlayerAccountId == command.PlayerId && wnl.WebNewsArticleId == command.ArticleId,
             cancellationToken: cancellationToken);
     }

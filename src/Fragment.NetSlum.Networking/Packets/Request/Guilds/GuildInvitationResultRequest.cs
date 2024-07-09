@@ -28,7 +28,7 @@ public class GuildInvitationResultRequest : BaseRequest
         _logger = logger;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         ushort responseCode = BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[..2]);
 

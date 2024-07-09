@@ -1,9 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
-using Fragment.NetSlum.Core.CommandBus.Contracts.Commands;
 using Fragment.NetSlum.Core.CommandBus.Contracts.Events;
-using Fragment.NetSlum.Core.CommandBus.Contracts.Queries;
-using MediatR;
+using Mediator;
 
 namespace Fragment.NetSlum.Core.CommandBus;
 
@@ -24,12 +22,12 @@ public class MediatorCommandBus : ICommandBus
         await _mediator.Publish(eventInfo, cancellationToken);
     }
 
-    public async Task<TResult> GetResult<TResult>(IQuery<TResult> query, CancellationToken cancellationToken = default)
+    public async Task<TResult> GetResult<TResult>(Contracts.Queries.IQuery<TResult> query, CancellationToken cancellationToken = default)
     {
         return await _mediator.Send(query, cancellationToken);
     }
 
-    public async Task<TResult> Execute<TResult>(ICommand<TResult> command, CancellationToken cancellationToken = default)
+    public async Task<TResult> Execute<TResult>(Contracts.Commands.ICommand<TResult> command, CancellationToken cancellationToken = default)
     {
         return await _mediator.Send(command, cancellationToken);
     }

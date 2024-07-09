@@ -23,7 +23,7 @@ public class GetGuildLoggedInMembersRequest : BaseRequest
         _database = database;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         ushort guildId = BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[..2]);
 
@@ -38,8 +38,7 @@ public class GetGuildLoggedInMembersRequest : BaseRequest
             .AsNoTracking()
             .Where(gs => gs.GuildId == guildId);
 
-        return Task.FromResult<ICollection<FragmentMessage>>(new[]
-        {
+        return SingleMessage(
             new GuildLoggedInMembersResponse()
                 .SetGuildName(guild.Name)
                 .SetGuildDescription(guild.Comment)
@@ -60,8 +59,9 @@ public class GetGuildLoggedInMembersRequest : BaseRequest
                 .SetAverageLevel((ushort)(guild.Members.Sum(m => m.CurrentLevel) / guild.Members.Count))
                 .SetGeneralItemsAvailable((uint)guildShopInfoQuery.Count(gs => gs.AvailableForGeneral))
                 .SetMemberItemsAvailable((uint)guildShopInfoQuery.Count(gs => gs.AvailableForMember))
-                .SetNumberJoined(0) //TODO: I have no idea what this is actually supposed to represent in the 'guild scale' section of the stats..
+                .SetNumberJoined(
+                    0) //TODO: I have no idea what this is actually supposed to represent in the 'guild scale' section of the stats..
                 .Build()
-        });
+        );
     }
 }

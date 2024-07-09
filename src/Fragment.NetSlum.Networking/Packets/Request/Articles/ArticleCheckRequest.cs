@@ -20,13 +20,13 @@ public class ArticleCheckRequest : BaseRequest
         _database = database;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         var hasUnreadArticles = _database.WebNewsArticles
             .Any(a => !_database.WebNewsReadLogs.Any(
                 log => log.WebNewsArticleId == a.Id && log.PlayerAccountId == session.PlayerAccountId));
 
-        return Task.FromResult<ICollection<FragmentMessage>>(new[] { new ArticleCheckResponse()
+        return ValueTask.FromResult<ICollection<FragmentMessage>>(new[] { new ArticleCheckResponse()
             .ArticlesAvailable(hasUnreadArticles)
             .Build() });
     }

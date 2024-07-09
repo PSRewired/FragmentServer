@@ -22,7 +22,7 @@ public class GetMailContentRequest : BaseRequest
         _database = database;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         var accountId = BinaryPrimitives.ReadUInt32BigEndian(request.Data[..4].Span);
         var mailId = BinaryPrimitives.ReadUInt32BigEndian(request.Data[4..8].Span);

@@ -1,4 +1,4 @@
-using MediatR;
+using Mediator;
 
 namespace Fragment.NetSlum.Core.CommandBus.Contracts.Commands;
 

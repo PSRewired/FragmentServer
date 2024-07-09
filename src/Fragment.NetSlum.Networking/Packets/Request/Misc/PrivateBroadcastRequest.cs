@@ -21,7 +21,7 @@ public class PrivateBroadcastRequest : BaseRequest
         _chatLobbyStore = chatLobbyStore;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         var lobbyId = BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[..2]);
         var destinationPlayerIndex = BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[2..4]);

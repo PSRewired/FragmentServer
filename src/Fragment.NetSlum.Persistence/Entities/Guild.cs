@@ -23,7 +23,7 @@ public class Guild : IConfigurableEntity<Guild>
 
     public GuildStats Stats { get; set; } = new();
 
-    public byte[] Emblem { get; set; } = Array.Empty<byte>();
+    public byte[] Emblem { get; set; } = [];
 
     public int? LeaderId { get; set; }
     public Character? Leader { get; set; }

@@ -23,7 +23,7 @@ public class GetGuildInfoRequest : BaseRequest
         _database = database;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         ushort guildId = BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[..2]);
 
@@ -34,8 +34,7 @@ public class GetGuildInfoRequest : BaseRequest
             .Include(g => g.Stats)
             .First(g => g.Id == guildId);
 
-        return Task.FromResult<ICollection<FragmentMessage>>(new[]
-        {
+        return SingleMessage(
             new GuildInfoResponse()
                 .SetGuildName(guild.Name)
                 .SetGuildDescription(guild.Comment)
@@ -54,8 +53,7 @@ public class GetGuildInfoRequest : BaseRequest
                 .SetWaveMasterCount((ushort)guild.Members.Count(m => m.Class == CharacterClass.WaveMaster))
                 .SetHeavyBladeCount((ushort)guild.Members.Count(m => m.Class == CharacterClass.HeavyBlade))
                 .SetAverageLevel((ushort)(guild.Members.Sum(m => m.CurrentLevel) / guild.Members.Count))
-
                 .Build()
-        });
+        );
     }
 }

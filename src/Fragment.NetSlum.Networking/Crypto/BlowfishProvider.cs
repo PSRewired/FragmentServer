@@ -15,7 +15,7 @@ public class BlowfishProvider
     private uint SecretKeyLength => (uint)(_secretKey?.Length ?? 0);
 
     private uint[]? _pArray;
-    private List<uint[]> _sBoxes = new();
+    private List<uint[]> _sBoxes = [];
 
     public bool Initialized => _pArray != null && _sBoxes.Count > 0;
 
@@ -81,7 +81,7 @@ public class BlowfishProvider
             _pArray[i] = DefaultParray[i];
         }
 
-        _sBoxes = new List<uint[]>();
+        _sBoxes = [];
         for (int i = 0; i < 4; i++)
         {
             uint[] sBox = new uint[256];
@@ -108,7 +108,7 @@ public class BlowfishProvider
         }
 
         // Encrypt P-Array
-        uint[] tempChunks = { 0, 0 };
+        uint[] tempChunks = [0, 0];
         for (int i = 0; i < 9; i++)
         {
             // Encrypt 1st Half
@@ -206,7 +206,7 @@ public class BlowfishProvider
             chunkBuffer[0] = BitConverter.ToUInt32(result, i * 8);
             chunkBuffer[1] = BitConverter.ToUInt32(result, i * 8 + 4);
             // Processing Variables
-            uint[] tempChunks = { 0, 0 };
+            uint[] tempChunks = [0, 0];
 
             // Decrypt Chunk
             var runningChunk = chunkBuffer[0] ^ _pArray![17];
@@ -297,7 +297,7 @@ public class BlowfishProvider
             chunkBuffer[0] = BitConverter.ToUInt32(result, i * 8);
             chunkBuffer[1] = BitConverter.ToUInt32(result, i * 8 + 4);
             // Processing Variables
-            uint[] tempChunks = { 0, 0 };
+            uint[] tempChunks = [0, 0];
 
             // Encrypt Chunk
             var runningChunk = chunkBuffer[0] ^ _pArray![0];
@@ -393,16 +393,16 @@ public class BlowfishProvider
     #region defaults
 
     private static readonly uint[] DefaultParray =
-    {
+    [
         0x25406B89, 0x86A409D4, 0x141A8B2F, 0x04717445,
         0xA50A3923, 0x2AA032D1, 0x092FFB99, 0xED4F6D8A,
         0x462922E7, 0x39D11478, 0xBF5567D0, 0x35EA0D6D,
         0xC1AD2AB8, 0xCA7D51DE, 0x4085D6B6, 0xB6480A18,
         0x9317D6DA, 0x8A7AFC1C
-    };
+    ];
 
     private static readonly uint[] DefaultSboxes =
-    {
+    [
         0xD2320CA7, 0x99E0B6AD, 0x30FE73DC, 0xD11BE0B8,
         0xB9E2B0EE, 0x6B277F97, 0xBB7D9146, 0xF22D809A,
         0x25A29A48, 0xB4926DF8, 0x0902F3E3, 0x868FFD17,
@@ -659,7 +659,7 @@ public class BlowfishProvider
         0x1A49C35D, 0x03FC8B8D, 0x02C46BE5, 0xD7ECE2FA,
         0x91D5F96A, 0xA75DDFA1, 0x400A262E, 0xC309E7A0,
         0xB84F6233, 0xCF78E35C, 0x5890E0E4, 0x3BC473E7
-    };
+    ];
 
     #endregion
 }

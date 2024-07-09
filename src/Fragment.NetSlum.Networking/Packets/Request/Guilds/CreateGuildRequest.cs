@@ -23,7 +23,7 @@ public class CreateGuildRequest : BaseRequest
         _database = database;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         var reader = new SpanReader(request.Data.Span);
 
@@ -45,9 +45,6 @@ public class CreateGuildRequest : BaseRequest
         _database.Add(guild);
         _database.SaveChanges();
 
-        return Task.FromResult<ICollection<FragmentMessage>>(new[]
-        {
-            new CreateGuildResponse(guild.Id).Build(),
-        });
+        return SingleMessage(new CreateGuildResponse(guild.Id).Build());
     }
 }

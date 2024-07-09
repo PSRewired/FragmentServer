@@ -20,7 +20,7 @@ public class AreaServerUpdateStatusRequest :BaseRequest
         _logger = logger;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         //byte[] diskId = request.Data[0..64].ToArray();
         var pos = 0x43;

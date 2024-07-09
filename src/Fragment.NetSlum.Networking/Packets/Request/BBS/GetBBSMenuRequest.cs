@@ -22,13 +22,13 @@ public class GetBBSMenuRequest : BaseRequest
         _database = database;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         uint categoryId = BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[..2]);
 
         if (categoryId == 0)
         {
-            return Task.FromResult(GetBbcCategories());
+            return ValueTask.FromResult(GetBbcCategories());
         }
 
         var threads = _database.BbsThreads
@@ -49,7 +49,7 @@ public class GetBBSMenuRequest : BaseRequest
                 .Build());
         }
 
-        return Task.FromResult<ICollection<FragmentMessage>>(responses);
+        return ValueTask.FromResult<ICollection<FragmentMessage>>(responses);
     }
 
     private ICollection<FragmentMessage> GetBbcCategories()

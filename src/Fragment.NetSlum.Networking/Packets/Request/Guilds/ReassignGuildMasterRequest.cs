@@ -21,7 +21,7 @@ public class ReassignGuildMasterRequest : BaseRequest
         _database = database;
     }
 
-    public override async Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override async ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         var newMasterId = BinaryPrimitives.ReadInt32BigEndian(request.Data.Span[..4]);
 

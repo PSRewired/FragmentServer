@@ -24,7 +24,7 @@ public class LobbyEventRequest : BaseRequest
         _chatLobbyStore = chatLobbyStore;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         var lobbyId = BinaryPrimitives.ReadUInt16BigEndian(request.Data[..2].Span);
 
@@ -43,8 +43,10 @@ public class LobbyEventRequest : BaseRequest
 
         chatLobby?.NotifyAllExcept(chatLobbyPlayer, response.Build());
 
-        return Task.FromResult<ICollection<FragmentMessage>>(new[] { response
-            .SetIsSender(true)
-            .Build() });
+        return SingleMessage(
+            response
+                .SetIsSender(true)
+                .Build()
+        );
     }
 }

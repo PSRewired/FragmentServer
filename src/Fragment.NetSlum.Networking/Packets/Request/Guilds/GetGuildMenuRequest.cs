@@ -22,13 +22,13 @@ public class GetGuildMenuRequest : BaseRequest
         _database = database;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         ushort menuId = BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[..2]);
 
         if (menuId < 1)
         {
-            return Task.FromResult(HandleMenuCategories());
+            return ValueTask.FromResult<ICollection<FragmentMessage>>(HandleMenuCategories());
         }
 
         var responses = new List<FragmentMessage>();
@@ -64,13 +64,13 @@ public class GetGuildMenuRequest : BaseRequest
             );
         }
 
-        return Task.FromResult<ICollection<FragmentMessage>>(responses);
+        return ValueTask.FromResult<ICollection<FragmentMessage>>(responses);
     }
 
-    private static ICollection<FragmentMessage> HandleMenuCategories()
+    private static FragmentMessage[] HandleMenuCategories()
     {
-        return new[]
-        {
+        return
+        [
             new GuildMenuCategoryCountResponse(3).Build(),
             new GuildMenuCategoryResponse()
                 .SetCategoryId(1)
@@ -84,7 +84,7 @@ public class GetGuildMenuRequest : BaseRequest
             new GuildMenuCategoryResponse()
                 .SetCategoryId(3)
                 .SetCategoryName("MOST MEMBERS")
-                .Build(),
-        };
+                .Build()
+        ];
     }
 }

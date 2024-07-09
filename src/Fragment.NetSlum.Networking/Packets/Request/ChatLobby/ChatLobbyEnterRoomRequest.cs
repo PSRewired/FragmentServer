@@ -31,7 +31,7 @@ public class ChatLobbyEnterRoomRequest : BaseRequest
         _database = database;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         ushort chatLobbyId = BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[..2]);
         ChatLobbyType chatType = (ChatLobbyType)BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[2..4]);
@@ -53,7 +53,7 @@ public class ChatLobbyEnterRoomRequest : BaseRequest
             //TODO: Fix this to return an error response instead of disconnecting the player
             //throw new AuthenticationException(
                 //$"Invalid password specified by {session.CharacterInfo!.CharacterName} while entering room {chatLobby.LobbyName}");
-            return Task.FromResult<ICollection<FragmentMessage>>(responses);
+            return ValueTask.FromResult<ICollection<FragmentMessage>>(responses);
         }
 
 
@@ -71,7 +71,7 @@ public class ChatLobbyEnterRoomRequest : BaseRequest
         _logger.LogWarning("Player {PlayerName} has entered {LobbyType} lobby {LobbyName} at player slot {PlayerIndex}",
             myPlayer.PlayerName, chatType, chatLobby.LobbyName, myPlayer.PlayerIndex);
 
-        return Task.FromResult<ICollection<FragmentMessage>>(responses);
+        return ValueTask.FromResult<ICollection<FragmentMessage>>(responses);
     }
 
     /// <summary>

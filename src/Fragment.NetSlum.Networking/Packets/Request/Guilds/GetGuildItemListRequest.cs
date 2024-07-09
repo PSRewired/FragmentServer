@@ -21,7 +21,7 @@ public class GetGuildShopItemListRequest : BaseRequest
         _database = database;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         var guildId = BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[..2]);
 
@@ -45,6 +45,6 @@ public class GetGuildShopItemListRequest : BaseRequest
                 .Build());
         }
 
-        return Task.FromResult<ICollection<FragmentMessage>>(responses);
+        return ValueTask.FromResult<ICollection<FragmentMessage>>(responses);
     }
 }

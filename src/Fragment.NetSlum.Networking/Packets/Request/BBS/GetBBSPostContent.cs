@@ -21,19 +21,17 @@ public class GetBBSPostContent : BaseRequest
         _database = database;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         var postId = BinaryPrimitives.ReadUInt32BigEndian(request.Data[4..8].Span);
 
         var post = _database.BbsPostContents
             .First(pc => pc.PostId == postId);
 
-        return Task.FromResult<ICollection<FragmentMessage>>(new[]
-        {
+        return SingleMessage(
             new BbsPostContentResponse()
                 .SetPostId(post.PostId)
                 .SetContent(post.Content)
-                .Build()
-        });
+                .Build());
     }
 }

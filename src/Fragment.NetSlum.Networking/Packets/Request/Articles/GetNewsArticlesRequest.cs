@@ -23,7 +23,7 @@ public class GetNewsArticlesRequest : BaseRequest
         _database = database;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         var categoryId = BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[..2]);
 
@@ -73,6 +73,6 @@ public class GetNewsArticlesRequest : BaseRequest
             .Build()
         ));
 
-        return Task.FromResult<ICollection<FragmentMessage>>(responses);
+        return ValueTask.FromResult<ICollection<FragmentMessage>>(responses);
     }
 }

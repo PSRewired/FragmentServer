@@ -20,7 +20,7 @@ public class MarksNewsArticleReadCommandHandler : CommandHandler<MarkNewsArticle
         _commandBus = commandBus;
     }
 
-    public override async Task<bool> Handle(MarkNewsArticleReadCommand command, CancellationToken cancellationToken)
+    public override async ValueTask<bool> Handle(MarkNewsArticleReadCommand command, CancellationToken cancellationToken)
     {
         if (await _commandBus.GetResult(new HasPlayerReadNewsArticle(command.PlayerId, command.ArticleId), cancellationToken))
         {

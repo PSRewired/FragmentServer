@@ -11,11 +11,8 @@ namespace Fragment.NetSlum.Networking.Packets.Request.Misc;
 [FragmentPacket(MessageType.Data, OpCodes.DataUnknown787e)]
 public class Unknown787ERequest : BaseRequest
 {
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
-        return Task.FromResult<ICollection<FragmentMessage>>(new[]
-        {
-            new UnknownResponse(OpCodes.DataUnknown787fResponse).Build(),
-        });
+        return SingleMessage(new UnknownResponse(OpCodes.DataUnknown787fResponse).Build());
     }
 }

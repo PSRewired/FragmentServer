@@ -190,7 +190,7 @@ public class ChatLobbyModel
     public void NotifyAllExcept(ChatLobbyPlayer? sender, FragmentMessage message)
     {
         Log.ForContext<ChatLobbyModel>().Debug("Notifying lobby {LobbyName} ({LobbyId}) with data:\n{HexDump}", LobbyName, LobbyId, message.Data.ToHexDump());
-        NotifyAllExcept(sender, new List<FragmentMessage> { message });
+        NotifyAllExcept(sender, [message]);
     }
 
     /// <summary>
@@ -220,7 +220,7 @@ public class ChatLobbyModel
     /// <param name="message"></param>
     public void SendTo(ushort idx, FragmentMessage message)
     {
-        SendTo(idx, new List<FragmentMessage> {message});
+        SendTo(idx, [message]);
     }
 
     private ushort GetAvailablePlayerIndex()

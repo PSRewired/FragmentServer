@@ -25,7 +25,7 @@ public class AreaServerIPAddressPortRequest : BaseRequest
         _logger = logger;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         var ipAddressBytes = new Span<byte>(new byte[4]);
         request.Data.Span[..4].CopyTo(ipAddressBytes);

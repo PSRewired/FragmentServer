@@ -25,7 +25,7 @@ namespace Fragment.NetSlum.Networking.Packets.Request.Mail
             _database = database;
         }
 
-        public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+        public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
         {
             var receiverAccountId = BinaryPrimitives.ReadUInt32BigEndian(request.Data[4..8].Span);
             var receiverName = request.Data.Span[8..24].ToShiftJisString();

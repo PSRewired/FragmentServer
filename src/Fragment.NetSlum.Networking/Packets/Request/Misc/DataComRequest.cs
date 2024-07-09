@@ -11,7 +11,7 @@ namespace Fragment.NetSlum.Networking.Packets.Request.Misc;
 [FragmentPacket(MessageType.Data, OpCodes.DataComRequest)]
 public class DataComRequest : BaseRequest
 {
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         return SingleMessage(new DataComResponse().Build());
     }

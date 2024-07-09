@@ -23,7 +23,7 @@ public class PurchaseGuildShopItemRequest : BaseRequest
         _database = database;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         var reader = new SpanReader(request.Data.Span);
 
@@ -44,13 +44,10 @@ public class PurchaseGuildShopItemRequest : BaseRequest
         }
 
         guildShopItem.Quantity -= quantityPurchased;
-        guildShopItem.Guild.Stats.CurrentGp += (int) unitPrice * quantityPurchased;
+        guildShopItem.Guild.Stats.CurrentGp += (int)unitPrice * quantityPurchased;
 
         _database.SaveChanges();
 
-        return Task.FromResult<ICollection<FragmentMessage>>(new[]
-        {
-            new PurchaseGuildShopItemResponse(quantityPurchased).Build(),
-        });
+        return SingleMessage(new PurchaseGuildShopItemResponse(quantityPurchased).Build());
     }
 }

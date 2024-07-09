@@ -20,7 +20,7 @@ public class RegisterCharacterCommandHandler : CommandHandler<RegisterCharacterC
         _database = database;
     }
 
-    public override async Task<Persistence.Entities.Character> Handle(RegisterCharacterCommand command, CancellationToken cancellationToken)
+    public override async ValueTask<Persistence.Entities.Character> Handle(RegisterCharacterCommand command, CancellationToken cancellationToken)
     {
         var characterInfo = command.CharacterInfo;
 

@@ -11,8 +11,8 @@ namespace Fragment.NetSlum.Networking.Packets.Request.Character;
 [FragmentPacket(MessageType.Data, OpCodes.DataSelectCharRequest)]
 public class SelectCharacterRequest : BaseRequest
 {
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
-        return Task.FromResult<ICollection<FragmentMessage>>(new [] {new SelectCharacterResponse().Build()});
+        return SingleMessage(new SelectCharacterResponse().Build());
     }
 }

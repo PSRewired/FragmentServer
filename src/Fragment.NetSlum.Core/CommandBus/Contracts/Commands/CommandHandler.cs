@@ -1,6 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 
 namespace Fragment.NetSlum.Core.CommandBus.Contracts.Commands;
 
@@ -13,5 +13,5 @@ namespace Fragment.NetSlum.Core.CommandBus.Contracts.Commands;
 public abstract class CommandHandler<TCommand, TResult> : ICommandHandler<TCommand, TResult>, IRequestHandler<TCommand, TResult>
     where TCommand : ICommand<TResult>
 {
-    public abstract Task<TResult> Handle(TCommand command, CancellationToken cancellationToken);
+    public abstract ValueTask<TResult> Handle(TCommand command, CancellationToken cancellationToken);
 }

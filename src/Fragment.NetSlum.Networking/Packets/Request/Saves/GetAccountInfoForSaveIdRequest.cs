@@ -25,7 +25,7 @@ public class GetAccountInfoForSaveIdRequest : BaseRequest
         _commandBus = commandBus;
     }
 
-    public override async Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override async ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         var saveId = request.Data.Span.ToShiftJisString();
 

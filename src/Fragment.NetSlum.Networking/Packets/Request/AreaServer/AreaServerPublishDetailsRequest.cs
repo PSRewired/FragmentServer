@@ -29,7 +29,7 @@ public class AreaServerPublishDetailsRequest:BaseRequest
         _logger = logger;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         BaseResponse response;
 
@@ -50,17 +50,25 @@ public class AreaServerPublishDetailsRequest:BaseRequest
                 pos += 3;
                 session.AreaServerInfo.Detail = request.Data[pos..];
 
-                response = new AreaServerPublishDetailsResponse { PacketType = OpCodes.Data_AreaServerPublishDetails1Success, Data = new byte[] { 0x00, 0x01 } };
+                response = new AreaServerPublishDetailsResponse { PacketType = OpCodes.Data_AreaServerPublishDetails1Success, Data = [0x00, 0x01
+                    ]
+                };
                 break;
             case OpCodes.Data_AreaServerPublishDetails2Request:
-                response = new AreaServerPublishDetailsResponse { PacketType = OpCodes.Data_AreaServerPublishDetails2Success, Data = new byte[] { 0xDE, 0xAD } };
+                response = new AreaServerPublishDetailsResponse { PacketType = OpCodes.Data_AreaServerPublishDetails2Success, Data = [0xDE, 0xAD
+                    ]
+                };
                 break;
 
             case OpCodes.Data_AreaServerPublishDetails3Request:
-                response = new AreaServerPublishDetailsResponse { PacketType = OpCodes.Data_AreaServerPublishDetails3Success, Data = new byte[] { 0x00, 0x01 } };
+                response = new AreaServerPublishDetailsResponse { PacketType = OpCodes.Data_AreaServerPublishDetails3Success, Data = [0x00, 0x01
+                    ]
+                };
                 break;
             case OpCodes.Data_AreaServerPublishDetails4Request:
-                response = new AreaServerPublishDetailsResponse { PacketType = OpCodes.Data_AreaServerPublishDetails4Success, Data = new byte[] { 0x00, 0x01 } };
+                response = new AreaServerPublishDetailsResponse { PacketType = OpCodes.Data_AreaServerPublishDetails4Success, Data = [0x00, 0x01
+                    ]
+                };
                 break;
             case OpCodes.Data_AreaServerPublishDetails6Request:
                 //response = new AreaServerPublishDetailsResponse() { PacketType = OpCodes.Data_AreaServerPublishDetails6Success, Data = new byte[] { 0x00, 0x09 } };

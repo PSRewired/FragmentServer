@@ -41,7 +41,7 @@ public class FragmentPacketPipelineTest
         var logger = new NullLogger<EncryptionEncoder>();
         var encoder = new EncryptionEncoder(cryptoProvider, logger);
 
-        encoder.Encode(new List<FragmentMessage>{{decryptedMessage}}, new MemoryStream());
+        encoder.Encode([decryptedMessage], new MemoryStream());
 
         buffer.SetLength(0);
         buffer.Write(decryptedMessage.ToArray());

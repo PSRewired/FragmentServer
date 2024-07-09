@@ -16,7 +16,7 @@ public class TimestampableAttribute : Attribute
     /// </summary>
     public TimestampableAttribute()
     {
-        States = new[] { EntityState.Added, EntityState.Modified };
+        States = [EntityState.Added, EntityState.Modified];
     }
 
     /// <summary>

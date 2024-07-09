@@ -1,3 +1,4 @@
+using Mediator;
 using System;
 using System.Linq;
 using Fragment.NetSlum.Core.CommandBus;
@@ -16,18 +17,6 @@ public static class ServiceCollectionExtensions
     /// <returns></returns>
     public static IServiceCollection AddCommandBus(this IServiceCollection services, params Type[] types)
     {
-        services.AddMediatR(cfg =>
-        {
-            cfg.RegisterServicesFromAssemblies(types.Select(t => t.Assembly).ToArray());
-            cfg.TypeEvaluator = t =>
-            {
-                Log.Information(t.Name);
-                return true;
-            };
-        });
-
-        services.AddScoped<ICommandBus, MediatorCommandBus>();
-
         return services;
     }
 }

@@ -21,7 +21,7 @@ public class MailCheckRequest : BaseRequest
         _database = database;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         var accountId = BinaryPrimitives.ReadInt32BigEndian(request.Data.Span[..4]);
 

@@ -16,8 +16,8 @@ public class GetImageInfoQueryHandler : QueryHandler<GetImageInfoQuery, ImageInf
         _imageConverter = imageConverter;
     }
 
-    public override Task<ImageInfo> Handle(GetImageInfoQuery command, CancellationToken cancellationToken)
+    public override ValueTask<ImageInfo> Handle(GetImageInfoQuery command, CancellationToken cancellationToken)
     {
-        return Task.FromResult(_imageConverter.Convert(command.ImageData));
+        return ValueTask.FromResult(_imageConverter.Convert(command.ImageData));
     }
 }

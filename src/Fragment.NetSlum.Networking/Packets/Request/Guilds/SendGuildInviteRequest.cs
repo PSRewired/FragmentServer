@@ -29,7 +29,7 @@ public class SendGuildInviteRequest : BaseRequest
         _logger = logger;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         var playerToInviteIdx = BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[..2]);
 

@@ -28,7 +28,7 @@ public class RankingLeaderboardRequest : BaseRequest
         _logger = logger;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         var categoryId = BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[..2]);
 
@@ -46,47 +46,28 @@ public class RankingLeaderboardRequest : BaseRequest
 
         if (categoryType == 0)
         {
-            return HandleRankCategories();
+            return ValueTask.FromResult<ICollection<FragmentMessage>>(HandleRankCategories());
         }
 
 
         if (classType == 0xFF)
         {
-            return HandleClassCategories(categoryType);
+            return ValueTask.FromResult<ICollection<FragmentMessage>>(HandleClassCategories(categoryType));
         }
 
-        switch ((CharacterRanks.RankCategory) categoryType)
+        rankingQuery = (CharacterRanks.RankCategory)categoryType switch
         {
-            case CharacterRanks.RankCategory.Level:
-                rankingQuery = rankingQuery
-                    .Include(cs => cs.Character)
-                    .OrderByDescending(c => c.Character!.CurrentLevel);
-                break;
-            case CharacterRanks.RankCategory.HP:
-                rankingQuery = rankingQuery.OrderByDescending(c => c.CurrentHp);
-                break;
-            case CharacterRanks.RankCategory.SP:
-                rankingQuery = rankingQuery.OrderByDescending(c => c.CurrentSp);
-                break;
-            case CharacterRanks.RankCategory.GP:
-                rankingQuery = rankingQuery.OrderByDescending(c => c.CurrentGp);
-                break;
-            case CharacterRanks.RankCategory.OnlineTreasures:
-                rankingQuery = rankingQuery.OrderByDescending(c => c.OnlineTreasures);
-                break;
-            case CharacterRanks.RankCategory.AverageFieldLevel:
-                rankingQuery = rankingQuery.OrderByDescending(c => c.AverageFieldLevel);
-                break;
-            case CharacterRanks.RankCategory.GoldCoin:
-                rankingQuery = rankingQuery.OrderByDescending(c => c.AverageFieldLevel);
-                break;
-            case CharacterRanks.RankCategory.SilverCoin:
-                rankingQuery = rankingQuery.OrderByDescending(c => c.AverageFieldLevel);
-                break;
-            case CharacterRanks.RankCategory.BronzeCoin:
-                rankingQuery = rankingQuery.OrderByDescending(c => c.AverageFieldLevel);
-                break;
-        }
+            CharacterRanks.RankCategory.Level => rankingQuery.Include(cs => cs.Character).OrderByDescending(c => c.Character!.CurrentLevel),
+            CharacterRanks.RankCategory.HP => rankingQuery.OrderByDescending(c => c.CurrentHp),
+            CharacterRanks.RankCategory.SP => rankingQuery.OrderByDescending(c => c.CurrentSp),
+            CharacterRanks.RankCategory.GP => rankingQuery.OrderByDescending(c => c.CurrentGp),
+            CharacterRanks.RankCategory.OnlineTreasures => rankingQuery.OrderByDescending(c => c.OnlineTreasures),
+            CharacterRanks.RankCategory.AverageFieldLevel => rankingQuery.OrderByDescending(c => c.AverageFieldLevel),
+            CharacterRanks.RankCategory.GoldCoin => rankingQuery.OrderByDescending(c => c.AverageFieldLevel),
+            CharacterRanks.RankCategory.SilverCoin => rankingQuery.OrderByDescending(c => c.AverageFieldLevel),
+            CharacterRanks.RankCategory.BronzeCoin => rankingQuery.OrderByDescending(c => c.AverageFieldLevel),
+            _ => rankingQuery
+        };
 
         rankingQuery = rankingQuery
             .Where(cs => cs.Character!.Class == (CharacterClass) classType)
@@ -105,10 +86,10 @@ public class RankingLeaderboardRequest : BaseRequest
                 .Build());
         }
 
-        return Task.FromResult<ICollection<FragmentMessage>>(responses);
+        return ValueTask.FromResult<ICollection<FragmentMessage>>(responses);
     }
 
-    private static Task<ICollection<FragmentMessage>> HandleRankCategories()
+    private static List<FragmentMessage> HandleRankCategories()
     {
         var categoryTypes = Enum.GetValues(typeof(CharacterRanks.RankCategory));
         var responses = new List<FragmentMessage>
@@ -125,10 +106,10 @@ public class RankingLeaderboardRequest : BaseRequest
                 .Build());
         }
 
-        return Task.FromResult<ICollection<FragmentMessage>>(responses);
+        return responses;
     }
 
-    private static Task<ICollection<FragmentMessage>> HandleClassCategories(byte rankId)
+    private static List<FragmentMessage> HandleClassCategories(byte rankId)
     {
         var categoryTypes = Enum.GetValues(typeof(CharacterClass));
         var responses = new List<FragmentMessage>
@@ -144,6 +125,6 @@ public class RankingLeaderboardRequest : BaseRequest
                 .Build());
         }
 
-        return Task.FromResult<ICollection<FragmentMessage>>(responses);
+        return responses;
     }
 }

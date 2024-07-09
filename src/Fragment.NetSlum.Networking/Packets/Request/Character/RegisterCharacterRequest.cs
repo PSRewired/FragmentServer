@@ -27,7 +27,7 @@ public class RegisterCharacterRequest : BaseRequest
         _commandBus = commandBus;
     }
 
-    public override async Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override async ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         session.CharacterInfo = CharacterInfo.FromBinaryData(request.Data.Span);
         _logger.LogInformation("Registering character:\n{CharInfo}", session.CharacterInfo.ToString());

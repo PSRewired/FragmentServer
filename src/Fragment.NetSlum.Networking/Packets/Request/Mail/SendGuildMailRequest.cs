@@ -12,7 +12,7 @@ namespace Fragment.NetSlum.Networking.Packets.Request.Mail;
 [FragmentPacket(MessageType.Data, OpCodes.DataGuildMailSend)]
 public class SendGuildMailRequest : BaseRequest
 {
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         return SingleMessage(new SendMailResponse().SetStatusCode(OpCodes.DataGuildMailSendOk).Build());
     }

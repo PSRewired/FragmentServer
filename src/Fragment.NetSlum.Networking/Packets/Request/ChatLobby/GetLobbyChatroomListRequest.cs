@@ -24,7 +24,7 @@ namespace Fragment.NetSlum.Networking.Packets.Request.ChatLobby
             _chatLobbyStore = chatLobbyStore;
         }
 
-        public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+        public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
         {
             // If no default lobby was found, attempt to look up by guild
             var gameLobby = _chatLobbyStore.GetLobbyBySession(session, ChatLobbyType.Default) ?? _chatLobbyStore.GetLobbyBySession(session, ChatLobbyType.Guild);
@@ -54,7 +54,7 @@ namespace Fragment.NetSlum.Networking.Packets.Request.ChatLobby
                         .Build());
             }
 
-            return Task.FromResult<ICollection<FragmentMessage>>(responses);
+            return ValueTask.FromResult<ICollection<FragmentMessage>>(responses);
         }
     }
 }

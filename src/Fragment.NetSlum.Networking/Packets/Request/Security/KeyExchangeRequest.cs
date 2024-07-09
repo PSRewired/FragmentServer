@@ -28,7 +28,7 @@ public class KeyExchangeRequest : BaseRequest
         _commandBus = commandBus;
     }
 
-    public override async Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override async ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         var isClientBanned = await _commandBus.GetResult(new IsIpAddressBannedQuery(session.Socket!.GetClientIp()));
 

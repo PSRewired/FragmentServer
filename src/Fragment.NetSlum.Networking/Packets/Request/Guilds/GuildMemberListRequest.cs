@@ -25,13 +25,13 @@ public class GuildMemberListRequest : BaseRequest
         _database = database;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         ushort categoryId = BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[..2]);
 
         if (categoryId == 0)
         {
-            return Task.FromResult(GetMemberListCategories());
+            return ValueTask.FromResult(GetMemberListCategories());
         }
 
         var myPlayer = _database.Characters.First(c => c.Id == session.CharacterId);
@@ -67,10 +67,10 @@ public class GuildMemberListRequest : BaseRequest
                 .Build());
         }
 
-        return Task.FromResult<ICollection<FragmentMessage>>(responses);
+        return ValueTask.FromResult<ICollection<FragmentMessage>>(responses);
     }
 
-    private ICollection<FragmentMessage> GetMemberListCategories()
+    private static ICollection<FragmentMessage> GetMemberListCategories()
     {
         var classTypes = Enum.GetValues(typeof(CharacterClass));
 

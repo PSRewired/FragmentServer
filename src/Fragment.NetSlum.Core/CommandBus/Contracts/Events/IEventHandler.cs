@@ -5,5 +5,5 @@ namespace Fragment.NetSlum.Core.CommandBus.Contracts.Events;
 
 internal interface IEventHandler<in TEvent> where TEvent : IEvent
 {
-    public Task Handle(TEvent eventInfo, CancellationToken cancellationToken);
+    public ValueTask Handle(TEvent eventInfo, CancellationToken cancellationToken);
 }

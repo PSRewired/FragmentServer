@@ -2,7 +2,7 @@ using Fragment.NetSlum.Core.CommandBus.Contracts.Commands;
 
 namespace Fragment.NetSlum.Networking.Commands.News;
 
-public class MarkNewsArticleReadCommand : ICommand, ICommand<bool>
+public class MarkNewsArticleReadCommand : ICommand<bool>
 {
     public int PlayerId { get; }
     public ushort ArticleId { get; }

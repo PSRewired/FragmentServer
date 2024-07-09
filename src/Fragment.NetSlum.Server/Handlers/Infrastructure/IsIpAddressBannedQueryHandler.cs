@@ -16,8 +16,8 @@ public class IsIpAddressBannedQueryHandler : QueryHandler<IsIpAddressBannedQuery
         _database = database;
     }
 
-    public override Task<bool> Handle(IsIpAddressBannedQuery command, CancellationToken cancellationToken)
+    public override ValueTask<bool> Handle(IsIpAddressBannedQuery command, CancellationToken cancellationToken)
     {
-        return Task.FromResult(_database.BannedIps.Any(log => log.IpAddress == command.IpAddress));
+        return ValueTask.FromResult(_database.BannedIps.Any(log => log.IpAddress == command.IpAddress));
     }
 }

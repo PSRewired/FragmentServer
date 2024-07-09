@@ -24,7 +24,7 @@ public class ChatLobbyGetMenuRequest : BaseRequest
         _chatLobbyStore = chatLobbyStore;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         //var channels = _database.ChatLobbies.Where(c => c.DefaultChannel == true).ToList();
         var lobbies = _chatLobbyStore.GetLobbiesByType(ChatLobbyType.Default);
@@ -51,6 +51,6 @@ public class ChatLobbyGetMenuRequest : BaseRequest
                 .Build();
         }));
 
-        return Task.FromResult<ICollection<FragmentMessage>>(responses);
+        return ValueTask.FromResult<ICollection<FragmentMessage>>(responses);
     }
 }

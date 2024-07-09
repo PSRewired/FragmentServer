@@ -49,7 +49,7 @@ public static class PacketExtensions
     /// <typeparam name="TSession"></typeparam>
     /// <returns></returns>
     /// <exception cref="ArgumentException"></exception>
-    public static async Task<ICollection<FragmentMessage>> CreateResponse<TSession>(this BaseRequest ro, TSession session, FragmentMessage request)
+    public static async ValueTask<ICollection<FragmentMessage>> CreateResponse<TSession>(this BaseRequest ro, TSession session, FragmentMessage request)
     {
         return session switch
         {

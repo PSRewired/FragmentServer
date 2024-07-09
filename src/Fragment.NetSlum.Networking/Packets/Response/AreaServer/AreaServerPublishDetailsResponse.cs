@@ -8,7 +8,7 @@ namespace Fragment.NetSlum.Networking.Packets.Response.AreaServer;
 public class AreaServerPublishDetailsResponse :BaseResponse
 {
     public OpCodes PacketType { get; set; }
-    public byte[] Data { get; set; } = Array.Empty<byte>();
+    public byte[] Data { get; set; } = [];
 
     public override FragmentMessage Build()
     {

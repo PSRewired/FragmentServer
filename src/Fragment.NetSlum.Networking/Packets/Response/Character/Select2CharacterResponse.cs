@@ -12,7 +12,7 @@ public class Select2CharacterResponse : BaseResponse
         {
             MessageType = MessageType.Data,
             DataPacketType = OpCodes.Data_Select2_CharacterSuccess,
-            Data = new Memory<byte>(new byte[] {0x30, 0x30, 0x30, 0x30}), // Apparently represents "0000" literally
+            Data = new Memory<byte>([0x30, 0x30, 0x30, 0x30]), // Apparently represents "0000" literally
         };
     }
 }

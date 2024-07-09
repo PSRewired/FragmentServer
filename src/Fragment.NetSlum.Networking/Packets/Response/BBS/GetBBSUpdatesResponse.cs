@@ -12,7 +12,7 @@ public class GetBBSUpdatesResponse:BaseResponse
         {
             MessageType = MessageType.Data,
             DataPacketType = OpCodes.DataBBSGetUpdatesSuccess,
-            Data = new Memory<byte>(new byte[] { 0x00, 0x00 }),
+            Data = new Memory<byte>([0x00, 0x00]),
         };
     }
 }

@@ -8,7 +8,6 @@ using Fragment.NetSlum.Networking.Objects;
 using Fragment.NetSlum.Networking.Packets.Response.Mail;
 using Fragment.NetSlum.Networking.Sessions;
 using Fragment.NetSlum.Persistence;
-using Microsoft.EntityFrameworkCore;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.Mail;
 
@@ -22,7 +21,7 @@ public class GetMailListRequest : BaseRequest
         _database = database;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         var accountId = BinaryPrimitives.ReadUInt32BigEndian(request.Data.Span[..4]);
 
@@ -52,6 +51,6 @@ public class GetMailListRequest : BaseRequest
 
         _database.SaveChanges();
 
-        return Task.FromResult<ICollection<FragmentMessage>>(responses);
+        return ValueTask.FromResult<ICollection<FragmentMessage>>(responses);
     }
 }

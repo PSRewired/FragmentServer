@@ -21,7 +21,7 @@ public class GetGuildShopItemsRequest : BaseRequest
         _database = database;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         //TODO: The GetShoppableGuildListRequest packet sets the shop ID to the guild's ID right now. This will need to be updated,
         //if we ever implement separate guild shops
@@ -52,6 +52,6 @@ public class GetGuildShopItemsRequest : BaseRequest
                 .Build());
         }
 
-        return Task.FromResult<ICollection<FragmentMessage>>(responses);
+        return ValueTask.FromResult<ICollection<FragmentMessage>>(responses);
     }
 }

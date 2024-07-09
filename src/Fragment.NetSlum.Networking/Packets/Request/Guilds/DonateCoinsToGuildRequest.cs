@@ -21,7 +21,7 @@ public class DonateCoinsToGuildRequest : BaseRequest
         _database = database;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         var reader = new SpanReader(request.Data.Span);
 
@@ -39,9 +39,6 @@ public class DonateCoinsToGuildRequest : BaseRequest
 
         _database.SaveChanges();
 
-        return Task.FromResult<ICollection<FragmentMessage>>(new[]
-        {
-            new DonateCoinsToGuildResponse(goldDonated, silverDonated, bronzeDonated).Build(),
-        });
+        return SingleMessage(new DonateCoinsToGuildResponse(goldDonated, silverDonated, bronzeDonated).Build());
     }
 }

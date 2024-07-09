@@ -24,7 +24,7 @@ public class CreateLobbyChatroomRequest : BaseRequest
         _chatLobbyStore = chatLobbyStore;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         var reader = new SpanReader(request.Data.Span);
 

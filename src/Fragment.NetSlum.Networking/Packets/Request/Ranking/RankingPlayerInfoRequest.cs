@@ -23,7 +23,7 @@ public class RankingPlayerInfoRequest : BaseRequest
         _database = database;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         var characterId = BinaryPrimitives.ReadInt32BigEndian(request.Data.Span[..4]);
 
@@ -31,19 +31,18 @@ public class RankingPlayerInfoRequest : BaseRequest
             .Include(c => c.Guild)
             .First(c => c.Id == characterId);
 
-        return Task.FromResult<ICollection<FragmentMessage>>(new[]
-        {
-            new RankingPlayerInfoResponse()
-                .SetClass(character.Class)
-                .SetModelId(character.FullModelId)
-                .SetLevel((ushort)character.CurrentLevel)
-                .SetMemberGreeting(character.GreetingMessage)
-                .SetMemberName(character.CharacterName)
-                .SetMembershipStatus(character.Guild == null ? GuildStatus.None : character.Guild.LeaderId == character.Id ? GuildStatus.GuildMaster : GuildStatus.Member)
-                .SetIsOnline(session.Server.Sessions
-                    .Cast<FragmentTcpSession>()
-                    .Any(s => s.CharacterId == characterId))
-                .Build(),
-        });
+        return SingleMessage(new RankingPlayerInfoResponse()
+            .SetClass(character.Class)
+            .SetModelId(character.FullModelId)
+            .SetLevel((ushort)character.CurrentLevel)
+            .SetMemberGreeting(character.GreetingMessage)
+            .SetMemberName(character.CharacterName)
+            .SetMembershipStatus(character.Guild == null ? GuildStatus.None :
+                character.Guild.LeaderId == character.Id ? GuildStatus.GuildMaster : GuildStatus.Member)
+            .SetIsOnline(session.Server.Sessions
+                .Cast<FragmentTcpSession>()
+                .Any(s => s.CharacterId == characterId))
+            .Build()
+        );
     }
 }

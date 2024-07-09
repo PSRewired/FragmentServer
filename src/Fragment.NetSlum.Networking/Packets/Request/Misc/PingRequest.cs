@@ -14,7 +14,7 @@ namespace Fragment.NetSlum.Networking.Packets.Request.Misc;
 [FragmentPacket(MessageType.Data, OpCodes.DataPing)]
 public class PingRequest : BaseRequest
 {
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         session.LastContacted = DateTime.UtcNow;
 

@@ -18,7 +18,7 @@ public class KeyExchangeAcknowledgementRequest : BaseRequest
         _cryptoHandler = cryptoHandler;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         _cryptoHandler.ClientCipher.Initialize();
         _cryptoHandler.ServerCipher.Initialize();

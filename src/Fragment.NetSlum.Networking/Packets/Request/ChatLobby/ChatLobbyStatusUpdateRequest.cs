@@ -23,7 +23,7 @@ public class ChatLobbyStatusUpdateRequest:BaseRequest
         _chatLobbyStore = chatLobbyStore;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         var lobbyId = BitConverter.ToUInt16(request.Data[2..4].Span);
         var cl = _chatLobbyStore.GetLobbyBySession(session);

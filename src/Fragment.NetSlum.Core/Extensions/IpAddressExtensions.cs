@@ -8,12 +8,12 @@ public static class IpAddressExtensions
     /// Private IP CIDR ranges defined by
     /// <a href="http://www.faqs.org/rfcs/rfc1918.html">RFC1918</a>
     /// </summary>
-    private static readonly string[] _privateIpCidrs = new string[]
-    {
+    private static readonly string[] _privateIpCidrs =
+    [
         "10.0.0.0/8",
         "172.16.0.0/12",
-        "192.168.0.0/16",
-    };
+        "192.168.0.0/16"
+    ];
 
     /// <summary>
     /// Determines if the given <see cref="IPAddress"/> is a private (LAN) IP

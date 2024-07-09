@@ -11,11 +11,8 @@ namespace Fragment.NetSlum.Networking.Packets.Request.BBS;
 [FragmentPacket(MessageType.Data, OpCodes.DataBbsCheckThreadCreate)]
 public class CheckCreateBBSThreadRequest : BaseRequest
 {
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
-        return Task.FromResult<ICollection<FragmentMessage>>(new[]
-        {
-            new CheckCreateBBSThreadResponse().Build()
-        });
+        return SingleMessage(new CheckCreateBBSThreadResponse().Build());
     }
 }

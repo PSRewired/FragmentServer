@@ -22,7 +22,7 @@ public class GetBBSThreadDetailsRequest : BaseRequest
         _database = database;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         var threadId = BinaryPrimitives.ReadUInt32BigEndian(request.Data.Span[..4]);
 
@@ -34,10 +34,7 @@ public class GetBBSThreadDetailsRequest : BaseRequest
 
         if (thread == null)
         {
-            return Task.FromResult<ICollection<FragmentMessage>>(new[]
-            {
-                new BbsThreadPostCountResponse(0).Build(),
-            });
+            return SingleMessage(new BbsThreadPostCountResponse(0).Build());
         }
 
         var responses = new List<FragmentMessage>
@@ -55,6 +52,6 @@ public class GetBBSThreadDetailsRequest : BaseRequest
                 .Build());
         }
 
-        return Task.FromResult<ICollection<FragmentMessage>>(responses);
+        return ValueTask.FromResult<ICollection<FragmentMessage>>(responses);
     }
 }

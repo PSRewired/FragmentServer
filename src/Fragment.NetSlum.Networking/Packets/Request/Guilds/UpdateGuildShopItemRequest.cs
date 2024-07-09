@@ -23,7 +23,7 @@ public class UpdateGuildShopItemRequest : BaseRequest
         _database = database;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         var reader = new SpanReader(request.Data.Span);
         var guildId = reader.ReadUInt16();
@@ -44,9 +44,6 @@ public class UpdateGuildShopItemRequest : BaseRequest
                     .SetProperty(p => p.UpdatedAt, v => DateTime.UtcNow)
             );
 
-        return Task.FromResult<ICollection<FragmentMessage>>(new[]
-        {
-            new UpdateGuildShopItemResponse().Build(),
-        });
+        return SingleMessage(new UpdateGuildShopItemResponse().Build());
     }
 }

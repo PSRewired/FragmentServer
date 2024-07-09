@@ -1,6 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 
 namespace Fragment.NetSlum.Core.CommandBus.Contracts.Events;
 
@@ -12,5 +12,5 @@ namespace Fragment.NetSlum.Core.CommandBus.Contracts.Events;
 public abstract class EventHandler<TEvent> : IEventHandler<TEvent>, INotificationHandler<TEvent>
     where TEvent : IEvent
 {
-    public abstract Task Handle(TEvent eventInfo, CancellationToken cancellationToken);
+    public abstract ValueTask Handle(TEvent eventInfo, CancellationToken cancellationToken);
 }

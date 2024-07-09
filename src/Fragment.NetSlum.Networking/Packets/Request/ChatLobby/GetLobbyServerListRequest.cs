@@ -24,13 +24,13 @@ public class GetLobbyServerListRequest : BaseRequest
         _database = database;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         var categoryId = BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[..2]);
 
         if (categoryId == 0)
         {
-            return Task.FromResult(HandleCategories());
+            return ValueTask.FromResult(HandleCategories());
         }
 
         var category = _database.AreaServerCategories
@@ -66,7 +66,7 @@ public class GetLobbyServerListRequest : BaseRequest
                 .Build());
         }
 
-        return Task.FromResult<ICollection<FragmentMessage>>(responses);
+        return ValueTask.FromResult<ICollection<FragmentMessage>>(responses);
     }
 
     private ICollection<FragmentMessage> HandleCategories()

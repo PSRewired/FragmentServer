@@ -22,7 +22,7 @@ public class GetShoppableGuildListRequest : BaseRequest
         _database = database;
     }
 
-    public override Task<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
+    public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         ushort guildId = BinaryPrimitives.ReadUInt16BigEndian(request.Data.Span[..2]);
 
@@ -30,17 +30,16 @@ public class GetShoppableGuildListRequest : BaseRequest
         //TODO: Create different shop types?
         if (guildId < 1)
         {
-            return Task.FromResult(HandleGuildList());
+            return ValueTask.FromResult(HandleGuildList());
         }
 
-        return Task.FromResult<ICollection<FragmentMessage>>(new[]
-        {
+        return ValueTask.FromResult<ICollection<FragmentMessage>>([
             new GuildShopEntryCountResponse(1).Build(),
             new GuildShopEntryResponse()
                 .SetGuildId(guildId)
                 .SetGuildName("ALL")
                 .Build(),
-        });
+        ]);
     }
 
     private ICollection<FragmentMessage> HandleGuildList()
