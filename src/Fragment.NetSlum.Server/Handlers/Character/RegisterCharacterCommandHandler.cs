@@ -34,14 +34,18 @@ public class RegisterCharacterCommandHandler : CommandHandler<RegisterCharacterC
 
         PlayerAccount? playerAccount = await _database.PlayerAccounts.FirstOrDefaultAsync(p => p.SaveId == characterInfo.SaveId, cancellationToken);
 
-        character = CharacterInfoMapper.MapOrCreate(characterInfo, character);
-
-        // If a player account was found when looking up the save ID, use that player account instead of persisting a new one
-        if (playerAccount != null)
+        // If the player account is missing, attempt to create it now.
+        if (playerAccount == null)
         {
-            character.PlayerAccount = playerAccount;
+            playerAccount = new PlayerAccount
+            {
+                SaveId = characterInfo.SaveId,
+            };
         }
 
+        character = CharacterInfoMapper.MapOrCreate(characterInfo, character);
+
+        character.PlayerAccount = playerAccount;
         character.LastLoginAt = DateTime.UtcNow;
 
         _database.Update(character);
