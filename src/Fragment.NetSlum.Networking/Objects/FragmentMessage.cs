@@ -24,13 +24,12 @@ public class FragmentMessage
 
     public byte[] ToArray()
     {
+        var length = sizeof(ushort) + Length;
+        var buffer = length <= 8192 ? stackalloc byte[length] : new byte[length];
+        const int dataOffset = 4;
 
-        var buffer = new byte[sizeof(ushort) + Length];
-        var span = new Span<byte>(buffer);
-        var dataOffset = 4;
-
-        BinaryPrimitives.WriteUInt16BigEndian(span[..2], Length);
-        BinaryPrimitives.WriteUInt16BigEndian(span[2..4], (ushort)MessageType);
+        BinaryPrimitives.WriteUInt16BigEndian(buffer[..2], Length);
+        BinaryPrimitives.WriteUInt16BigEndian(buffer[2..4], (ushort)MessageType);
 
         // If the data of this message is already encrypted, it is assumed that the checksum was already appended since it needs to be
         // included in the encrypted payload
@@ -40,9 +39,9 @@ public class FragmentMessage
             //dataOffset += 2;
         }
 
-        Data.Span.CopyTo(span[dataOffset..]);
+        Data.Span.CopyTo(buffer[dataOffset..]);
 
-        return buffer;
+        return buffer.ToArray();
     }
 
     public override string ToString()

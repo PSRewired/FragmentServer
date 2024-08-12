@@ -11,11 +11,11 @@ using Fragment.NetSlum.Networking.Packets.Response.AreaServer;
 namespace Fragment.NetSlum.Networking.Packets.Request.AreaServer;
 
 [FragmentPacket(MessageType.Data, OpCodes.Data_AreaServerPublishRequest)]
-public class AreaServerPublshRequest :BaseRequest
+public class AreaServerPublishRequest :BaseRequest
 {
-    private readonly ILogger<AreaServerPublshRequest> _logger;
+    private readonly ILogger<AreaServerPublishRequest> _logger;
 
-    public AreaServerPublshRequest(ILogger<AreaServerPublshRequest> logger)
+    public AreaServerPublishRequest(ILogger<AreaServerPublishRequest> logger)
     {
         _logger = logger;
     }
