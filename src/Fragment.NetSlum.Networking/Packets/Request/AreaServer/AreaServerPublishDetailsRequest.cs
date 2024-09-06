@@ -17,7 +17,6 @@ namespace Fragment.NetSlum.Networking.Packets.Request.AreaServer;
 [FragmentPacket(MessageType.Data, OpCodes.Data_AreaServerPublishDetails2Request)]
 [FragmentPacket(MessageType.Data, OpCodes.Data_AreaServerPublishDetails3Request)]
 [FragmentPacket(MessageType.Data, OpCodes.Data_AreaServerPublishDetails4Request)]
-[FragmentPacket(MessageType.Data, OpCodes.Data_AreaServerPublishDetails6Request)]
 public class AreaServerPublishDetailsRequest:BaseRequest
 {
     private readonly FragmentContext _database;
@@ -70,8 +69,6 @@ public class AreaServerPublishDetailsRequest:BaseRequest
                     ]
                 };
                 break;
-            case OpCodes.Data_AreaServerPublishDetails6Request:
-                //response = new AreaServerPublishDetailsResponse() { PacketType = OpCodes.Data_AreaServerPublishDetails6Success, Data = new byte[] { 0x00, 0x09 } };
             default:
                 return NoResponse();
         }
