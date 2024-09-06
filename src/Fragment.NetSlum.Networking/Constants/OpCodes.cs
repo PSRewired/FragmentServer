@@ -255,14 +255,14 @@ DATA_SELECT_CHAR2 seems to be a 1:1 clone of the normal OPCODE_DATA_SELECT_CHAR 
     Data_AreaServerPublishDetails2Request = 0x7016,
     Data_AreaServerPublishDetails3Request = 0x7881,
     Data_AreaServerPublishDetails4Request = 0x7887,
-    Data_AreaServerPublishDetails6Request = 0x78a7,
+    Data_AreaServerDateTimeRequest = 0x78a7,
 
     Data_AreaServerPublishDetails1Success = 0x7012,
     Data_AreaServerPublishDetails2Success = 0x7017,
     Data_AreaServerPublishDetails3Success = 0x7882,
     Data_AreaServerPublishDetails4Success = 0x7888,
     Data_AreaServerPublishDetails5Success = 0x741e,
-    Data_AreaServerPublishDetails6Success = 0x78a8,
+    Data_AreaServerDateTimeSuccess = 0x78a8,
     Data_AreaServerPublishDetails7Success = 0x780d,
 
 
