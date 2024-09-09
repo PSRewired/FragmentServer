@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fragment.NetSlum.Networking.Attributes;
@@ -30,6 +31,7 @@ public class LogonRequest : BaseRequest
             case (byte)OpCodes.DataServerKeyChange:
                 _logger.LogInformation("Session {SessionId} has identified itself as an Area Server", session.Id);
                 session.AreaServerInfo = new AreaServerInformation();
+                session.AreaServerInfo.ActiveSince = DateTime.UtcNow;
                 response = new AreaServerLogonResponse();
                 break;
             default:

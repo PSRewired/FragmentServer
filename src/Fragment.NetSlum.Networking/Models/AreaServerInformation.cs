@@ -17,7 +17,7 @@ public class AreaServerInformation
     public Memory<byte> Detail { get; set; } = Array.Empty<byte>();
     public IPEndPoint? PublicConnectionEndpoint { get; set; }
     public IPEndPoint? PrivateConnectionEndpoint { get; set; }
-    public DateTime ActiveSince => DateTime.UtcNow;
+    public DateTime ActiveSince { get; set; }
 
     public override string ToString()
     {
