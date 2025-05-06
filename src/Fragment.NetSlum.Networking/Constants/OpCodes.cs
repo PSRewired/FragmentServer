@@ -143,6 +143,7 @@ public enum OpCodes : ushort
     DataNewsPostSizeInfoResponse = 0x7855,
     DataNewsPostDetailsResponse = 0x7856,
     DataNewsPostErrorResponse = 0x7857,
+    DataLobbyFavoritesAsCount = 0x7859,
 
 
     DataGetMailList = 0x7803,
@@ -194,6 +195,7 @@ public enum OpCodes : ushort
 
     DataMailCheckFail = 0x7869,
 
+    DataAreaServerFavoriteEntry = 0x786a,
     //
     DataNewCheckRequest = 0x786D,
 

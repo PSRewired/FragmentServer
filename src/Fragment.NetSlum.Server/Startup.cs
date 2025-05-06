@@ -3,7 +3,6 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Fragment.NetSlum.Core.CommandBus;
-using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Networking.Extensions;
 using Fragment.NetSlum.Networking.Stores;
 using Fragment.NetSlum.Persistence;
