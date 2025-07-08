@@ -25,24 +25,24 @@ public class EntityChangeInterceptor : SaveChangesInterceptor
     {
         if (eventData.Context is { } dbContext)
         {
-            ExecuteListeners(dbContext);
+            ExecuteListeners(dbContext).Wait();
         }
 
         return result;
     }
 
-    public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result,
+    public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result,
         CancellationToken cancellationToken = new())
     {
         if (eventData.Context is { } dbContext)
         {
-            ExecuteListeners(dbContext);
+            await ExecuteListeners(dbContext);
         }
 
-        return new ValueTask<InterceptionResult<int>>(result);
+        return result;
     }
 
-    private void ExecuteListeners(DbContext context)
+    private async Task ExecuteListeners(DbContext context)
     {
         context.ChangeTracker.DetectChanges();
 
@@ -59,7 +59,7 @@ public class EntityChangeInterceptor : SaveChangesInterceptor
 
             foreach (var listener in compatibleListeners)
             {
-                listener.EntityChanged(context, entry);
+                await listener.EntityChanged(context, entry);
             }
         }
     }

@@ -1,9 +1,11 @@
 using System;
 using System.Buffers.Binary;
+using System.Runtime.InteropServices;
 using Fragment.NetSlum.Core.Extensions;
 
 namespace Fragment.NetSlum.Core.Buffers;
 
+[StructLayout(LayoutKind.Auto)]
 public ref struct SpanReader
 {
     private Span<byte> _holdingSpan;

@@ -10,7 +10,7 @@ public class AreaServerFavoriteEntry : BaseResponse
 {
     private ushort _userNum;
     private Memory<byte> _detail;
-    private IPEndPoint _location { get; set; }
+    private IPEndPoint _location { get; set; } = default!;
 
     public AreaServerFavoriteEntry SetUserNum(ushort userNum)
     {

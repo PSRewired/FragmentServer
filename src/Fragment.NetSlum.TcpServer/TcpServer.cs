@@ -2,6 +2,7 @@
 using System.Buffers;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -12,6 +13,7 @@ using Serilog;
 
 namespace Fragment.NetSlum.TcpServer;
 
+[SuppressMessage("Design", "MA0049:Type name should not match containing namespace")]
 public class TcpServer : ITcpServer, IDisposable
 {
     private IPEndPoint EndPoint { get; }

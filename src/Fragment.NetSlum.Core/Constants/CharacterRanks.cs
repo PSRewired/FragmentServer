@@ -24,9 +24,9 @@ public static partial class CharacterRanks
         return FormatRegex().Replace(StripCharsRegex().Replace(category.ToString(), "$1 $2"), "$1 $2");
     }
 
-    [GeneratedRegex("(\\p{Ll})(\\P{Ll})")]
+    [GeneratedRegex(@"(\p{Ll})(\P{Ll})", RegexOptions.Compiled | RegexOptions.ExplicitCapture, matchTimeoutMilliseconds: 1000)]
     private static partial Regex FormatRegex();
 
-    [GeneratedRegex("(\\P{Ll})(\\P{Ll}\\p{Ll})")]
+    [GeneratedRegex(@"(\P{Ll})(\P{Ll}\p{Ll})",  RegexOptions.Compiled | RegexOptions.ExplicitCapture, matchTimeoutMilliseconds: 1000)]
     private static partial Regex StripCharsRegex();
 }
