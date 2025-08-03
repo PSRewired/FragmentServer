@@ -61,9 +61,10 @@ public partial class GetLobbyServerListRequest : BaseRequest
             responses.Add(new LobbyServerEntryResponse()
                 .SetServerId(cId++)
                 .SetLevel(server.AreaServerInfo!.Level)
-                .SetStatus(server.AreaServerInfo.State)
+                .SetState(server.AreaServerInfo.State)
+                .SetStatus(server.AreaServerInfo.Status)
                 .SetExternalAddress((clientIpMatchesPrivate ? server.AreaServerInfo!.PrivateConnectionEndpoint : server.AreaServerInfo!.PublicConnectionEndpoint)!)
-                .SetDetails(server.AreaServerInfo.Detail)
+                .SetDetails(server.AreaServerInfo.ServerId)
                 .SetPlayerCount(server.AreaServerInfo.CurrentPlayerCount)
                 .SetServerName(ServerNameUtil.FormatServerName(server.AreaServerInfo.ServerName))
                 .Build());

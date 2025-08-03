@@ -22,12 +22,18 @@ public class AreaServerFavoritesRequest : BaseRequest
     {
         _logger = logger;
     }
+
     public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
         var areaServers = session.Server.Sessions
             .Cast<FragmentTcpSession>()
             .Where(s => s.IsAreaServer)
             .ToArray();
+
+        if (areaServers.Length == 0)
+        {
+            return SingleMessage(new AreaServerFavoritesNoResultResponse().Build());
+        }
 
         var responses = new List<FragmentMessage>();
 
@@ -40,9 +46,10 @@ public class AreaServerFavoritesRequest : BaseRequest
 
             var resp = new AreaServerFavoriteEntry()
                 .SetLevel(areaServer.AreaServerInfo!.Level)
-                .SetStatus(areaServer.AreaServerInfo.State)
+                .SetStatus(areaServer.AreaServerInfo.Status)
+                .SetState(areaServer.AreaServerInfo.State)
                 .SetExternalAddress((clientIpMatchesPrivate ? areaServer.AreaServerInfo!.PrivateConnectionEndpoint : areaServer.AreaServerInfo!.PublicConnectionEndpoint)!)
-                .SetDetails(areaServer.AreaServerInfo.Detail)
+                .SetDetails(areaServer.AreaServerInfo.ServerId)
                 .SetPlayerCount(areaServer.AreaServerInfo.CurrentPlayerCount)
                 .SetServerName(ServerNameUtil.FormatServerName(areaServer.AreaServerInfo.ServerName))
                 .Build();

@@ -47,7 +47,7 @@ public class AreaServerPublishDetailsRequest:BaseRequest
                 session.AreaServerInfo!.State = request.Data.Span[pos++];
                 session.AreaServerInfo!.CurrentPlayerCount = BinaryPrimitives.ReadUInt16BigEndian(request.Data[pos..(pos + 2)].Span);
                 pos += 3;
-                session.AreaServerInfo.Detail = request.Data[pos..];
+                session.AreaServerInfo.ServerId = request.Data[pos..];
 
                 response = new AreaServerPublishDetailsResponse { PacketType = OpCodes.Data_AreaServerPublishDetails1Success, Data = [0x00, 0x01
                     ]

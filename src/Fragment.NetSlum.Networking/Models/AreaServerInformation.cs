@@ -12,9 +12,10 @@ public class AreaServerInformation
     public int CategoryId { get; set; }
     public string ServerName { get; set; } = "";
     public ushort Level { get; set; }
+    public byte Status { get; set; }
     public byte State { get; set; }
     public ushort CurrentPlayerCount { get;set; }
-    public Memory<byte> Detail { get; set; } = Array.Empty<byte>();
+    public Memory<byte> ServerId { get; set; } = Array.Empty<byte>();
     public IPEndPoint? PublicConnectionEndpoint { get; set; }
     public IPEndPoint? PrivateConnectionEndpoint { get; set; }
     public DateTime ActiveSince { get; set; }
@@ -24,11 +25,12 @@ public class AreaServerInformation
         var sb = new StringBuilder("--- Area Server Information ---\n");
         sb.AppendLine($"Server Name: {ServerName}");
         sb.AppendLine($"Current Level: {Level}");
-        sb.AppendLine($"Current Status: {State}(0x{State:X1})");
+        sb.AppendLine($"Current Status: {Status}(0x{Status:X1})");
+        sb.AppendLine($"Current State: {State}(0x{State:X1})");
         sb.AppendLine($"Current Player Count: {CurrentPlayerCount}");
         sb.AppendLine($"Public connection Info: {PublicConnectionEndpoint?.ToString()}");
         sb.AppendLine($"Private connection Info: {PrivateConnectionEndpoint?.ToString()}");
-        sb.AppendLine($"Known Detail: \n{Detail.ToHexDump()}\n");
+        sb.AppendLine($"Server ID: \n{ServerId.ToHexDump()}\n");
 
         return sb.ToString();
     }

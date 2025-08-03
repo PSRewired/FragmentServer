@@ -13,6 +13,7 @@ public class LobbyServerEntryResponse : BaseResponse
     private IPEndPoint _serverIp = null!;
     private string _serverName = "";
     private byte _state;
+    private byte _status;
     private ushort _level;
     private ushort _playerCount;
     private Memory<byte> _details;
@@ -38,9 +39,16 @@ public class LobbyServerEntryResponse : BaseResponse
         return this;
     }
 
-    public LobbyServerEntryResponse SetStatus(byte status)
+    public LobbyServerEntryResponse SetState(byte status)
     {
         _state = status;
+
+        return this;
+    }
+
+    public LobbyServerEntryResponse SetStatus(byte status)
+    {
+        _status = status;
 
         return this;
     }
@@ -74,20 +82,20 @@ public class LobbyServerEntryResponse : BaseResponse
         _serverIp.Address.TryWriteBytes(ipAddressFlipped.Span, out _);
         ipAddressFlipped.Span.Reverse();
 
-        var writer = new MemoryWriter(3 + ipAddressFlipped.Length + nameBytes.Length + _details.Length + sizeof(ushort) * 4);
-
-        writer.Skip(1); // This is likely the disc ID NOP'd out
+        var writer = new MemoryWriter(ipAddressFlipped.Length + nameBytes.Length + sizeof(ushort) * 4 + 11);
+        writer.Skip(1);
 
         writer.Write(ipAddressFlipped);
         writer.Write((ushort)_serverIp.Port);
 
-        writer.Write(_serverName.ToShiftJis());
-        //writer.Skip(1); // String null terminator
+        writer.Write(nameBytes);
 
-        writer.Write(_level);
-        writer.Write((ushort)_state); // Maybe some sort of online status? The server shows up as "incapacitated" if the value is 0
+        writer.Write(_level); // Level
+        writer.Write((ushort)_status);
+        writer.Write(_state); // State 0 - Normal, 1 - Password ON, 2 - Playing, 3 - Playing, 4 - Incapacitated
         writer.Write(_playerCount);
 
+        // Details appear to be written at 15 or 16
         writer.Write(_details);
 
         return new FragmentMessage

@@ -11,6 +11,7 @@ public class AreaServerFavoriteEntry : BaseResponse
 {
     private IPEndPoint _serverIp = null!;
     private string _serverName = "";
+    private byte _status;
     private byte _state;
     private ushort _level;
     private ushort _playerCount;
@@ -32,7 +33,14 @@ public class AreaServerFavoriteEntry : BaseResponse
 
     public AreaServerFavoriteEntry SetStatus(byte status)
     {
-        _state = status;
+        _status = status;
+
+        return this;
+    }
+
+    public AreaServerFavoriteEntry SetState(byte state)
+    {
+        _state = state;
 
         return this;
     }
@@ -66,7 +74,7 @@ public class AreaServerFavoriteEntry : BaseResponse
 
         var serverNameBytes = _serverName.ToShiftJis();
 
-        var writer = new MemoryWriter(ipAddressFlipped.Length + serverNameBytes.Length + sizeof(ushort) * 4 + 9);
+        var writer = new MemoryWriter(ipAddressFlipped.Length + serverNameBytes.Length + sizeof(ushort) * 4 + 10);
 
         writer.Write(ipAddressFlipped);
         writer.Write((ushort)_serverIp.Port);
@@ -74,12 +82,12 @@ public class AreaServerFavoriteEntry : BaseResponse
         writer.Write(serverNameBytes);
 
         writer.Write(_level); // Level
-        writer.Write((ushort)1); // ?? -- Must be non-zero for the state to show correctly
-        writer.Write((byte)0); // State 0 - Normal, 1 - Password ON, 2 - Playing, 3 - Playing, 4 - Incapacitated -- TODO Fix me
+        writer.Write((ushort)_status);
+        writer.Write(_state); // State 0 - Normal, 1 - Password ON, 2 - Playing, 3 - Playing, 4 - Incapacitated
         writer.Write(_playerCount);
 
         // Details appear to be written at 15 or 16
-        writer.Write(_details[1..9]);
+        writer.Write(_details);
 
         return new FragmentMessage
         {
