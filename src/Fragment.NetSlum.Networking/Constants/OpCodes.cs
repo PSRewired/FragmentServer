@@ -143,7 +143,8 @@ public enum OpCodes : ushort
     DataNewsPostSizeInfoResponse = 0x7855,
     DataNewsPostDetailsResponse = 0x7856,
     DataNewsPostErrorResponse = 0x7857,
-    DataLobbyFavoritesAsCount = 0x7859,
+    DataLobbyFavoritesAsInquiry = 0x7858,
+    DataAreaServerFavoriteEntry = 0x7859,
 
 
     DataGetMailList = 0x7803,
@@ -195,7 +196,6 @@ public enum OpCodes : ushort
 
     DataMailCheckFail = 0x7869,
 
-    DataAreaServerFavoriteEntry = 0x786a,
     //
     DataNewCheckRequest = 0x786D,
 
@@ -237,7 +237,6 @@ DATA_SELECT_CHAR2 seems to be a 1:1 clone of the normal OPCODE_DATA_SELECT_CHAR 
     DataGuildMailSendOk = 0x780A,
 
 
-    DataLobbyFavoritesAsInquiry = 0x7858,
 
     ///////////////
     //AREA	SERVER	DEFINES:

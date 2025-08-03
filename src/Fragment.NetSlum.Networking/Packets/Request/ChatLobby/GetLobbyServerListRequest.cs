@@ -2,8 +2,8 @@ using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Fragment.NetSlum.Core.Utils;
 using Fragment.NetSlum.Networking.Attributes;
 using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Objects;
@@ -65,7 +65,7 @@ public partial class GetLobbyServerListRequest : BaseRequest
                 .SetExternalAddress((clientIpMatchesPrivate ? server.AreaServerInfo!.PrivateConnectionEndpoint : server.AreaServerInfo!.PublicConnectionEndpoint)!)
                 .SetDetails(server.AreaServerInfo.Detail)
                 .SetPlayerCount(server.AreaServerInfo.CurrentPlayerCount)
-                .SetServerName(FormatServerName(server.AreaServerInfo.ServerName))
+                .SetServerName(ServerNameUtil.FormatServerName(server.AreaServerInfo.ServerName))
                 .Build());
         }
 
@@ -91,15 +91,6 @@ public partial class GetLobbyServerListRequest : BaseRequest
         return responses;
     }
 
-    [GeneratedRegex(@"^(.*)\|(.*)$", RegexOptions.Compiled, 1000)]
-    private static partial Regex CategorySeparatorRegex();
-
-    private static string FormatServerName(string serverName)
-    {
-        var match = CategorySeparatorRegex().Match(serverName);
-
-        return match.Success ? match.Groups[2].Value : serverName;
-    }
 
     private static bool CategoryFilter(AreaServerCategory? category, string serverName)
     {
@@ -108,7 +99,7 @@ public partial class GetLobbyServerListRequest : BaseRequest
             return false;
         }
 
-        var match = CategorySeparatorRegex().Match(serverName);
+        var match = ServerNameUtil.CategorySeparatorRegex().Match(serverName);
 
         // If its the main category and theres no category specified, include it as well
         if (category.Id == 1 && (!match.Success || match.Groups[1].Value.Equals(category.CategoryName)))
