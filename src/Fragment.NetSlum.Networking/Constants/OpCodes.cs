@@ -119,6 +119,10 @@ public enum OpCodes : ushort
     DataLobbyGetServersServerList = 0x750A,     //arg is # items?
     DataLobbyGetServersEntryServer = 0x750B,     //yay...
 
+    DataGuildShopItemCatalogRequest = 0x771E,
+    DataGuildShopItemCatalogCountResponse = 0x771F,
+    DataGuildShopItemCatalogEntryResponse = 0x7720,
+
 
     DataLobbyGetServersExit = 0x7844,
     DataLobbyGetServersExitOk = 0x7845,

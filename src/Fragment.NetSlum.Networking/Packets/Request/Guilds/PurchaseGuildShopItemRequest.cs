@@ -10,6 +10,7 @@ using Fragment.NetSlum.Networking.Packets.Response.Guilds;
 using Fragment.NetSlum.Networking.Sessions;
 using Fragment.NetSlum.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.Guilds;
 
@@ -17,10 +18,12 @@ namespace Fragment.NetSlum.Networking.Packets.Request.Guilds;
 public class PurchaseGuildShopItemRequest : BaseRequest
 {
     private readonly FragmentContext _database;
+    private readonly ILogger<PurchaseGuildShopItemRequest> _logger;
 
-    public PurchaseGuildShopItemRequest(FragmentContext database)
+    public PurchaseGuildShopItemRequest(FragmentContext database, ILogger<PurchaseGuildShopItemRequest> logger)
     {
         _database = database;
+        _logger = logger;
     }
 
     public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
@@ -35,12 +38,22 @@ public class PurchaseGuildShopItemRequest : BaseRequest
         var guildShopItem = _database.GuildShopItems
             .Include(gs => gs.Guild)
             .ThenInclude(g => g.Stats)
-            .First(gs => gs.GuildId == guildId && gs.Id == itemId);
+            .FirstOrDefault(gs => gs.GuildId == guildId && gs.ItemId == itemId);
+
+
+        if (guildShopItem == null)
+        {
+            _logger.LogWarning("Player attempted to buy unknown item {ItemId} from guild {GuildId} for {UnitPrice}x{Quantity}", itemId, guildId, unitPrice, quantityPurchased);
+            return SingleMessage(new PurchaseGuildShopItemResponse(0).Build());
+        }
+
+        _logger.LogInformation("Player is buying item {ItemId} from guild {GuildId} for {UnitPrice}x{Quantity}", itemId, guildId, unitPrice, quantityPurchased);
 
         if (guildShopItem.Quantity - quantityPurchased < 0)
         {
-            throw new DataException(
-                $"Player attempted to purchase {quantityPurchased} of itemID {itemId} but only {guildShopItem.Quantity} are available");
+            return SingleMessage(new PurchaseGuildShopItemResponse(guildShopItem.Quantity).Build());
+            // throw new DataException(
+            //     $"Player attempted to purchase {quantityPurchased} of itemID {itemId} but only {guildShopItem.Quantity} are available");
         }
 
         guildShopItem.Quantity -= quantityPurchased;

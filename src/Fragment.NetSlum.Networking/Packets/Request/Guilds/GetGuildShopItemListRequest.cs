@@ -36,7 +36,7 @@ public class GetGuildShopItemListRequest : BaseRequest
         foreach (var item in guildItems)
         {
             responses.Add(new GuildItemListEntryResponse()
-                .SetItemId((uint)item.Id)
+                .SetItemId((uint)item.ItemId)
                 .SetQuantity(item.Quantity)
                 .SetPrice(item.Price)
                 .SetMemberPrice(item.MemberPrice)
