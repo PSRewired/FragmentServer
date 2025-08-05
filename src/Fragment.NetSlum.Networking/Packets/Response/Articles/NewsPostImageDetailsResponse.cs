@@ -6,12 +6,10 @@ namespace Fragment.NetSlum.Networking.Packets.Response.Articles;
 
 public class NewsPostImageDetailsResponse : BaseResponse
 {
-    private readonly Memory<byte> _colorData;
     private readonly Memory<byte> _imageData;
 
-    public NewsPostImageDetailsResponse(Memory<byte> colorData, Memory<byte> imageData)
+    public NewsPostImageDetailsResponse(Memory<byte> imageData)
     {
-        _colorData = colorData;
         _imageData = imageData;
     }
 

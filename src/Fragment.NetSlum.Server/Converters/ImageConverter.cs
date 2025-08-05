@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Core.Models;
 using ImageMagick;
@@ -20,30 +22,31 @@ public class ImageConverter
         byte[] convertedImage;
         try
         {
+            //MagickNET.SetLogEvents(LogEvents.All);
+            //MagickNET.Log += (s, a) => _logger.LogDebug("{Type}: {Message}", a.EventType, a.Message);
+
             using var image = new MagickImage(imageBytes)
             {
                 Format = MagickFormat.Tga,
                 ColorType = ColorType.Palette,
-                ColorSpace = ColorSpace.RGB,
                 Depth = 32,
                 Orientation = OrientationType.TopLeft,
                 Comment = null,
-                Quality = 20,
+                //Quality = 20,
             };
             // Ensure the image is always 128x128 otherwise it gets corrupted in-game
-            image.Resize(128, 128);
+            image.Resize(new MagickGeometry(128, 128) { IgnoreAspectRatio = true });
 
-            convertedImage = image.ToByteArray();
+            _logger.LogInformation("Image Info: {ColorMapSize}", image.ColormapSize);
+
+            // Fragment appears to only support images that have a max colormap size of 768
+            if (image.ColormapSize > 768)
+            {
+                image.ColormapSize = 768;
+            }
+
             image.Write("test.tga");
-
-            _logger.LogDebug("Converted image data:\n{HexDump}", convertedImage.ToHexDump());
-            //MagickNET.SetLogEvents(LogEvents.All);
-            //MagickNET.Log += (s, a) => _logger.LogDebug("{Type}: {Message}", a.EventType, a.Message);
-
-            //var colorMapLength = image.ColormapSize;
-
-            // Ensure origin TopLeft is set since ImageMagick doesn't seem to set this bit
-            //convertedImage.Span[0x11] = 0x08;
+            convertedImage = image.ToByteArray();
         }
         catch (MagickMissingDelegateErrorException) // Assume if conversion fails, this image is already formatted
         {

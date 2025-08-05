@@ -1,6 +1,8 @@
+using System;
 using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.JavaScript;
 using System.Threading.Tasks;
 using Fragment.NetSlum.Core.CommandBus;
 using Fragment.NetSlum.Networking.Attributes;
@@ -39,15 +41,21 @@ public class GetNewsPostRequest : BaseRequest
 
         if (post?.Image == null)
         {
-            return new[] { new GetNewsPostErrorResponse().Build() };
+            //return new[] { new GetNewsPostErrorResponse().Build() };
+            return new[]
+            {
+                new NewsPostImageSizeResponse((uint)0, 0).Build(),
+                new NewsPostImageDetailsResponse(Array.Empty<byte>()).Build()
+            };
         }
 
         var articleImageInfo = await _commandBus.GetResult(new GetImageInfoQuery(post.Image));
 
         return new[]
         {
-            new NewsPostImageSizeResponse((uint)articleImageInfo.ImageSize, articleImageInfo.ChunkCount).Build(),
-            new NewsPostImageDetailsResponse(articleImageInfo.ColorData, articleImageInfo.ImageData).Build()
+            //new NewsPostImageSizeResponse((uint)0, 0).Build(),
+            new NewsPostImageSizeResponse((uint)articleImageInfo.ImageData.Length, articleImageInfo.ChunkCount).Build(),
+            new NewsPostImageDetailsResponse(articleImageInfo.ImageData).Build()
         };
     }
 }
