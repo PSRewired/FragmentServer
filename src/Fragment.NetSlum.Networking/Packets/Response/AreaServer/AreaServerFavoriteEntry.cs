@@ -74,7 +74,7 @@ public class AreaServerFavoriteEntry : BaseResponse
 
         var serverNameBytes = _serverName.ToShiftJis();
 
-        var writer = new MemoryWriter(ipAddressFlipped.Length + serverNameBytes.Length + sizeof(ushort) * 4 + 10);
+        var writer = new MemoryWriter(1 + ipAddressFlipped.Length + serverNameBytes.Length + sizeof(ushort) * 4 + _details.Length);
 
         writer.Write(ipAddressFlipped);
         writer.Write((ushort)_serverIp.Port);

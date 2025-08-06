@@ -82,7 +82,7 @@ public class LobbyServerEntryResponse : BaseResponse
         _serverIp.Address.TryWriteBytes(ipAddressFlipped.Span, out _);
         ipAddressFlipped.Span.Reverse();
 
-        var writer = new MemoryWriter(ipAddressFlipped.Length + nameBytes.Length + sizeof(ushort) * 4 + 11);
+        var writer = new MemoryWriter(2 + ipAddressFlipped.Length + nameBytes.Length + sizeof(ushort) * 4 + _details.Length);
         writer.Skip(1);
 
         writer.Write(ipAddressFlipped);
