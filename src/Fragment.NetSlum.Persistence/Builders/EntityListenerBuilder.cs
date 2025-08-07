@@ -12,9 +12,9 @@ public class EntityListenerBuilder
         Services = services;
     }
 
-    public EntityListenerBuilder AddListener<TEntityListener>()
+    public EntityListenerBuilder AddListener<TEntityListener>(ServiceLifetime lifetime = ServiceLifetime.Scoped)
     {
-        Services.AddScoped(typeof(IEntityChangeListener), typeof(TEntityListener));
+        Services.Add(new ServiceDescriptor(typeof(IEntityChangedListener), typeof(TEntityListener), lifetime));
 
         return this;
     }

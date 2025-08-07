@@ -38,7 +38,7 @@ public class MigrateBbsCommand : AsyncCommand<MigrateBbsCommand.Settings>
     {
 
         var existingBbs = _oldDatabase.BbsThreads.ToList();
-        var guildCount = existingBbs.Count();
+        var guildCount = existingBbs.Count;
 
         var pTask = ctx.AddTask($"[bold yellow] Generating {guildCount} thread records[/]", maxValue: guildCount);
 

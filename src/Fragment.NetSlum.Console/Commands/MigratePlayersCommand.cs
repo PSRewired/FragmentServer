@@ -1,6 +1,8 @@
 using System;
 using System.Globalization;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Fragment.NetSlum.Core.Constants;
 using Fragment.NetSlum.Core.Extensions;
@@ -29,11 +31,11 @@ public class MigratePlayersCommand : AsyncCommand<MigratePlayersCommand.Settings
 
     public override Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
-        AnsiConsole.Progress()
-            .AutoClear(false)
-            .Columns(new TaskDescriptionColumn(), new ProgressBarColumn(), new PercentageColumn(), new RemainingTimeColumn(),
-                new SpinnerColumn())
-            .Start(MigratePlayerRecords);
+        // AnsiConsole.Progress()
+        //     .AutoClear(false)
+        //     .Columns(new TaskDescriptionColumn(), new ProgressBarColumn(), new PercentageColumn(), new RemainingTimeColumn(),
+        //         new SpinnerColumn())
+        //     .Start(MigratePlayerRecords);
 
         AnsiConsole.Progress()
             .AutoClear(false)
@@ -55,10 +57,15 @@ public class MigratePlayersCommand : AsyncCommand<MigratePlayersCommand.Settings
 
     private void MigrateCharacterRecords(ProgressContext ctx)
     {
-        var existingCharacters = _oldDatabase.Characterrepositories;
+        var existingCharacters = _oldDatabase.Characterrepositories
+            .OrderByDescending(c => c.PlayerId)
+            .Skip(800);
+
         var characterCount = existingCharacters.Count();
         var pTask = ctx.AddTask($"[bold yellow] Generating {characterCount} character records[/]", maxValue: characterCount);
 
+        var transaction = _database.Database.BeginTransaction();
+        var count = 0;
         foreach (var existingCharacter in existingCharacters.ToList())
         {
             var exists = _database.Characters.AsNoTracking()
@@ -103,10 +110,10 @@ public class MigratePlayersCommand : AsyncCommand<MigratePlayersCommand.Settings
             {
                 Id = existingCharacter.PlayerId,
                 SaveId = existingCharacter.CharacterSaveId!.TrimNull(),
-                CharacterName = existingCharacter.CharacterName.AsSpan().ToShiftJisString().TrimNull(),
+                CharacterName = RemoveGarbageNameCharacters(existingCharacter.CharacterName.AsSpan().ToShiftJisString().TrimNull()),
                 Class = (CharacterClass)existingCharacter.ClassId!,
                 CurrentLevel = existingCharacter.CharacterLevel!.Value,
-                GreetingMessage = existingCharacter.Greeting.AsSpan().ToShiftJisString().Replace("\r\n", "\n").TrimNull(),
+                GreetingMessage = RemoveGarbageNameCharacters(existingCharacter.Greeting.AsSpan().ToShiftJisString().Replace("\r\n", "\n").TrimNull()),
                 FullModelId = (uint)existingCharacter.ModelNumber!.Value,
                 LastLoginAt = lastLogin != null
                     ? TryParseJankTimestamp(lastLogin.LoginTime)
@@ -141,14 +148,26 @@ public class MigratePlayersCommand : AsyncCommand<MigratePlayersCommand.Settings
                     _database.Add(mappedCharacter);
                 }
 
+                count += 1;
                 _database.SaveChanges();
-                _database.ChangeTracker.Clear();
+
+                if (count % 100 == 0)
+                {
+                    transaction.Commit();
+                    transaction.Dispose();
+                    _database.ChangeTracker.Clear();
+
+                    transaction = _database.Database.BeginTransaction();
+                    AnsiConsole.WriteLine($"Persisting {count} character updates");
+                }
             }
             catch (Exception e)
             {
                 AnsiConsole.WriteLine($"{mappedCharacter.Id} -> {mappedCharacter.CharacterName} -> {mappedCharacter.GreetingMessage}");
                 AnsiConsole.WriteLine($"{existingCharacter.Greeting!.ToHexDump()}");
                 AnsiConsole.WriteException(e);
+                pTask.Increment(1);
+
                 continue;
             }
 
@@ -296,5 +315,10 @@ public class MigratePlayersCommand : AsyncCommand<MigratePlayersCommand.Settings
         }
 
         return loginTime;
+    }
+
+    public static string RemoveGarbageNameCharacters(string input)
+    {
+        return input.Replace('', '?');
     }
 }

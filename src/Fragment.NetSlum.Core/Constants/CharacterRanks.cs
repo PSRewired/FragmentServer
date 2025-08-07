@@ -21,12 +21,9 @@ public static partial class CharacterRanks
 
     public static string GetCategoryName(this RankCategory category)
     {
-        return FormatRegex().Replace(StripCharsRegex().Replace(category.ToString(), "$1 $2"), "$1 $2");
+        return FormatRegex().Replace(category.ToString(), " ");
     }
 
-    [GeneratedRegex(@"(\p{Ll})(\P{Ll})", RegexOptions.Compiled | RegexOptions.ExplicitCapture, matchTimeoutMilliseconds: 1000)]
+    [GeneratedRegex(@"(?<=[a-z0-9])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])", RegexOptions.Compiled | RegexOptions.ExplicitCapture, matchTimeoutMilliseconds: 1000)]
     private static partial Regex FormatRegex();
-
-    [GeneratedRegex(@"(\P{Ll})(\P{Ll}\p{Ll})",  RegexOptions.Compiled | RegexOptions.ExplicitCapture, matchTimeoutMilliseconds: 1000)]
-    private static partial Regex StripCharsRegex();
 }

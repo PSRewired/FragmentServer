@@ -1,10 +1,12 @@
 using System.Threading.Tasks;
+using Fragment.NetSlum.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Fragment.NetSlum.Persistence.Listeners;
 
-public interface IEntityChangeListener
+public interface IEntityChangedListener
 {
-    public Task EntityChanged(DbContext context, EntityEntry entry);
+    public Task EntityChanging(DbContext context, EntityChangeSnapshot snapshot);
+    public Task EntityChanged(DbContext context, EntityChangeSnapshot snapshot);
 }

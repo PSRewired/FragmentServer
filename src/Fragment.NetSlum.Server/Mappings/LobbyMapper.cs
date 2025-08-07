@@ -22,11 +22,18 @@ public static partial class LobbyMapper
     [MapProperty(nameof(ChatLobbyModel.LobbyName), nameof(Lobby.Name))]
     [MapProperty(nameof(ChatLobbyModel.LobbyType), nameof(Lobby.Type))]
     [MapProperty(nameof(ChatLobbyModel.PlayerCount), nameof(Lobby.PlayerCount))]
-    public static partial Lobby MapLobby(ChatLobbyModel lobby);
+    [MapperIgnoreSource(nameof(ChatLobbyModel.Password))]
+    [MapperIgnoreSource(nameof(ChatLobbyModel.ParentChatLobby))]
+    [MapperIgnoreTarget(nameof(Lobby.Players))]
+    private static partial Lobby MapLobby(ChatLobbyModel lobby);
 
     [MapProperty(nameof(ChatLobbyPlayer.PlayerCharacterId), nameof(LobbyPlayer.CharacterId))]
     [MapProperty(nameof(ChatLobbyPlayer.PlayerName), nameof(LobbyPlayer.CharacterName))]
-    public static partial LobbyPlayer MapPlayer(ChatLobbyPlayer player);
+    [MapperIgnoreSource(nameof(ChatLobbyPlayer.ChatLobby))]
+    [MapperIgnoreSource(nameof(ChatLobbyPlayer.LastStatus))]
+    [MapperIgnoreSource(nameof(ChatLobbyPlayer.LastStatusUpdateReceivedAt))]
+    [MapperIgnoreSource(nameof(ChatLobbyPlayer.CurrentGuildEnticementId))]
+    private static partial LobbyPlayer MapPlayer(ChatLobbyPlayer player);
 
     private static ICollection<LobbyPlayer> Players(ChatLobbyModel model) => model.GetPlayers().Select(MapPlayer).ToArray();
 }

@@ -1,22 +1,12 @@
-using System.Threading.Tasks;
+using Fragment.NetSlum.Persistence.Contexts;
 using Fragment.NetSlum.Persistence.Entities;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Fragment.NetSlum.Persistence.Listeners;
 
-public class CharacterStatsChangeListener : AbstractEntityChangeListener<FragmentContext, CharacterStats>
+public class CharacterStatsChangeListener : AbstractHistoryChangeListener<CharacterStats, CharacterStatHistory>
 {
-    protected override Task OnEntityChanged(FragmentContext context, EntityEntry entry)
+    protected override CharacterStatHistory CreateHistoryEntry(EntityChangeSnapshot snapshot)
     {
-        // If the player stats are deleted (which should never happen), we can ignore stats updates
-        if (entry.State != EntityState.Modified)
-        {
-            return Task.CompletedTask;
-        }
-
-        context.CharacterStatHistory.Add(CharacterStatHistory.FromStats((CharacterStats)entry.OriginalValues.ToObject()));
-
-        return Task.CompletedTask;
+        return CharacterStatHistory.FromStats((CharacterStats)snapshot.Entity);
     }
 }

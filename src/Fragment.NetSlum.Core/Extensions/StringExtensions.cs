@@ -61,7 +61,7 @@ public static class StringExtensions
     {
         data = ReadToNullByte(data);
 
-        return Encoding.UTF8.GetString(data);
+        return ShiftJisEncoder.GetString(data);
     }
 
     /// <summary>
@@ -73,7 +73,7 @@ public static class StringExtensions
     {
         if (arr.Length < 1)
         {
-            return Array.Empty<byte>();
+            return [];
         }
 
         var nullIndex = 0;
@@ -110,6 +110,6 @@ public static class StringExtensions
     /// <returns></returns>
     public static string TrimNull(this string str)
     {
-        return str.Replace("\0", string.Empty);
+        return str.Replace("\0", string.Empty, StringComparison.OrdinalIgnoreCase);
     }
 }
