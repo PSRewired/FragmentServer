@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using Fragment.NetSlum.Core.Buffers;
+using Fragment.NetSlum.Core.Constants;
 using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Objects;
@@ -12,8 +13,8 @@ public class LobbyServerEntryResponse : BaseResponse
     private ushort _serverId;
     private IPEndPoint _serverIp = null!;
     private string _serverName = "";
-    private byte _state;
-    private byte _status;
+    private AreaServerState _state;
+    private AreaServerStatus _status;
     private ushort _level;
     private ushort _playerCount;
     private Memory<byte> _details;
@@ -39,14 +40,14 @@ public class LobbyServerEntryResponse : BaseResponse
         return this;
     }
 
-    public LobbyServerEntryResponse SetState(byte status)
+    public LobbyServerEntryResponse SetState(AreaServerState status)
     {
         _state = status;
 
         return this;
     }
 
-    public LobbyServerEntryResponse SetStatus(byte status)
+    public LobbyServerEntryResponse SetStatus(AreaServerStatus status)
     {
         _status = status;
 
@@ -82,7 +83,7 @@ public class LobbyServerEntryResponse : BaseResponse
         _serverIp.Address.TryWriteBytes(ipAddressFlipped.Span, out _);
         ipAddressFlipped.Span.Reverse();
 
-        var writer = new MemoryWriter(2 + ipAddressFlipped.Length + nameBytes.Length + sizeof(ushort) * 4 + _details.Length);
+        var writer = new MemoryWriter(1 + ipAddressFlipped.Length + nameBytes.Length + sizeof(ushort) * 5 + _details.Length);
         writer.Skip(1);
 
         writer.Write(ipAddressFlipped);
@@ -92,8 +93,9 @@ public class LobbyServerEntryResponse : BaseResponse
 
         writer.Write(_level); // Level
         writer.Write((ushort)_status);
-        writer.Write(_state); // State 0 - Normal, 1 - Password ON, 2 - Playing, 3 - Playing, 4 - Incapacitated
         writer.Write(_playerCount);
+        writer.Write((byte)_state); // State 0 - Normal, 1 - Password ON, 2 - Playing
+        writer.Write((byte)0);
 
         // Details appear to be written at 15 or 16
         writer.Write(_details);

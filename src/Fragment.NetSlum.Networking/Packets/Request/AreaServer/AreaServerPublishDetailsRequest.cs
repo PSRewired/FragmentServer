@@ -1,6 +1,7 @@
 using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Fragment.NetSlum.Core.Constants;
 using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Networking.Attributes;
 using Fragment.NetSlum.Networking.Constants;
@@ -44,7 +45,7 @@ public class AreaServerPublishDetailsRequest:BaseRequest
 
                 session.AreaServerInfo!.Level = BinaryPrimitives.ReadUInt16BigEndian(request.Data[pos..(pos + 2)].Span);
                 pos += 3;
-                session.AreaServerInfo!.State = request.Data.Span[pos++];
+                session.AreaServerInfo!.State = (AreaServerState)request.Data.Span[pos++];
                 session.AreaServerInfo!.CurrentPlayerCount = BinaryPrimitives.ReadUInt16BigEndian(request.Data[pos..(pos + 2)].Span);
                 pos += 3;
                 session.AreaServerInfo.ServerId = request.Data[pos..];

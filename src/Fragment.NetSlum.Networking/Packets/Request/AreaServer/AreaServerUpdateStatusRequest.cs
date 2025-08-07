@@ -7,6 +7,7 @@ using Fragment.NetSlum.Core.Extensions;
 using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Fragment.NetSlum.Core.Constants;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.AreaServer;
 
@@ -30,8 +31,8 @@ public class AreaServerUpdateStatusRequest :BaseRequest
         session.AreaServerInfo!.Level = BinaryPrimitives.ReadUInt16BigEndian(request.Data[pos..(pos + 2)].Span);
         //pos + 2 is some sort of status flag
         pos += 3;
-        session.AreaServerInfo!.Status = request.Data.Span[pos++];
-        session.AreaServerInfo!.State = request.Data.Span[pos++];
+        session.AreaServerInfo!.Status = (AreaServerStatus)request.Data.Span[pos++];
+        session.AreaServerInfo!.State = (AreaServerState)request.Data.Span[pos++];
         session.AreaServerInfo!.ServerId = request.Data[pos..];
 
         _logger.LogDebug("Area server status update:\n{Details}", session.AreaServerInfo.ToString());

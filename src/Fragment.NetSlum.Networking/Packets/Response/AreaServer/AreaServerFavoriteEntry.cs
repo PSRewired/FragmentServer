@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using Fragment.NetSlum.Core.Buffers;
+using Fragment.NetSlum.Core.Constants;
 using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Objects;
@@ -11,8 +12,8 @@ public class AreaServerFavoriteEntry : BaseResponse
 {
     private IPEndPoint _serverIp = null!;
     private string _serverName = "";
-    private byte _status;
-    private byte _state;
+    private AreaServerStatus _status;
+    private AreaServerState _state;
     private ushort _level;
     private ushort _playerCount;
     private Memory<byte> _details;
@@ -31,14 +32,14 @@ public class AreaServerFavoriteEntry : BaseResponse
         return this;
     }
 
-    public AreaServerFavoriteEntry SetStatus(byte status)
+    public AreaServerFavoriteEntry SetStatus(AreaServerStatus status)
     {
         _status = status;
 
         return this;
     }
 
-    public AreaServerFavoriteEntry SetState(byte state)
+    public AreaServerFavoriteEntry SetState(AreaServerState state)
     {
         _state = state;
 
@@ -83,7 +84,7 @@ public class AreaServerFavoriteEntry : BaseResponse
 
         writer.Write(_level); // Level
         writer.Write((ushort)_status);
-        writer.Write(_state); // State 0 - Normal, 1 - Password ON, 2 - Playing, 3 - Playing, 4 - Incapacitated
+        writer.Write((byte)_state); // State 0 - Normal, 1 - Password ON, 2 - Playing
         writer.Write(_playerCount);
 
         // Details appear to be written at 15 or 16
