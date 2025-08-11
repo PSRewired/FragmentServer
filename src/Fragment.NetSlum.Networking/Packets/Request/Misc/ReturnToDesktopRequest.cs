@@ -13,6 +13,10 @@ public class ReturnToDesktopRequest : BaseRequest
 {
     public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
     {
+        // Reset the character info when they return to desktop because they have quit the world.
+        session.CharacterInfo = null;
+        session.CharacterId = 0;
+
         return SingleMessage(new ReturnToDesktopResponse().Build());
     }
 }

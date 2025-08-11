@@ -107,7 +107,7 @@ public class Startup
             opt.AllowAnyOrigin();
         });
 
-        app.UseHealthChecks("/health", new HealthCheckOptions
+        app.UseHealthChecks("/api/health", new HealthCheckOptions
         {
             ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
         });

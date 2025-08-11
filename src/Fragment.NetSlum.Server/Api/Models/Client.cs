@@ -18,7 +18,7 @@ public class Client
     public ushort? SilverAmount { get; set; }
     public ushort? BronzeAmount { get; set; }
     public uint? ModelId { get; set; }
-    public string? ModelFileName { get; set; }
+    public string? AvatarId { get; set; }
     public DateTime? LastPing { get; set; }
 
     public static Client FromSession(FragmentTcpSession session)
@@ -37,7 +37,7 @@ public class Client
             SilverAmount = session.CharacterInfo?.SilverCoinCount,
             BronzeAmount = session.CharacterInfo?.BronzeCoinCount,
             ModelId = session.CharacterInfo?.ModelId,
-            ModelFileName = session.CharacterInfo?.ModelFile,
+            AvatarId = session.CharacterInfo?.ModelFile,
             LastPing = session.LastContacted,
         };
     }
