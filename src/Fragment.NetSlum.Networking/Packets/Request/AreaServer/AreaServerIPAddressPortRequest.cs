@@ -45,6 +45,8 @@ public class AreaServerIPAddressPortRequest : BaseRequest
         session.AreaServerInfo!.PublicConnectionEndpoint = new IPEndPoint(
             asIpAddress, BinaryPrimitives.ReadUInt16BigEndian(request.Data[4..6].Span));
 
+        _logger.LogInformation("{AreaServerInfo}", session.AreaServerInfo!.ToString());
+
         BaseResponse response = new AreaServerIPAddressPortResponse();
         return SingleMessage(response.Build());
     }
