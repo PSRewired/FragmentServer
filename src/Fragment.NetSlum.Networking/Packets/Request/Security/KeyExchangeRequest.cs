@@ -13,6 +13,7 @@ using Fragment.NetSlum.Networking.Packets.Response.Security;
 using Fragment.NetSlum.Networking.Queries.Infrastructure;
 using Fragment.NetSlum.Networking.Sessions;
 using Fragment.NetSlum.TcpServer.Extensions;
+using Microsoft.Extensions.Logging;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.Security;
 
@@ -21,11 +22,13 @@ public class KeyExchangeRequest : BaseRequest
 {
     private readonly CryptoHandler _cryptoHandler;
     private readonly ICommandBus _commandBus;
+    private readonly ILogger<KeyExchangeRequest> _logger;
 
-    public KeyExchangeRequest(CryptoHandler cryptoHandler, ICommandBus commandBus)
+    public KeyExchangeRequest(CryptoHandler cryptoHandler, ICommandBus commandBus, ILogger<KeyExchangeRequest> logger)
     {
         _cryptoHandler = cryptoHandler;
         _commandBus = commandBus;
+        _logger = logger;
     }
 
     public override async ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
@@ -51,7 +54,7 @@ public class KeyExchangeRequest : BaseRequest
         var serverCipher = BlowfishProvider.CreateNew(out var serverKey);
         _cryptoHandler.ServerCipher.PrepareNewKey(serverKey);
 
-        Log.Information("Received client key!\n{HexDump}", clientKey.ToHexDump());
+        _logger.LogDebug("Received client key!\n{HexDump}", clientKey.ToHexDump());
 
         return SingleMessageAsync(
             new KeyExchangeResponse()

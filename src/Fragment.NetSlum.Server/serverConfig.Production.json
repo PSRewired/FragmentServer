@@ -7,7 +7,7 @@
             "Default": "Debug",
             "Override": {
                 "Microsoft.AspNetCore": "Warning",
-                "Microsoft.EntityFrameworkCore": "Debug"
+                "Microsoft.EntityFrameworkCore": "Warning"
             }
         },
         "Enrich": [

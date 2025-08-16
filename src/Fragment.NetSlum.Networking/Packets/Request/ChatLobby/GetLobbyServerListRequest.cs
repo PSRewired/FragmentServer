@@ -1,3 +1,4 @@
+using System;
 using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ using Fragment.NetSlum.Persistence;
 using Fragment.NetSlum.Persistence.Entities;
 using Fragment.NetSlum.TcpServer.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.ChatLobby;
 
@@ -20,10 +22,12 @@ namespace Fragment.NetSlum.Networking.Packets.Request.ChatLobby;
 public partial class GetLobbyServerListRequest : BaseRequest
 {
     private readonly FragmentContext _database;
+    private readonly ILogger<GetLobbyServerListRequest> _logger;
 
-    public GetLobbyServerListRequest(FragmentContext database)
+    public GetLobbyServerListRequest(FragmentContext database, ILogger<GetLobbyServerListRequest> logger)
     {
         _database = database;
+        _logger = logger;
     }
 
     public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
@@ -55,15 +59,20 @@ public partial class GetLobbyServerListRequest : BaseRequest
             // If the game-client IP matches the recorded private IP address of the area-server, we need to send back their local IP
             // so they are able to connect without NAT
             var clientIpMatchesPrivate = server.AreaServerInfo!.PrivateConnectionEndpoint != null &&
-                                                 server.AreaServerInfo!.PrivateConnectionEndpoint.Address.Equals(
-                                            IPAddress.Parse(session.Socket!.GetClientIp()));
+                                         server.AreaServerInfo!.PrivateConnectionEndpoint.Address.Equals(
+                                             IPAddress.Parse(session.Socket!.GetClientIp()));
+
+            _logger.LogInformation("Area Server List[{Index}] (Client IP Match: {ClientMatch}): {NewLine}{AreaServerInfo}", cId,
+                clientIpMatchesPrivate ? "YES" : "NO", Environment.NewLine, server.AreaServerInfo.ToString());
 
             responses.Add(new LobbyServerEntryResponse()
                 .SetServerId(cId++)
                 .SetLevel(server.AreaServerInfo!.Level)
                 .SetState(server.AreaServerInfo.State)
                 .SetStatus(server.AreaServerInfo.Status)
-                .SetExternalAddress((clientIpMatchesPrivate ? server.AreaServerInfo!.PrivateConnectionEndpoint : server.AreaServerInfo!.PublicConnectionEndpoint)!)
+                .SetExternalAddress((clientIpMatchesPrivate
+                    ? server.AreaServerInfo!.PrivateConnectionEndpoint
+                    : server.AreaServerInfo!.PublicConnectionEndpoint)!)
                 .SetDetails(server.AreaServerInfo.ServerId)
                 .SetPlayerCount(server.AreaServerInfo.CurrentPlayerCount)
                 .SetServerName(ServerNameUtil.FormatServerName(server.AreaServerInfo.ServerName))

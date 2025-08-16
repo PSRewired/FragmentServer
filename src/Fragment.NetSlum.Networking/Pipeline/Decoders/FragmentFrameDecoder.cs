@@ -5,6 +5,7 @@ using System.IO;
 using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Crypto;
 using Fragment.NetSlum.Networking.Objects;
+using Microsoft.Extensions.Logging;
 using Serilog;
 using OpCodes = Fragment.NetSlum.Networking.Constants.OpCodes;
 
@@ -13,10 +14,12 @@ namespace Fragment.NetSlum.Networking.Pipeline.Decoders;
 public class FragmentFrameDecoder : IPacketDecoder
 {
     private readonly CryptoHandler _cryptoHandler;
+    private readonly ILogger<FragmentFrameDecoder> _logger;
 
-    public FragmentFrameDecoder(CryptoHandler cryptoHandler)
+    public FragmentFrameDecoder(CryptoHandler cryptoHandler, ILogger<FragmentFrameDecoder> logger)
     {
         _cryptoHandler = cryptoHandler;
+        _logger = logger;
     }
 
     public int Decode(Memory<byte> data, List<FragmentMessage> messages)
@@ -66,7 +69,7 @@ public class FragmentFrameDecoder : IPacketDecoder
 
         var ok = _cryptoHandler.TryDecrypt(messageContent.ToArray(), out var decrypted);
 
-        Log.Information("[CRYPTO] Decrypt Result: {Result}", ok ? "OK" : "FAIL");
+        _logger.LogTrace("[CRYPTO] Decrypt Result: {Result}", ok ? "OK" : "FAIL");
 
         var dataPacketType = OpCodes.None;
 

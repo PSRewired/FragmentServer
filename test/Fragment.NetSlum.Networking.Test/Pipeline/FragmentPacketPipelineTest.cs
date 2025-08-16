@@ -6,7 +6,9 @@ using Fragment.NetSlum.Networking.Crypto;
 using Fragment.NetSlum.Networking.Objects;
 using Fragment.NetSlum.Networking.Pipeline.Decoders;
 using Fragment.NetSlum.Networking.Pipeline.Encoders;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using NSubstitute;
 using Xunit;
 
 namespace Fragment.NetSlum.Networking.Test.Pipeline;
@@ -17,13 +19,13 @@ public class FragmentPacketPipelineTest
     public void PipelineCanDecodeAndEncodeResponseObjects()
     {
         var cryptoProvider = new CryptoHandler();
-        //var mockLogger = new Mock<ILogger<EncryptionEncoder>>();
+        var mockLogger = Substitute.For<ILogger<FragmentFrameDecoder>>();
 
         var encryptedMessage = "00320035E3725B557AA0F61D4385B46E2BEE37AC3ECB518FCD6F577941FF97A52DC489A454BAA7EE43DBE8DAC306BC9BC59ECB1B"
             .StringToByteArray();
 
         var messagesDecoded = new List<FragmentMessage>();
-        var decoder = new FragmentFrameDecoder(cryptoProvider);
+        var decoder = new FragmentFrameDecoder(cryptoProvider, mockLogger);
         var buffer = new MemoryStream();
 
         buffer.Write(encryptedMessage);
