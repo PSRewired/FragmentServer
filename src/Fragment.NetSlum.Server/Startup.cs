@@ -1,5 +1,7 @@
+using System;
 using System.Data;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -17,8 +19,10 @@ using Fragment.NetSlum.Server.Authentication.Configuration;
 using Fragment.NetSlum.Server.Converters;
 using Fragment.NetSlum.Server.Servers;
 using Fragment.NetSlum.Server.Services;
+using Fragment.NetSlum.Server.Transformers;
 using Fragment.NetSlum.TcpServer;
 using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -29,6 +33,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
+using ZiggyCreatures.Caching.Fusion;
 
 namespace Fragment.NetSlum.Server;
 
@@ -80,6 +85,18 @@ public class Startup
             .AddProcessAllocatedMemoryHealthCheck(2048)
             ;
 
+        services.AddMemoryCache();
+        services.AddFusionCache()
+            .WithDefaultEntryOptions(opt =>
+            {
+                opt.Duration = TimeSpan.FromMinutes(5);
+                opt.SkipBackplaneNotifications = true;
+            })
+            .WithMemoryBackplane(opt =>
+            {
+                opt.ConnectionId = Assembly.GetEntryAssembly()!.GetName().Name;
+            });
+
         services.Configure<DiscordAuthOptions>(Configuration.GetSection("Authentication"));
 
         services.AddAuthentication()
@@ -118,6 +135,8 @@ public class Startup
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(discordOptions.Value.JwtSecret)),
                 };
             });
+
+        services.AddTransient<IClaimsTransformation, WebUserClaimsTransformer>();
 
         // Register command bus
         services.AddMediator(opt => { opt.ServiceLifetime = ServiceLifetime.Transient; });

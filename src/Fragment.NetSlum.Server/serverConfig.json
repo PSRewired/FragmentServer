@@ -9,7 +9,8 @@
             "Override": {
                 "Microsoft.AspNetCore": "Warning",
                 "Microsoft.AspNetCore.Authentication": "Information",
-                "Microsoft.EntityFrameworkCore": "Warning"
+                "Microsoft.EntityFrameworkCore": "Warning",
+                "ZiggyCreatures.Caching.Fusion.FusionCache": "Warning"
             }
         },
         "Enrich": [

@@ -2,6 +2,7 @@
 
 using System;
 using System.Linq;
+using EntityFramework.Exceptions.MySQL.Pomelo;
 using Fragment.NetSlum.Persistence.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -23,7 +24,8 @@ public class FragmentContext : DbContext
     {
         // Use snake_cased table/column names to keep things consistent with the old database layout
         optionsBuilder
-            .UseSnakeCaseNamingConvention();
+            .UseSnakeCaseNamingConvention()
+            .UseExceptionProcessor();
 
         #if (DEBUG)
         optionsBuilder.EnableSensitiveDataLogging();
@@ -48,6 +50,8 @@ public class FragmentContext : DbContext
         }
     }
 
+    public virtual DbSet<AuthUser> AuthUsers { get; set; }
+    public virtual DbSet<AuthRole> AuthRoles { get; set; }
     public virtual DbSet<Character> Characters { get; set; }
     public virtual DbSet<CharacterStats> CharacterStats { get; set; }
     public virtual DbSet<CharacterIpLog> CharacterIpLogs { get; set; }
