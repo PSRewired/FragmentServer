@@ -1,7 +1,10 @@
 using System.Data;
+using System.Net.Http.Headers;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 using Fragment.NetSlum.Core.CommandBus;
 using Fragment.NetSlum.Networking.Extensions;
 using Fragment.NetSlum.Networking.Stores;
@@ -9,17 +12,22 @@ using Fragment.NetSlum.Persistence;
 using Fragment.NetSlum.Persistence.Extensions;
 using Fragment.NetSlum.Persistence.Interceptors;
 using Fragment.NetSlum.Persistence.Listeners;
+using Fragment.NetSlum.Server.Authentication;
+using Fragment.NetSlum.Server.Authentication.Configuration;
 using Fragment.NetSlum.Server.Converters;
 using Fragment.NetSlum.Server.Servers;
 using Fragment.NetSlum.Server.Services;
 using Fragment.NetSlum.TcpServer;
 using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
 
 namespace Fragment.NetSlum.Server;
@@ -40,7 +48,8 @@ public class Startup
         // Add failsafe to ensure the database is never executed on the original one
         if (connectionString!.Contains("Database=fragment;"))
         {
-            throw new ConstraintException("Auto-migrations have been disabled. The connection string contains the old database information!");
+            throw new ConstraintException(
+                "Auto-migrations have been disabled. The connection string contains the old database information!");
         }
 
         services
@@ -69,13 +78,49 @@ public class Startup
             .AddDbContextCheck<FragmentContext>()
             .AddPrivateMemoryHealthCheck(2147483648)
             .AddProcessAllocatedMemoryHealthCheck(2048)
-        ;
+            ;
+
+        services.Configure<DiscordAuthOptions>(Configuration.GetSection("Authentication"));
+
+        services.AddAuthentication()
+            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme);
+
+        services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme)
+            .Configure<IOptions<DiscordAuthOptions>>((options, discordOptions) =>
+            {
+                options.TokenHandlers.Clear();
+                options.TokenHandlers.Add(new DiscordJwtTokenHandler(discordOptions));
+
+                options.Events = new JwtBearerEvents
+                {
+                    // Allow the JWT policy to accept the token from either the Authorization header, or the 'token' cookie
+                    // supplied in the request
+                    OnMessageReceived = context =>
+                    {
+                        context.Token = context.HttpContext.Request.Headers.TryGetValue("Authorization", out var bearerToken)
+                            ? AuthenticationHeaderValue.Parse(bearerToken.ToString()).Parameter
+                            : context.HttpContext.Request.Cookies["netslum-token"];
+
+                        return Task.CompletedTask;
+                    },
+                };
+
+                options.MapInboundClaims = true;
+                options.IncludeErrorDetails = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    RequireSignedTokens = true,
+                    ValidateAudience = false,
+                    ValidateIssuer = false,
+                    ValidateIssuerSigningKey = true,
+                    IncludeTokenOnFailedValidation = true,
+                    ValidateLifetime = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(discordOptions.Value.JwtSecret)),
+                };
+            });
 
         // Register command bus
-        services.AddMediator(opt =>
-        {
-            opt.ServiceLifetime = ServiceLifetime.Transient;
-        });
+        services.AddMediator(opt => { opt.ServiceLifetime = ServiceLifetime.Transient; });
         services.AddScoped<ICommandBus, MediatorCommandBus>();
 
         services.AddOpenApiDocument(doc =>
@@ -99,12 +144,21 @@ public class Startup
 
     public void Configure(IApplicationBuilder app, IHostEnvironment env)
     {
+        app.UseSerilogRequestLogging(o =>
+        {
+            o.MessageTemplate =
+                "HTTP [{ClientIp}] {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms";
+            o.IncludeQueryInRequestPath = true;
+        });
+
         app.UseRouting();
         app.UseCors(opt =>
         {
+            opt.SetIsOriginAllowedToAllowWildcardSubdomains();
             opt.AllowAnyHeader();
             opt.AllowAnyMethod();
-            opt.AllowAnyOrigin();
+            opt.WithOrigins(Configuration.GetValue<string>("AllowedOrigins")?.Split(",") ?? ["*"])
+                .AllowCredentials();
         });
 
         app.UseHealthChecks("/api/health", new HealthCheckOptions
@@ -112,6 +166,8 @@ public class Startup
             ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
         });
 
+        app.UseAuthentication();
+        app.UseAuthorization();
         app.UseStaticFiles();
         app.UseOpenApi();
         app.UseSwaggerUi(opt =>

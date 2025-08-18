@@ -2,12 +2,14 @@ using System.Collections.Generic;
 using Fragment.NetSlum.Networking.Stores;
 using Fragment.NetSlum.Server.Api.Models;
 using Fragment.NetSlum.Server.Mappings;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fragment.NetSlum.Server.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class LobbiesController : ControllerBase
 {
     private readonly ChatLobbyStore _lobbyStore;

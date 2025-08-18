@@ -1,37 +1,44 @@
 {
-  "Serilog": {
-    "Using": [
-      "Serilog.Sinks.Console"
-    ],
-    "MinimumLevel": {
-      "Default": "Debug",
-      "Override": {
-        "Microsoft.AspNetCore": "Warning",
-        "Microsoft.EntityFrameworkCore": "Warning"
-      }
-    },
-    "Enrich": [
-      "FromLogContext",
-      "WithMachineName"
-    ],
-    "WriteTo": [
-      {
-        "Name": "Console",
-        "Args": {
-          "outputTemplate": "[{Timestamp:HH:mm:ss.fff}] [{Application}] [{Level:u3}] [{RequestId}] [{SourceContext}]: {Message:lj}{NewLine}{Exception}"
+    "Serilog": {
+        "Using": [
+            "Serilog.Enrichers.ClientInfo",
+            "Serilog.Sinks.Console"
+        ],
+        "MinimumLevel": {
+            "Default": "Debug",
+            "Override": {
+                "Microsoft.AspNetCore": "Warning",
+                "Microsoft.AspNetCore.Authentication": "Information",
+                "Microsoft.EntityFrameworkCore": "Warning"
+            }
+        },
+        "Enrich": [
+            "FromLogContext",
+            "WithMachineName",
+            "WithClientIp"
+        ],
+        "WriteTo": [
+            {
+                "Name": "Console",
+                "Args": {
+                    "outputTemplate": "[{Timestamp:HH:mm:ss.fff}] [{Application}] [{Level:u3}] [{RequestId}] [{SourceContext}]: {Message:lj}{NewLine}{Exception}"
+                }
+            }
+        ],
+        "Properties": {
+            "Application": "Fragment.NetSlum.Server",
+            "Environment": "local"
         }
-      }
-    ],
-    "Properties": {
-      "Application": "Fragment.NetSlum.Server",
-      "Environment": "local"
-    }
-  },
-  "ConnectionStrings": {
-    "Database": ""
-  },
-  "TcpServer": {
-    "IpAddress": "0.0.0.0",
-    "Port": 49000
-  }
+    },
+    "ConnectionStrings": {
+        "Database": ""
+    },
+    "TcpServer": {
+        "IpAddress": "0.0.0.0",
+        "Port": 49000
+    },
+    "Authentication": {
+        "JwtSecret": ""
+    },
+    "AllowedOrigins": "http://localhost:3000,https://fragment.psrewired.com"
 }

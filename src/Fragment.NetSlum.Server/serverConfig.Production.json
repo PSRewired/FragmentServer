@@ -1,6 +1,7 @@
 {
     "Serilog": {
         "Using": [
+            "Serilog.Enrichers.ClientInfo",
             "Serilog.Sinks.Console"
         ],
         "MinimumLevel": {
@@ -12,7 +13,8 @@
         },
         "Enrich": [
             "FromLogContext",
-            "WithMachineName"
+            "WithMachineName",
+            "WithClientIp"
         ],
         "WriteTo": [
             {
