@@ -9,7 +9,6 @@ namespace Fragment.NetSlum.Server.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
 public class LobbiesController : ControllerBase
 {
     private readonly ChatLobbyStore _lobbyStore;
