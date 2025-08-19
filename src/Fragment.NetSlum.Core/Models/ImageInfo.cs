@@ -3,8 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace Fragment.NetSlum.Core.Models;
 
-[StructLayout(LayoutKind.Auto)]
-public struct ImageInfo
+public class ImageInfo
 {
     public ImageInfo()
     {

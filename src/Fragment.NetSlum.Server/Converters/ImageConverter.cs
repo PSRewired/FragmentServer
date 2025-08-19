@@ -17,7 +17,7 @@ public class ImageConverter
         _logger = logger;
     }
 
-    public ImageInfo Convert(byte[] imageBytes)
+    public ImageInfo ConvertTga(byte[] imageBytes)
     {
         byte[] convertedImage;
         try
@@ -46,6 +46,36 @@ public class ImageConverter
             }
 
             image.Write("test.tga");
+            convertedImage = image.ToByteArray();
+        }
+        catch (MagickMissingDelegateErrorException) // Assume if conversion fails, this image is already formatted
+        {
+            convertedImage = imageBytes;
+        }
+
+        return new ImageInfo
+        {
+            ImageData = convertedImage,
+        };
+    }
+
+    public ImageInfo ConvertPng(byte[] imageBytes)
+    {
+        byte[] convertedImage;
+        try
+        {
+            //MagickNET.SetLogEvents(LogEvents.All);
+            //MagickNET.Log += (s, a) => _logger.LogDebug("{Type}: {Message}", a.EventType, a.Message);
+
+            using var image = new MagickImage(imageBytes)
+            {
+                Format = MagickFormat.Png,
+            };
+            // Ensure the image is always 128x128 otherwise it gets corrupted in-game
+            image.Resize(new MagickGeometry(128, 128) { IgnoreAspectRatio = true });
+
+            _logger.LogInformation("Image Info: {ColorMapSize}", image.ColormapSize);
+
             convertedImage = image.ToByteArray();
         }
         catch (MagickMissingDelegateErrorException) // Assume if conversion fails, this image is already formatted

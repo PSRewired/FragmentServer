@@ -18,6 +18,6 @@ public class GetImageInfoQueryHandler : QueryHandler<GetImageInfoQuery, ImageInf
 
     public override ValueTask<ImageInfo> Handle(GetImageInfoQuery command, CancellationToken cancellationToken)
     {
-        return ValueTask.FromResult(_imageConverter.Convert(command.ImageData));
+        return ValueTask.FromResult(_imageConverter.ConvertTga(command.ImageData));
     }
 }
