@@ -1,7 +1,7 @@
 <Project>
     <PropertyGroup>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <NoWarn>$(NoWarn);1591,MA0048,MA0011,MA0015,MA0051,MA0002,MA0005,MA0004,MA0016,MA0069,MA0006,MA0076,MA0003,MA0004,MA0064</NoWarn>
+        <NoWarn>$(NoWarn);CS1591,MA0048,MA0011,MA0015,MA0051,MA0002,MA0005,MA0004,MA0016,MA0069,MA0006,MA0076,MA0003,MA0004,MA0064</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>
