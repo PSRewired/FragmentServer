@@ -1,6 +1,7 @@
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Persistence;
 using Fragment.NetSlum.Persistence.Entities;
 using Microsoft.AspNetCore.Authentication;
@@ -22,9 +23,21 @@ public class WebUserClaimsTransformer : IClaimsTransformation
 
     public async Task<ClaimsPrincipal> TransformAsync(ClaimsPrincipal principal)
     {
-        if (principal.Identity is { IsAuthenticated: true } and ClaimsIdentity claimsIdentity)
+        if (principal.Identity is not ({ IsAuthenticated: true } and ClaimsIdentity claimsIdentity))
         {
-            await GetAuthUserByUsername(claimsIdentity);
+            return principal;
+        }
+
+        var user = await GetAuthUserByUsername(claimsIdentity);
+
+        if (user?.Role != null)
+        {
+            claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, user.Role.ToString()!));
+
+            foreach (var permName in user.Role.PermissionMask.ToStringCollection())
+            {
+                claimsIdentity.AddClaim(new Claim("permissions", permName));
+            }
         }
 
         return principal;
