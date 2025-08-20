@@ -39,7 +39,7 @@
         "Port": 49000
     },
     "Authentication": {
-        "JwtSecret": ""
+        "JwtSecret": "changeme123"
     },
     "AllowedOrigins": "http://localhost:3000,https://fragment.psrewired.com"
 }

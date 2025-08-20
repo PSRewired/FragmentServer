@@ -1,8 +1,6 @@
 using System;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Fragment.NetSlum.Core.Constants;
 using Fragment.NetSlum.Core.Extensions;

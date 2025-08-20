@@ -22,6 +22,7 @@ public static partial class CharacterMapper
     [MapProperty(nameof(CharacterStatHistory.SilverAmount), nameof(PlayerStats.SilverCoinCount))]
     [MapProperty(nameof(CharacterStatHistory.BronzeAmount), nameof(PlayerStats.BronzeCoinCount))]
     [MapProperty(nameof(CharacterStatHistory.CreatedAt), nameof(PlayerStats.UpdatedAt))]
+    [MapperIgnoreTarget(nameof(PlayerStats.Level))]
     public static partial PlayerStats Map(CharacterStatHistory history);
 
     [MapProperty(nameof(Character.CurrentLevel), nameof(PlayerInfo.Level))]
@@ -36,6 +37,7 @@ public static partial class CharacterMapper
     [MapProperty(nameof(@Character.CharacterStats.BronzeAmount), nameof(PlayerInfo.BronzeCoinCount))]
     [MapProperty(nameof(@Character.CharacterStats.OnlineTreasures), nameof(PlayerInfo.OnlineTreasures))]
     [MapProperty(nameof(@Character.CharacterStats.AverageFieldLevel), nameof(PlayerInfo.AverageFieldLevel))]
+    [MapperIgnoreTarget(nameof(PlayerInfo.AvatarId))]
     private static partial PlayerInfo MapCharacter(Character character);
 
     private static string GetModelFileName(Character character)

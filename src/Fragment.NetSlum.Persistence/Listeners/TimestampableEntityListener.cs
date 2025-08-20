@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Fragment.NetSlum.Persistence.Attributes;
 using Fragment.NetSlum.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
 
 namespace Fragment.NetSlum.Persistence.Listeners;

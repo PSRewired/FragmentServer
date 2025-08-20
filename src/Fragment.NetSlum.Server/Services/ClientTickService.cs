@@ -29,12 +29,10 @@ public class ClientTickService : BackgroundService
         return Task.CompletedTask;
     }
 
-    public override Task StopAsync(CancellationToken cancellationToken)
+    public override async Task StopAsync(CancellationToken cancellationToken)
     {
-        base.StopAsync(cancellationToken);
-        _clientTickTask.Wait(CancellationToken.None);
-
-        return Task.CompletedTask;
+        await base.StopAsync(cancellationToken);
+        await _clientTickTask.WaitAsync(CancellationToken.None);
     }
 
     private void FlushClients(CancellationToken cancellationToken)

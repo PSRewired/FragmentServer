@@ -10,6 +10,7 @@ using Fragment.NetSlum.Networking.Objects;
 using Fragment.NetSlum.Networking.Packets.Response.Saves;
 using Fragment.NetSlum.Networking.Sessions;
 using Fragment.NetSlum.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace Fragment.NetSlum.Networking.Packets.Request.Saves;
 
@@ -39,6 +40,7 @@ public class GetAccountInfoForSaveIdRequest : BaseRequest
         session.PlayerAccountId = accountId.Value;
 
         var serverNews = _database.ServerNews
+            .AsNoTracking()
             .Select(n => n.Content)
             .ToArray();
 

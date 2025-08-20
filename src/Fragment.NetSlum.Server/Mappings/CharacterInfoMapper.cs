@@ -33,11 +33,30 @@ public static partial class CharacterInfoMapper
     [MapProperty(nameof(CharacterInfo.Level), nameof(Character.CurrentLevel))]
     [MapProperty(nameof(CharacterInfo.Greeting), nameof(Character.GreetingMessage))]
     [MapProperty(nameof(CharacterInfo.ModelId), nameof(Character.FullModelId))]
+    [MapperIgnoreTarget(nameof(Character.Id))]
+    [MapperIgnoreTarget(nameof(Character.PlayerAccountId))]
+    [MapperIgnoreTarget(nameof(Character.PlayerAccount))]
+    [MapperIgnoreTarget(nameof(Character.CharacterStats))]
+    [MapperIgnoreTarget(nameof(Character.IpLogs))]
+    [MapperIgnoreTarget(nameof(Character.Guild))]
+    [MapperIgnoreTarget(nameof(Character.GuildId))]
+    [MapperIgnoreTarget(nameof(Character.CreatedAt))]
+    [MapperIgnoreTarget(nameof(Character.LastLoginAt))]
     private static partial void MapBaseProperties(CharacterInfo info, Character character);
 
     [MapProperty(nameof(CharacterInfo.OnlineStatueCounter), nameof(CharacterStats.OnlineTreasures))]
     [MapProperty(nameof(CharacterInfo.OfflineStatueCounter), nameof(CharacterStats.AverageFieldLevel))]
+    [MapperIgnoreTarget(nameof(CharacterStats.Id))]
+    [MapperIgnoreTarget(nameof(CharacterStats.CharacterId))]
+    [MapperIgnoreTarget(nameof(CharacterStats.Character))]
+    [MapperIgnoreTarget(nameof(CharacterStats.GoldAmount))]
+    [MapperIgnoreTarget(nameof(CharacterStats.SilverAmount))]
+    [MapperIgnoreTarget(nameof(CharacterStats.BronzeAmount))]
+    [MapperIgnoreTarget(nameof(CharacterStats.CreatedAt))]
+    [MapperIgnoreTarget(nameof(CharacterStats.UpdatedAt))]
     private static partial void MapStats(CharacterInfo stats, CharacterStats characterStats);
 
+    [MapperIgnoreTarget(nameof(PlayerAccount.Id))]
+    [MapperIgnoreTarget(nameof(PlayerAccount.CreatedAt))]
     private static partial void MapPlayer(CharacterInfo info, PlayerAccount player);
 }
