@@ -58,8 +58,8 @@ public partial class GetLobbyServerListRequest : BaseRequest
         {
             // If the game-client IP matches the recorded private IP address of the area-server, we need to send back their local IP
             // so they are able to connect without NAT
-            var clientIpMatchesPrivate = server.AreaServerInfo!.PrivateConnectionEndpoint != null &&
-                                         server.AreaServerInfo!.PrivateConnectionEndpoint.Address.Equals(
+            var clientIpMatchesPrivate = server.AreaServerInfo!.PublicConnectionEndpoint != null &&
+                                         server.AreaServerInfo!.PublicConnectionEndpoint.Address.Equals(
                                              IPAddress.Parse(session.Socket!.GetClientIp()));
 
             _logger.LogInformation("Area Server List[{Index}] (Client IP Match: {ClientMatch}): {NewLine}{AreaServerInfo}", cId,
