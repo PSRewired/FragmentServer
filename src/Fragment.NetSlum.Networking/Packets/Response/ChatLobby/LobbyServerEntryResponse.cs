@@ -83,7 +83,7 @@ public class LobbyServerEntryResponse : BaseResponse
         _serverIp.Address.TryWriteBytes(ipAddressFlipped.Span, out _);
         ipAddressFlipped.Span.Reverse();
 
-        var writer = new MemoryWriter(1 + ipAddressFlipped.Length + nameBytes.Length + sizeof(ushort) * 5 + _details.Length);
+        var writer = new MemoryWriter(ipAddressFlipped.Length + nameBytes.Length + sizeof(ushort) * 5 + _details.Length);
         writer.Skip(1);
 
         writer.Write(ipAddressFlipped);
@@ -95,7 +95,6 @@ public class LobbyServerEntryResponse : BaseResponse
         writer.Write((ushort)_status);
         writer.Write(_playerCount);
         writer.Write((byte)_state); // State 0 - Normal, 1 - Password ON, 2 - Playing
-        writer.Write((byte)0);
 
         // Details appear to be written at 15 or 16
         writer.Write(_details);
