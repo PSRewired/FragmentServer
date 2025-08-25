@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
@@ -48,6 +49,6 @@ public class GetOnlineAreaServersEndpoint : Endpoint<EmptyRequest, IEnumerable<A
             result.Add(AreaServerMapper.Map(session.AreaServerInfo));
         }
 
-        return Task.FromResult<IEnumerable<AreaServerStatus>>(result);
+        return Task.FromResult<IEnumerable<AreaServerStatus>>(result.OrderBy(a => a.Name));
     }
 }

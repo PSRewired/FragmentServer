@@ -31,6 +31,6 @@ public class GetAllLobbiesEndpoint : Endpoint<EmptyRequest, IEnumerable<Lobby>>
 
     public override Task<IEnumerable<Lobby>> ExecuteAsync(EmptyRequest req, CancellationToken ct)
     {
-        return Task.FromResult(_lobbyStore.ChatLobbies.Select(LobbyMapper.Map));
+        return Task.FromResult(_lobbyStore.ChatLobbies.OrderBy(c => c.LobbyName).Select(LobbyMapper.Map));
     }
 }

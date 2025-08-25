@@ -42,7 +42,8 @@ public class GetAllPlayersEndpoint : Endpoint<GetAllPlayersRequest, PagedResult<
     {
         IQueryable<Character> characters = _database.Characters
             .AsNoTracking()
-            .Include(g => g.CharacterStats);
+            .Include(g => g.CharacterStats)
+            .OrderBy(c => c.CharacterName);
 
         if (!string.IsNullOrWhiteSpace(req.CharacterName))
         {
