@@ -17,6 +17,7 @@ public class CharacterStatHistory
 
     public Character Character { get; set; } = null!;
 
+    public int CurrentLevel { get; set; }
     public int CurrentHp { get; set; }
     public int CurrentSp { get; set; }
     public uint CurrentGp { get; set; }
@@ -44,6 +45,7 @@ public class CharacterStatHistory
             CurrentHp = stats.CurrentHp,
             CurrentSp = stats.CurrentSp,
             CurrentGp = stats.CurrentGp,
+            CurrentLevel = stats.Character?.CurrentLevel ?? 0,
             OnlineTreasures = stats.OnlineTreasures,
             AverageFieldLevel = stats.AverageFieldLevel,
             GoldAmount = stats.GoldAmount,

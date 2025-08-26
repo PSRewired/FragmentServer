@@ -22,7 +22,8 @@ public static partial class CharacterMapper
     [MapProperty(nameof(CharacterStatHistory.SilverAmount), nameof(PlayerStats.SilverCoinCount))]
     [MapProperty(nameof(CharacterStatHistory.BronzeAmount), nameof(PlayerStats.BronzeCoinCount))]
     [MapProperty(nameof(CharacterStatHistory.CreatedAt), nameof(PlayerStats.UpdatedAt))]
-    [MapperIgnoreTarget(nameof(PlayerStats.Level))]
+    [MapProperty(nameof(CharacterStatHistory.AverageFieldLevel), nameof(PlayerStats.AverageFieldLevel))]
+    [MapProperty(nameof(CharacterStatHistory.CurrentLevel), nameof(PlayerStats.Level))]
     public static partial PlayerStats Map(CharacterStatHistory history);
 
     [MapProperty(nameof(Character.CurrentLevel), nameof(PlayerInfo.Level))]

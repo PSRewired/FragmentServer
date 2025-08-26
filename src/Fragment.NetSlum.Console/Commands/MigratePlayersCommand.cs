@@ -192,8 +192,10 @@ public class MigratePlayersCommand : AsyncCommand<MigratePlayersCommand.Settings
 
             stat.CharacterSaveId = stat.CharacterSaveId.TrimNull();
 
-            int? existingCharacterId = _database.Characters.AsNoTracking()
-                .FirstOrDefault(c => c.SaveId.Equals(stat.CharacterSaveId))?.Id;
+            var existingCharacter = _database.Characters.AsNoTracking()
+                .FirstOrDefault(c => c.SaveId.Equals(stat.CharacterSaveId));
+
+            var existingCharacterId = existingCharacter?.Id;
 
             if (existingCharacterId == null)
             {
@@ -210,6 +212,7 @@ public class MigratePlayersCommand : AsyncCommand<MigratePlayersCommand.Settings
                 CurrentHp = stat.CharacterHp,
                 CurrentGp = stat.CharacterGp,
                 CurrentSp = stat.CharacterSp,
+                CurrentLevel = existingCharacter!.CurrentLevel,
                 AverageFieldLevel = stat.AverageFieldLevel,
                 OnlineTreasures = (int)stat.GodStatueCounterOnline,
                 CreatedAt = TryParseJankTimestamp(stat.LoginTime),
