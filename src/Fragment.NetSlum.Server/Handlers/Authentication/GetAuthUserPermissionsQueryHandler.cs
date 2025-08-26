@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -33,7 +32,7 @@ public class GetAuthUserPermissionsQueryHandler : QueryHandler<GetAuthUserPermis
     {
         var user =  await _database.AuthUsers
             .Include(u => u.Role)
-            .FirstOrDefaultAsync(u => u.Id == command.UserId, cancellationToken);
+            .FirstOrDefaultAsync(u => u.Username == command.Username, cancellationToken);
 
         return user?.Role == null
             ? []

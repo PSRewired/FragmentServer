@@ -21,11 +21,6 @@ public static partial class CharacterInfoMapper
         MapBaseProperties(info, character);
         MapStats(info, character.CharacterStats);
 
-        if (character.PlayerAccount != null)
-        {
-            MapPlayer(info, character.PlayerAccount);
-        }
-
         return character;
     }
 
@@ -56,7 +51,4 @@ public static partial class CharacterInfoMapper
     [MapperIgnoreTarget(nameof(CharacterStats.UpdatedAt))]
     private static partial void MapStats(CharacterInfo stats, CharacterStats characterStats);
 
-    [MapperIgnoreTarget(nameof(PlayerAccount.Id))]
-    [MapperIgnoreTarget(nameof(PlayerAccount.CreatedAt))]
-    private static partial void MapPlayer(CharacterInfo info, PlayerAccount player);
 }

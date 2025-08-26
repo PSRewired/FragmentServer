@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,23 +25,19 @@ public class RegisterCharacterCommandHandler : CommandHandler<RegisterCharacterC
     {
         var characterInfo = command.CharacterInfo;
 
-        Persistence.Entities.Character? character = await _database.Characters
+        var character = await _database.Characters
             .Include(c => c.PlayerAccount)
             .Include(c => c.CharacterStats)
             .Include(c => c.Guild)
             .Where(c => characterInfo.CharacterName == c.CharacterName &&
-                        c.PlayerAccount != null && c.PlayerAccount!.SaveId == characterInfo.SaveId)
+                        c.PlayerAccount != null && c.SaveId == characterInfo.SaveId)
             .FirstOrDefaultAsync(cancellationToken);
 
-        PlayerAccount? playerAccount = await _database.PlayerAccounts.FirstOrDefaultAsync(p => p.SaveId == characterInfo.SaveId, cancellationToken);
+        var playerAccount = await _database.PlayerAccounts.FirstOrDefaultAsync(p => p.Id == command.PlayerAccountId, cancellationToken);
 
-        // If the player account is missing, attempt to create it now.
         if (playerAccount == null)
         {
-            playerAccount = new PlayerAccount
-            {
-                SaveId = characterInfo.SaveId,
-            };
+            throw new KeyNotFoundException($"Could not find associated player account for player ID of {command.PlayerAccountId}");
         }
 
         character = CharacterInfoMapper.MapOrCreate(characterInfo, character);

@@ -35,19 +35,17 @@ public class MigratePlayersCommand : AsyncCommand<MigratePlayersCommand.Settings
         //         new SpinnerColumn())
         //     .Start(MigratePlayerRecords);
 
-        AnsiConsole.Progress()
-            .AutoClear(false)
-            .Columns(new TaskDescriptionColumn(), new ProgressBarColumn(), new PercentageColumn(), new RemainingTimeColumn(),
-                new SpinnerColumn())
-            .Start(MigrateCharacterRecords);
+        // AnsiConsole.Progress()
+        //     .AutoClear(false)
+        //     .Columns(new TaskDescriptionColumn(), new ProgressBarColumn(), new PercentageColumn(), new RemainingTimeColumn(),
+        //         new SpinnerColumn())
+        //     .Start(MigrateCharacterRecords);
 
-        /*
         AnsiConsole.Progress()
             .AutoClear(false)
             .Columns(new TaskDescriptionColumn(), new ProgressBarColumn(), new PercentageColumn(), new RemainingTimeColumn(),
                 new SpinnerColumn())
             .Start(MigrateCharacterStatHistory);
-            */
 
 
         return Task.FromResult(0);
@@ -177,39 +175,31 @@ public class MigratePlayersCommand : AsyncCommand<MigratePlayersCommand.Settings
     {
         var existingStats = _oldDatabase.RankingData
             .AsNoTracking()
-            .Where(s => s.AccountId > 0)
-            .OrderBy(s => s.AccountId);
+            .OrderBy(s => s.CharacterSaveId);
 
-        var characterCount = existingStats.Count() / 5000;
+        var characterCount = existingStats.Count();
         var pTask = ctx.AddTask($"[bold yellow] Generating {characterCount} statistic records[/]", maxValue: characterCount);
 
         var count = 0;
-        var currentAccountId = -1;
+        var currentAccountId = string.Empty;
         foreach (var stat in existingStats)
         {
-            if (currentAccountId != stat.AccountId && !_database.PlayerAccounts.AsNoTracking().Any(c => c.Id == stat.AccountId))
+            if (currentAccountId != stat.CharacterSaveId)
             {
-                AnsiConsole.WriteLine($"Account ID {stat.AccountId} does not exist");
-                //pTask.Increment(1);
-                count += 1;
-                continue;
-            }
-
-            if (currentAccountId != stat.AccountId)
-            {
-                AnsiConsole.WriteLine($"AccountID changed! {currentAccountId} -> {stat.AccountId}");
-                currentAccountId = stat.AccountId;
+                AnsiConsole.WriteLine($"AccountID changed! {currentAccountId} -> {stat.CharacterSaveId}");
+                currentAccountId = stat.CharacterSaveId;
             }
 
             stat.CharacterSaveId = stat.CharacterSaveId.TrimNull();
 
             int? existingCharacterId = _database.Characters.AsNoTracking()
-                .FirstOrDefault(c => c.SaveSlotId.Equals(stat.CharacterSaveId))?.Id;
+                .FirstOrDefault(c => c.SaveId.Equals(stat.CharacterSaveId))?.Id;
 
             if (existingCharacterId == null)
             {
                 AnsiConsole.WriteLine($"No character with name {stat.CharacterName} -- '{stat.CharacterSaveId}'");
                 count += 1;
+                pTask.Increment(1);
                 continue;
             }
 
@@ -235,12 +225,13 @@ public class MigratePlayersCommand : AsyncCommand<MigratePlayersCommand.Settings
             }
 
             count += 1;
+            pTask.Increment(1);
 
-            if (count % 5000 == 0)
+            if (count % 50 == 0)
             {
                 _database.SaveChanges();
                 _database.ChangeTracker.Clear();
-                pTask.Increment(1);
+                AnsiConsole.WriteLine($"Saving {count} statistic records");
             }
         }
 

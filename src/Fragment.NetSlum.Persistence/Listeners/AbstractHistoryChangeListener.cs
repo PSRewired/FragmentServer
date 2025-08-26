@@ -63,6 +63,13 @@ public abstract class AbstractHistoryChangeListener<TEntity, THistory> : Abstrac
             entityProperty.SetValue(historyEntry, oldValue);
         }
 
+        context.Add(historyEntry);
+
+        return Task.CompletedTask;
+    }
+
+    protected override Task OnEntityChanged(FragmentContext context, EntityChangeSnapshot snapshot)
+    {
         return Task.CompletedTask;
     }
 

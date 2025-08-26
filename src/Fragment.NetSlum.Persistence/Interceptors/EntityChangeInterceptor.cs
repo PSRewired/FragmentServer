@@ -158,10 +158,16 @@ public class EntityChangeInterceptor : SaveChangesInterceptor
         foreach (var entry in entities)
         {
             var compatibleListeners = _listeners
-                .Where(l => (l.GetType().BaseType?.GetGenericArguments()[0]!).IsInstanceOfType(context) &&
-                            (l.GetType().BaseType?.GetGenericArguments()[1] == typeof(object) ||
-                             (l.GetType().BaseType?.GetGenericArguments()[1].IsInstanceOfType(entry.Entry.Entity) ??
-                              false)));
+                .Select(l => new
+                {
+                    BaseType = FindBaseListenerType(l.GetType()),
+                    Listener = l,
+                })
+                .Where(l => (l.BaseType?.GetGenericArguments()[0]!).IsInstanceOfType(context) &&
+                            (l.BaseType?.GetGenericArguments()[1] == typeof(object) ||
+                             (l.BaseType?.GetGenericArguments()[1].IsInstanceOfType(entry.Entry.Entity) ??
+                              false)))
+                .Select(l => l.Listener);
 
             foreach (var listener in compatibleListeners)
             {
@@ -174,5 +180,21 @@ public class EntityChangeInterceptor : SaveChangesInterceptor
     {
         var entry = values?.ToObject();
         return values?.Properties.ToDictionary(k => k.Name, v => v.PropertyInfo?.GetValue(entry)).AsReadOnly();
+    }
+
+    private static Type? FindBaseListenerType(Type listener)
+    {
+        var currentBase = listener.BaseType;
+        while (currentBase != null)
+        {
+            if (currentBase.GetGenericTypeDefinition() == typeof(AbstractEntityChangeListener<,>))
+            {
+                return currentBase;
+            }
+
+            currentBase = currentBase.BaseType;
+        }
+
+        return null;
     }
 }

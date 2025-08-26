@@ -7,7 +7,6 @@ using Fragment.NetSlum.Persistence;
 using Fragment.NetSlum.Server.Api.Models;
 using Fragment.NetSlum.Server.Mappings;
 using Microsoft.EntityFrameworkCore;
-using ZiggyCreatures.Caching.Fusion;
 
 namespace Fragment.NetSlum.Server.Api.Endpoints.News;
 

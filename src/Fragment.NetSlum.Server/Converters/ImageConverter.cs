@@ -1,6 +1,3 @@
-using System;
-using System.IO;
-using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Core.Models;
 using ImageMagick;
 using Microsoft.Extensions.Logging;

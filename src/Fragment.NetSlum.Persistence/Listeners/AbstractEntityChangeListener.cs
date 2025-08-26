@@ -8,15 +8,8 @@ namespace Fragment.NetSlum.Persistence.Listeners;
 public abstract class AbstractEntityChangeListener<TContext, TEntity> : IEntityChangedListener
     where TEntity : class where TContext : DbContext
 {
-    protected virtual Task OnEntityChanged(TContext context, EntityChangeSnapshot snapshot)
-    {
-        return Task.CompletedTask;
-    }
-
-    protected virtual Task OnEntityChanging(TContext context, EntityChangeSnapshot snapshot)
-    {
-        return Task.CompletedTask;
-    }
+    protected abstract Task OnEntityChanging(TContext context, EntityChangeSnapshot snapshot);
+    protected abstract Task OnEntityChanged(TContext context, EntityChangeSnapshot snapshot);
 
     public Task EntityChanging(DbContext context, EntityChangeSnapshot snapshot)
     {

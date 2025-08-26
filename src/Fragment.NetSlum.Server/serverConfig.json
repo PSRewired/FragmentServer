@@ -8,7 +8,7 @@
             "Default": "Debug",
             "Override": {
                 "Microsoft.AspNetCore": "Warning",
-                "Microsoft.AspNetCore.Authentication": "Information",
+                "Microsoft.AspNetCore.Authentication": "Verbose",
                 "Microsoft.EntityFrameworkCore": "Warning",
                 "ZiggyCreatures.Caching.Fusion.FusionCache": "Warning"
             }

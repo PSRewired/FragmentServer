@@ -22,7 +22,6 @@ public class UpdateMotdEndpoint : Endpoint<UpdateMotdRequest, MessageOfTheDay>
     public override void Configure()
     {
         Patch("/motd");
-        AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
         Permissions(nameof(AuthUserPermissions.ManageNews));
         Summary(s =>
         {

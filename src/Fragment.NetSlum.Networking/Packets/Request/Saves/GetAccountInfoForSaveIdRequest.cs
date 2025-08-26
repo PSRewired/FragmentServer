@@ -38,6 +38,7 @@ public class GetAccountInfoForSaveIdRequest : BaseRequest
         }
 
         session.PlayerAccountId = accountId.Value;
+        session.PlayerSaveId = saveId;
 
         var serverNews = _database.ServerNews
             .AsNoTracking()

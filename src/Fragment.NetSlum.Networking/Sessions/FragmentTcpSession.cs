@@ -51,9 +51,14 @@ public class FragmentTcpSession : TcpSession, IScopeable
 
     //Fields only used for a Player
     /// <summary>
-    /// The active "save" ID that is associated to this session
+    /// The active "save" ID that is associated with this session
     /// </summary>
     public int PlayerAccountId { get; set; }
+
+    /// <summary>
+    /// The active "save" ID that is associated with this session
+    /// </summary>
+    public string PlayerSaveId { get; set; }
 
     /// <summary>
     /// The character reference that belongs to this session

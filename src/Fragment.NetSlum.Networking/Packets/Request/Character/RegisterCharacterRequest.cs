@@ -32,7 +32,7 @@ public class RegisterCharacterRequest : BaseRequest
         session.CharacterInfo = CharacterInfo.FromBinaryData(request.Data.Span);
         _logger.LogInformation("Registering character:\n{CharInfo}", session.CharacterInfo.ToString());
 
-        var character = await _commandBus.Execute(new RegisterCharacterCommand(session.CharacterInfo));
+        var character = await _commandBus.Execute(new RegisterCharacterCommand(session.PlayerAccountId, session.CharacterInfo));
 
         GuildStatus guildStatus = GuildStatus.None;
 
@@ -46,12 +46,11 @@ public class RegisterCharacterRequest : BaseRequest
 
         await _commandBus.Notify(new CharacterLoggedInEvent(character.Id, session.Socket!.GetClientIp()));
 
-        return new[]
-        {
+        return SingleMessageAsync(
             new RegisterCharacterResponse()
-            .SetGuildId(character.GuildId ?? 0)
-            .SetGuildStatus(guildStatus)
+                .SetGuildId(character.GuildId ?? 0)
+                .SetGuildStatus(guildStatus)
                 .Build()
-        };
+        );
     }
 }

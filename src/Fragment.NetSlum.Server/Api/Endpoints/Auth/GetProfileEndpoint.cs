@@ -1,4 +1,3 @@
-using System;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,17 +20,16 @@ public class GetProfileEndpoint : Endpoint<EmptyRequest, AuthUserProfile>
     public override void Configure()
     {
         Get("/users/profile");
-        Roles("User");
     }
 
     public override async Task<AuthUserProfile> ExecuteAsync(EmptyRequest req, CancellationToken ct)
     {
         var identity = HttpContext.User.Identity as ClaimsIdentity;
-        var userId = Guid.Parse(identity!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+        var userName = identity!.FindFirst("username")!.Value;
 
         return new AuthUserProfile
         {
-            Permissions = await _commandBus.GetResult(new GetAuthUserPermissionsQuery(userId), ct),
+            Permissions = await _commandBus.GetResult(new GetAuthUserPermissionsQuery(userName), ct),
         };
     }
 }
