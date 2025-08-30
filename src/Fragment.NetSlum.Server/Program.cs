@@ -10,6 +10,7 @@ using FastEndpoints;
 using FastEndpoints.Swagger;
 using FastEndpoints.Security;
 using Fragment.NetSlum.Core.CommandBus;
+using Fragment.NetSlum.Networking.Contexts;
 using Fragment.NetSlum.Networking.Extensions;
 using Fragment.NetSlum.Networking.Stores;
 using Fragment.NetSlum.Persistence;
@@ -175,6 +176,7 @@ builder.Services.AddSingleton(typeof(ChatLobbyStore));
 builder.Services.AddHostedService<ServerBackgroundService>();
 builder.Services.AddHostedService<ClientTickService>();
 builder.Services.AddHostedService<ChatLobbyBackgroundService>();
+builder.Services.AddScoped<GuildShopContextAccessor>();
 
 
 var app = builder.Build();

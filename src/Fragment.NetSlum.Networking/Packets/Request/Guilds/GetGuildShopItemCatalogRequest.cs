@@ -29,6 +29,9 @@ public class GetGuildShopItemCatalogRequest : BaseRequest
     {
         var reader = new SpanReader(request.Data.Span);
         var categoryId = reader.ReadUInt16();
+
+        // The old database classified items as the category ID + item ID. So we need to make this backwards compatible with that...
+        reader.Skip(-2);
         var itemId = reader.ReadUInt32();
 
         _logger.LogDebug("GetGuildShopItemCatalogRequest: categoryId={CategoryId}, itemId={ItemId}", categoryId, itemId);
