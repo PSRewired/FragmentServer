@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Fragment.NetSlum.Core.CommandBus.Contracts.Commands;
 using Fragment.NetSlum.Networking.Commands.Characters;
 using Fragment.NetSlum.Persistence;
-using Fragment.NetSlum.Persistence.Entities;
 using Fragment.NetSlum.Server.Mappings;
 using Microsoft.EntityFrameworkCore;
 

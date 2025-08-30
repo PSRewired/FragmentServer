@@ -6,7 +6,6 @@ using Fragment.NetSlum.Core.Constants;
 using Fragment.NetSlum.Persistence;
 using Fragment.NetSlum.Server.Api.Models;
 using Fragment.NetSlum.Server.Api.ViewModels;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Fragment.NetSlum.Server.Api.Endpoints.News;
 
