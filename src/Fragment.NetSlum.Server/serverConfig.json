@@ -41,5 +41,8 @@
     "Authentication": {
         "JwtSecret": "changeme123"
     },
-    "AllowedOrigins": "http://localhost:3000,https://fragment.psrewired.com"
+    "Notifications": {
+        "Destinations": []
+    },
+    "AllowedOrigins": "http://localhost:3000,https://fragment.psrewired.com,https://fragment.dothackers.org"
 }

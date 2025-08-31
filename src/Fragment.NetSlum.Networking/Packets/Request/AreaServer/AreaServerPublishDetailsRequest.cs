@@ -1,10 +1,13 @@
+using System;
 using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Fragment.NetSlum.Core.CommandBus;
 using Fragment.NetSlum.Core.Constants;
 using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Networking.Attributes;
 using Fragment.NetSlum.Networking.Constants;
+using Fragment.NetSlum.Networking.Events;
 using Fragment.NetSlum.Networking.Objects;
 using Fragment.NetSlum.Networking.Packets.Response.AreaServer;
 using Fragment.NetSlum.Networking.Packets.Response;
@@ -22,11 +25,13 @@ public class AreaServerPublishDetailsRequest:BaseRequest
 {
     private readonly FragmentContext _database;
     private readonly ILogger<AreaServerPublishDetailsRequest> _logger;
+    private readonly ICommandBus _commandBus;
 
-    public AreaServerPublishDetailsRequest(FragmentContext database, ILogger<AreaServerPublishDetailsRequest> logger)
+    public AreaServerPublishDetailsRequest(FragmentContext database, ILogger<AreaServerPublishDetailsRequest> logger, ICommandBus commandBus)
     {
         _database = database;
         _logger = logger;
+        _commandBus = commandBus;
     }
 
     public override ValueTask<ICollection<FragmentMessage>> GetResponse(FragmentTcpSession session, FragmentMessage request)
@@ -49,6 +54,10 @@ public class AreaServerPublishDetailsRequest:BaseRequest
                 session.AreaServerInfo!.CurrentPlayerCount = BinaryPrimitives.ReadUInt16BigEndian(request.Data[pos..(pos + 2)].Span);
                 pos += 3;
                 session.AreaServerInfo.ServerId = request.Data[pos..];
+
+                _logger.LogInformation("Area Server Published Details: {NewLine}{AreaServerInfo}", Environment.NewLine, session.AreaServerInfo!.ToString());
+
+                _commandBus.Notify(new AreaServerPublishedEvent(session.AreaServerInfo!)).Wait();
 
                 response = new AreaServerPublishDetailsResponse { PacketType = OpCodes.Data_AreaServerPublishDetails1Success, Data = [0x00, 0x01
                     ]
