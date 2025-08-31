@@ -12,6 +12,9 @@ using FastEndpoints.Security;
 using Fragment.NetSlum.Core.CommandBus;
 using Fragment.NetSlum.Networking.Contexts;
 using Fragment.NetSlum.Networking.Extensions;
+using Fragment.NetSlum.Networking.Services.Notifications;
+using Fragment.NetSlum.Networking.Services.Notifications.Providers;
+using Fragment.NetSlum.Networking.Services.Notifications.Providers.Discord;
 using Fragment.NetSlum.Networking.Stores;
 using Fragment.NetSlum.Persistence;
 using Fragment.NetSlum.Persistence.Extensions;
@@ -177,6 +180,11 @@ builder.Services.AddHostedService<ServerBackgroundService>();
 builder.Services.AddHostedService<ClientTickService>();
 builder.Services.AddHostedService<ChatLobbyBackgroundService>();
 builder.Services.AddScoped<GuildShopContextAccessor>();
+
+builder.Services.Configure<NotificationOptions>(builder.Configuration.GetSection("Notifications"));
+
+builder.Services.AddKeyedScoped<INotificationProvider, DiscordNotificationProvider>(nameof(DiscordNotificationProvider).Replace("NotificationProvider", string.Empty, StringComparison.InvariantCultureIgnoreCase));
+builder.Services.AddSingleton<NotificationService>();
 
 
 var app = builder.Build();

@@ -1,5 +1,3 @@
-using Fragment.NetSlum.Persistence.Entities;
-
 namespace Fragment.NetSlum.Networking.Contexts;
 
 /// <summary>

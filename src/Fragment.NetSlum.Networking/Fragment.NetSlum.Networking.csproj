@@ -13,4 +13,8 @@
       <ProjectReference Include="..\Fragment.NetSlum.TcpServer\Fragment.NetSlum.TcpServer.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Discord.Net" Version="3.18.0" />
+    </ItemGroup>
+
 </Project>
