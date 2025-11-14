@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Fragment.NetSlum.Persistence;
 using Fragment.NetSlum.Persistence.Entities;
@@ -20,7 +21,7 @@ public class MigrateGuildShopCommand : AsyncCommand<MigrateGuildShopCommand.Sett
         _oldDatabase = oldDatabase;
     }
 
-    public override Task<int> ExecuteAsync(CommandContext context, Settings settings)
+    public override Task<int>ExecuteAsync(CommandContext context, Settings settings, CancellationToken cancellationToken)
     {
         AnsiConsole.Progress()
             .AutoClear(false)
