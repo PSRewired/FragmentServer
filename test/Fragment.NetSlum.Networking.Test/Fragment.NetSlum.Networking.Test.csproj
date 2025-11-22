@@ -24,4 +24,8 @@
       <ProjectReference Include="..\..\src\Fragment.NetSlum.Networking\Fragment.NetSlum.Networking.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Update="Meziantou.Analyzer" Version="2.0.256" />
+    </ItemGroup>
+
 </Project>

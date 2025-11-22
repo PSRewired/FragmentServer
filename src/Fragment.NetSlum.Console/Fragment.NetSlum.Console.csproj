@@ -8,13 +8,17 @@
 
     <ItemGroup>
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0" />
-      <PackageReference Include="Serilog.Extensions.Logging" Version="9.0.2" />
+      <PackageReference Include="Serilog.Extensions.Logging" Version="10.0.0" />
       <PackageReference Include="Spectre.Console.Cli" Version="0.53.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Fragment.NetSlum.Core\Fragment.NetSlum.Core.csproj" />
       <ProjectReference Include="..\Fragment.NetSlum.Persistence\Fragment.NetSlum.Persistence.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Update="Meziantou.Analyzer" Version="2.0.256" />
     </ItemGroup>
 
 </Project>

@@ -20,4 +20,8 @@
       <Folder Include="Migrations\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Update="Meziantou.Analyzer" Version="2.0.256" />
+    </ItemGroup>
+
 </Project>

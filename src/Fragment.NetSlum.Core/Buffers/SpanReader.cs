@@ -80,7 +80,7 @@ public ref struct SpanReader
 
         try
         {
-            return BinaryPrimitives.ReadInt16BigEndian(_holdingSpan[_position..(_position + size)]);
+            return BinaryPrimitives.ReadInt32BigEndian(_holdingSpan[_position..(_position + size)]);
         }
         finally
         {
