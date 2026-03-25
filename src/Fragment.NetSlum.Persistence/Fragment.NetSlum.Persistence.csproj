@@ -8,8 +8,8 @@
 
     <ItemGroup>
         <PackageReference Include="EntityFrameworkCore.Exceptions.MySQL.Pomelo" Version="8.1.3" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.0" />
-        <PackageReference Include="ZiggyCreatures.FusionCache" Version="2.4.0" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.5" />
+        <PackageReference Include="ZiggyCreatures.FusionCache" Version="2.6.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -18,10 +18,6 @@
 
     <ItemGroup>
       <Folder Include="Migrations\" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Update="Meziantou.Analyzer" Version="2.0.256" />
     </ItemGroup>
 
 </Project>

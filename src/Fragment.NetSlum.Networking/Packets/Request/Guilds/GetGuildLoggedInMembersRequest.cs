@@ -59,8 +59,7 @@ public class GetGuildLoggedInMembersRequest : BaseRequest
                 .SetAverageLevel((ushort)(guild.Members.Sum(m => m.CurrentLevel) / guild.Members.Count))
                 .SetGeneralItemsAvailable((uint)guildShopInfoQuery.Count(gs => gs.AvailableForGeneral))
                 .SetMemberItemsAvailable((uint)guildShopInfoQuery.Count(gs => gs.AvailableForMember))
-                .SetNumberJoined(
-                    0) //TODO: I have no idea what this is actually supposed to represent in the 'guild scale' section of the stats..
+                .SetNumberJoined((uint)guild.Members.Count) //TODO: I have no idea what this is actually supposed to represent in the 'guild scale' section of the stats..
                 .Build()
         );
     }
