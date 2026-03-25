@@ -37,16 +37,14 @@ public class DonateItemToGuildRequest : BaseRequest
             .AsNoTracking()
             .FirstOrDefaultAsync(i => i.ItemId == guildItemId && i.GuildId == guildId);
 
+        _logger.LogInformation("Player {PlayerId}({PlayerName}) is donating item {ItemId} to guild {GuildId}", session.CharacterId, session.CharacterInfo!.CharacterName, guildItemId, session.GuildId);
+        _guildShopContextAccessor.Current.Donation = new GuildShopContextAccessor.GuildShopItemDonation(guildId, guildItemId, itemQuantity);
+
         if (guildItem == null)
         {
-            _logger.LogWarning("Player {PlayerId}({PlayerName}) attempted to donate unknown item {ItemId} to guild {GuildId}", session.CharacterId, session.CharacterInfo!.CharacterName, guildItemId, session.GuildId);
             return SingleMessageAsync(new GuildItemPriceResponse()
                 .Build());
         }
-
-        _guildShopContextAccessor.Current.Donation = new GuildShopContextAccessor.GuildShopItemDonation(guildId, guildItemId, itemQuantity);
-
-        _logger.LogInformation("Player {PlayerId}({PlayerName}) is donating item {ItemId} to guild {GuildId}", session.CharacterId, session.CharacterInfo!.CharacterName, guildItemId, session.GuildId);
 
         return SingleMessageAsync(new GuildItemPriceResponse()
             .SetGeneralPrice(guildItem.Price)

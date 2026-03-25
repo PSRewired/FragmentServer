@@ -11,35 +11,35 @@
     <ItemGroup>
         <PackageReference Include="AspNetCore.HealthChecks.System" Version="9.0.0" />
         <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="9.0.0" />
-        <PackageReference Include="FastEndpoints" Version="7.1.1" />
-        <PackageReference Include="FastEndpoints.Security" Version="7.1.1" />
-        <PackageReference Include="FastEndpoints.Swagger" Version="7.1.1" />
-        <PackageReference Include="Haukcode.HighResolutionTimer" Version="1.2.5" />
-        <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.9.1" />
-        <PackageReference Include="Mediator.SourceGenerator" Version="3.0.1">
+        <PackageReference Include="FastEndpoints" Version="8.0.1" />
+        <PackageReference Include="FastEndpoints.Security" Version="8.0.1" />
+        <PackageReference Include="FastEndpoints.Swagger" Version="8.0.1" />
+        <PackageReference Include="Haukcode.HighResolutionTimer" Version="1.4.55" />
+        <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.11.1" />
+        <PackageReference Include="Mediator.SourceGenerator" Version="3.0.2">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.0">
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.5" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.14">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="10.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="10.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.5" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="10.0.5" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.5" />
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="9.0.14" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.5" />
+        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.5" />
         <PackageReference Include="NSwag.AspNetCore" Version="14.6.3" />
-        <PackageReference Include="Riok.Mapperly" Version="4.3.0" />
-        <PackageReference Include="Scalar.AspNetCore" Version="2.11.0" />
-        <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
-        <PackageReference Include="Serilog.Enrichers.ClientInfo" Version="2.6.0" />
-        <PackageReference Include="Serilog.Settings.Configuration" Version="9.0.0" />
+        <PackageReference Include="Riok.Mapperly" Version="4.3.1" />
+        <PackageReference Include="Scalar.AspNetCore" Version="2.13.14" />
+        <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
+        <PackageReference Include="Serilog.Enrichers.ClientInfo" Version="2.9.0" />
+        <PackageReference Include="Serilog.Settings.Configuration" Version="10.0.0" />
         <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
         <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
-        <PackageReference Include="ZiggyCreatures.FusionCache.Backplane.Memory" Version="2.4.0" />
+        <PackageReference Include="ZiggyCreatures.FusionCache.Backplane.Memory" Version="2.6.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -71,10 +71,6 @@
 
     <ItemGroup>
       <Folder Include="Api\Endpoints\" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Update="Meziantou.Analyzer" Version="2.0.256" />
     </ItemGroup>
 
 </Project>

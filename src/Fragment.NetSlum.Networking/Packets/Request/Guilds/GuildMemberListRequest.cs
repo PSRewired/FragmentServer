@@ -42,13 +42,15 @@ public class GuildMemberListRequest : BaseRequest
 
         if (categoryId != ushort.MaxValue)
         {
+            // here the categoryId will be the classType - 1, since class types are 0 indexed and the categories are offset by 1 to allow
+            // for initial categories request
             memberQuery = memberQuery
-                .Where(m => m.Class == (CharacterClass)categoryId && m.Id != myPlayer.Id);
+                .Where(m => m.Class == (CharacterClass)(categoryId - 1) && m.Id != myPlayer.Id);
         }
 
         var responses = new List<FragmentMessage>
         {
-            new GuildMemberListEntryCountResponse((ushort)memberQuery.Count()).Build()
+            new GuildMemberListEntryCountResponse((ushort)memberQuery.Count()).Build(),
         };
 
         foreach (var member in memberQuery)
@@ -86,7 +88,7 @@ public class GuildMemberListRequest : BaseRequest
         foreach (CharacterClass classType in classTypes)
         {
             responses.Add(new GuildMemberListCategoryEntryResponse()
-                .SetCategoryId((ushort) classType)
+                .SetCategoryId((ushort) (classType + 1))
                 .SetCategoryName(classType.GetClassName())
                 .Build()
             );
