@@ -24,7 +24,7 @@ public class MigrateMailCommand : AsyncCommand<MigrateMailCommand.Settings>
         _oldDatabase = oldDatabase;
     }
 
-    public override Task<int>ExecuteAsync(CommandContext context, Settings settings, CancellationToken cancellationToken)
+    protected override Task<int>ExecuteAsync(CommandContext context, Settings settings, CancellationToken cancellationToken)
     {
         AnsiConsole.Progress()
             .AutoClear(false)
