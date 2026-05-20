@@ -28,7 +28,7 @@ public class GetGuildDonationSettingsRequest : BaseRequest
             .AsNoTracking()
             .FirstOrDefaultAsync(g => g.Id == session.GuildId);
 
-        var isGuildMaster = guild != null && guild.LeaderId == session.GuildId;
+        var isGuildMaster = guild != null && guild.LeaderId == session.CharacterId;
 
         _logger.LogInformation("Guild donation settings requested for guild ID {GuildId} by player {PlayerId}({PlayerName}). Is Guild Master? {IsGuildMaster}", session.GuildId, session.CharacterId, session.CharacterInfo!.CharacterName, isGuildMaster);
 
