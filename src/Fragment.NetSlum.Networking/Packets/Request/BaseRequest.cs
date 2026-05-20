@@ -21,8 +21,7 @@ public abstract class BaseRequest
     protected static ValueTask<ICollection<FragmentMessage>> SingleMessage(FragmentMessage response) =>
         ValueTask.FromResult(SingleMessageAsync(response));
 
-    protected static ICollection<FragmentMessage> SingleMessageAsync(FragmentMessage response) =>
-        new[] { response };
+    protected static ICollection<FragmentMessage> SingleMessageAsync(FragmentMessage response) => [response];
 
     protected static ValueTask<ICollection<FragmentMessage>> NoResponse() =>
         ValueTask.FromResult<ICollection<FragmentMessage>>(Array.Empty<FragmentMessage>());

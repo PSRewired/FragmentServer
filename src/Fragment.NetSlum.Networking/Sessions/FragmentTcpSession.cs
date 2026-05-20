@@ -11,6 +11,7 @@ using Fragment.NetSlum.Networking.Models;
 using Fragment.NetSlum.Networking.Objects;
 using Fragment.NetSlum.Networking.Pipeline;
 using Fragment.NetSlum.Networking.Stores;
+using Fragment.NetSlum.Persistence;
 using Fragment.NetSlum.TcpServer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -134,6 +135,9 @@ public class FragmentTcpSession : TcpSession, IScopeable
     /// <returns></returns>
     protected internal void Send(List<FragmentMessage> data)
     {
+        // To keep entities from becoming stale and save memory, clear the EF change tracker.
+        ServiceScope.ServiceProvider.GetRequiredService<FragmentContext>().ChangeTracker.Clear();
+
         var respData = _packetPipeline.Encode(data, CancellationToken.None).Span;
 
         Send(respData);

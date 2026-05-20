@@ -41,7 +41,7 @@ public class UpdateGuildItemPricingAvailabilityRequest : BaseRequest
             .AsNoTracking()
             .FirstOrDefaultAsync(g => g.Id == session.GuildId);
 
-        var isGuildMaster = guild != null && guild.LeaderId == session.GuildId;
+        var isGuildMaster = guild != null && guild.LeaderId == session.CharacterId;
 
         var donatedItem = _guildShopContextAccessor.Current.Donation;
 
@@ -70,6 +70,9 @@ public class UpdateGuildItemPricingAvailabilityRequest : BaseRequest
 
         if (isGuildMaster)
         {
+            _logger.LogWarning("Player {PlayerId} ({PlayerName}) is guild master for guild {GuildId}. Setting availability/price to: General: {GeneralPrice}({AvailableGeneral}) Member: {MemberPrice}({AvailableMember})",
+                session.CharacterId, session.CharacterInfo!.CharacterName, session.GuildId, generalPrice, isGeneral, memberPrice, isMember);
+
             guildItem.Price = generalPrice;
             guildItem.MemberPrice = memberPrice;
             guildItem.AvailableForGeneral = isGeneral;
