@@ -62,6 +62,7 @@ public class FragmentContext : DbContext
     public virtual DbSet<WebNewsArticle> WebNewsArticles { get; set; }
     public virtual DbSet<WebNewsReadLog> WebNewsReadLogs { get; set; }
     public virtual DbSet<ChatLobby> ChatLobbies { get; set;}
+    public virtual DbSet<AreaServerAssociation> AreaServerAssociations { get; set;}
     public virtual DbSet<AreaServerCategory> AreaServerCategories { get; set;}
     public virtual DbSet<Guild> Guilds { get; set;}
     public virtual DbSet<GuildStats> GuildStats { get; set;}

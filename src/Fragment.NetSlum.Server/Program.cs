@@ -20,10 +20,12 @@ using Fragment.NetSlum.Persistence;
 using Fragment.NetSlum.Persistence.Extensions;
 using Fragment.NetSlum.Persistence.Interceptors;
 using Fragment.NetSlum.Persistence.Listeners;
+using Fragment.NetSlum.Server.Api.Middleware;
 using Fragment.NetSlum.Server.Authentication.Configuration;
 using Fragment.NetSlum.Server.Converters;
 using Fragment.NetSlum.Server.Servers;
 using Fragment.NetSlum.Server.Services;
+using Fragment.NetSlum.Server.Stores;
 using Fragment.NetSlum.Server.Transformers;
 using Fragment.NetSlum.TcpServer;
 using HealthChecks.UI.Client;
@@ -100,6 +102,10 @@ builder.Services.AddFastEndpoints()
             d.Description = "REST API that provides information from the .hack//Fragment server";
         };
     });
+
+builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<ApiExceptionHandler>();
+
 builder.Services
     .Configure<JsonSerializerOptions>(opt =>
     {
@@ -137,6 +143,8 @@ builder.Services.AddFusionCache()
     .WithMemoryBackplane(opt => { opt.ConnectionId = Assembly.GetEntryAssembly()!.GetName().Name; });
 
 builder.Services.Configure<DiscordAuthOptions>(builder.Configuration.GetSection("Authentication"));
+
+builder.Services.AddSingleton<AreaServerAssociationStore>();
 
 builder.Services.AddAuthenticationJwtBearer(s =>
 {

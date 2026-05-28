@@ -30,6 +30,8 @@ public class WebUserClaimsTransformer : IClaimsTransformation
 
         var user = await GetAuthUserByUsername(claimsIdentity);
 
+        claimsIdentity.AddClaim(new Claim("authUserId", user!.Id.ToString()!));
+
         if (user?.Role != null)
         {
             claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, user.Role.ToString()!));

@@ -1,7 +1,10 @@
+using System;
 using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Data;
+using System.Text;
 using System.Threading.Tasks;
+using Fragment.NetSlum.Core.Extensions;
 using Fragment.NetSlum.Networking.Attributes;
 using Fragment.NetSlum.Networking.Constants;
 using Fragment.NetSlum.Networking.Objects;
@@ -43,6 +46,16 @@ public class LobbyEventRequest : BaseRequest
 
         chatLobby?.NotifyAllExcept(chatLobbyPlayer, response.Build());
 
+        var systemMsg = "AAccount activation successful!".ToShiftJis();
+
+        var systemMsgBuffer = new byte[systemMsg.Length + 3];
+        systemMsg.CopyTo(systemMsgBuffer.AsSpan()[3..]);
+
+        var response2 = new LobbyEventResponse()
+            .SetData(systemMsgBuffer)
+            .SetSenderIndex(chatLobbyPlayer.PlayerIndex);
+
+        return ValueTask.FromResult<ICollection<FragmentMessage>>([response.SetIsSender(true).Build(), response2.SetIsSender(true).Build()]);
         return SingleMessage(
             response
                 .SetIsSender(true)
