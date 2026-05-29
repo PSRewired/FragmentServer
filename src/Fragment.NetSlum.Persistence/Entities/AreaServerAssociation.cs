@@ -22,6 +22,12 @@ public class AreaServerAssociation
     [MaxLength(15)]
     public required string LocalIpAddress { get; set; }
 
+    [MaxLength(21)]
+    public required string LastKnownName { get; set; }
+
     [Timestampable(EntityState.Added)]
     public DateTime CreatedAt { get; set; }
+
+    [Timestampable(EntityState.Modified)]
+    public DateTime? UpdatedAt { get; set; }
 }

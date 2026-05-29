@@ -1,6 +1,7 @@
 using System;
 using System.Buffers.Binary;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Fragment.NetSlum.Core.CommandBus;
@@ -55,20 +56,26 @@ public partial class AreaServerPublishDetailsRequest : BaseRequest
 
                 var claimMatches = AreaServerClaimRegex.Match(areaServerName);
 
-                if (claimMatches.Success && _associationStore.TryClaimCode(claimMatches.Groups[1].Value, out var claimAssociation))
+                var association = _database.AreaServerAssociations
+                    .FirstOrDefault(a => a.PublicIpAddress == session.AreaServerInfo.PublicConnectionEndpoint!.Address.ToString());
+
+                if (association == null && claimMatches.Success && _associationStore.TryClaimCode(claimMatches.Groups[1].Value, out var claimAssociation))
                 {
-                    var association = new AreaServerAssociation
+                    association = new AreaServerAssociation
                     {
                         AuthUserId = claimAssociation!.AuthUserId,
                         LocalIpAddress = session.AreaServerInfo.PrivateConnectionEndpoint!.Address.ToString(),
                         PublicIpAddress = session.AreaServerInfo.PublicConnectionEndpoint!.Address.ToString(),
+                        LastKnownName = areaServerName,
                     };
 
                     _database.AreaServerAssociations.Add(association);
-                    _database.SaveChanges();
 
                     areaServerName = areaServerName.Replace($"#{claimMatches.Groups[1].Value}", "", StringComparison.OrdinalIgnoreCase);
                 }
+
+                association?.LastKnownName = areaServerName;
+                _database.SaveChanges();
 
                 session.AreaServerInfo!.ServerName = areaServerName;
 
