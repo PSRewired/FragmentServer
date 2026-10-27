@@ -27,7 +27,7 @@ public class ImageConverter
                 Format = MagickFormat.Tga,
                 ColorType = ColorType.Palette,
                 Depth = 32,
-                Orientation = OrientationType.TopLeft,
+                Orientation = Orientation.TopLeft,
                 Comment = null,
                 //Quality = 20,
             };
