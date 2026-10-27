@@ -28,7 +28,7 @@ public class MigratePlayersCommand : AsyncCommand<MigratePlayersCommand.Settings
         _oldDatabase = oldDatabase;
     }
 
-    protected override Task<int>ExecuteAsync(CommandContext context, Settings settings, CancellationToken cancellationToken)
+    public override Task<int>ExecuteAsync(CommandContext context, Settings settings, CancellationToken cancellationToken)
     {
         // AnsiConsole.Progress()
         //     .AutoClear(false)
